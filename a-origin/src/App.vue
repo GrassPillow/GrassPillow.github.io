@@ -3,10 +3,13 @@
   <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
   <div>
     <digital-clock id="digital-clock-1"></digital-clock>
+    <map-container></map-container>
   </div>
 </template>
 
 <script>
+// import axios from 'axios';  
+import MapContainer from "./components/MapContainer.vue";
 import DigitalClock from "./components/DigitalClock.vue";
 // import HelloWorld from './components/HelloWorld.vue'
 
@@ -14,7 +17,15 @@ export default {
   name: "App",
   components: {
     DigitalClock,
+    MapContainer,
     // HelloWorld
+  },
+  // 默认加载
+  mounted() {
+    // 获取ip地址
+    // axios.get("http://ip-api.com/json?lang=zh-CN").then((res) => {
+    //   console.log(res);
+    // });
   },
 };
 </script>
@@ -39,5 +50,6 @@ body {
   font-size: 16vw;
   line-height: 100vh;
   font-family: "Courier New", Courier, monospace;
+  display: none;
 }
 </style>

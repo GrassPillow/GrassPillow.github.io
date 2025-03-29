@@ -1,4 +1,4 @@
-import { createMemoryHistory, createRouter } from 'vue-router'
+import { createWebHistory, createRouter } from 'vue-router'
 
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
@@ -6,10 +6,11 @@ import AboutView from '../views/AboutView.vue'
 const routes = [
   { path: '/', component: HomeView },
   { path: '/about', component: AboutView },
+  { path: '/map', component: () => import('../views/MapView.vue') },
 ]
 
 const router = createRouter({
-  history: createMemoryHistory(),
+  history: createWebHistory(),
   routes,
 })
 

@@ -16,7 +16,9 @@
     
       const updateTime = () => {  
         currentTime.value = new Date();  
+        console.log('Current time:', currentTime.value);  
         formattedTime.value = currentTime.value.toLocaleTimeString();  
+        console.log('Formatted time:', formattedTime.value);  
       };  
     
       const timerId = setInterval(updateTime, 1000);  
@@ -39,8 +41,8 @@
   <style scoped>  
   .digital-clock {  
     text-align: center;  
-    /* font-size: 36dvh;  
-    padding-top: 32dvh; */
+    font-size: 36dvh;
+    padding-top: 32dvh;
     font-family: 'Arial', sans-serif;  
   }  
   </style>

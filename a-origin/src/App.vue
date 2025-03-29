@@ -1,7 +1,13 @@
 <template>
-  <div>
+<!-- 导航栏 -->
+    <div class="nav-container">
+        <router-link to="/home">首页</router-link>｜
+        <router-link to="/about">关于</router-link>｜
+        <router-link to="/clock">时钟</router-link>｜
+        <router-link to="/map">地图</router-link>｜
+        <router-link to="/weather">天气</router-link>
+    </div>
     <router-view></router-view>
-  </div>
 </template>
 
 <script>
@@ -21,22 +27,51 @@ export default {
 
 <style>
 body {
-  background-color: rgb(102, 126, 126);
+  background-color: #f5f5f7;
   margin: 0;
-  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 #app {
-  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-#digital-clock-1 {
-  height: 100vh;
-  font-size: 16vw;
-  line-height: 100vh;
-  font-family: "Courier New", Courier, monospace;
-  display: none;
+.nav-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
 }
-#map-container {
-  height: 100vh;
+
+/* 导航栏样式 - 苹果风格 */
+.router-link {
+  color: #1d1d1f;
+  text-decoration: none;
+  padding: 10px 20px;
+  margin: 0 5px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  font-weight: 500;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.router-link:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 内容区域 */
+.router-view {
+  flex: 1;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  margin: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 </style>

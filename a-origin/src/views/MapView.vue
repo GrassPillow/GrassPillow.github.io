@@ -1,6 +1,8 @@
 <template>
   <div class="map-view">
     <map-container></map-container>
+    <!-- 展示地震数据 https://developer.aliyun.com/article/1639985 -->
+     
   </div>
 </template>
 

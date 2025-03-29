@@ -15,6 +15,7 @@ export default {
   name: "map-view",
   mounted() {
     this.initAMap();
+    this.getEarthquakeData();
   },
   unmounted() {
     this.map?.destroy();
@@ -51,6 +52,17 @@ export default {
           console.log(e);
         });
     },
+    getEarthquakeData() {
+      axios.get('https://cn.apihz.cn/api/tianqi/dizhen.php?id=88888888&key=88888888')
+        .then(response => {
+          console.log('地震数据:', response.data);
+          // 这里可以添加处理地震数据并传递给地震图层的逻辑
+        })
+        .catch(error => {
+          console.error('获取地震数据失败:', error);
+        });
+    },
+
   },
 };
 </script>

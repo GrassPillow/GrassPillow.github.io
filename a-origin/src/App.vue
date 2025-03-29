@@ -1,24 +1,13 @@
 <template>
-  <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-  <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
   <div>
-    <digital-clock id="digital-clock-1"></digital-clock>
-    <map-container></map-container>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-// import axios from 'axios';  
-import MapContainer from "./components/MapContainer.vue";
-import DigitalClock from "./components/DigitalClock.vue";
-// import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: "App",
   components: {
-    DigitalClock,
-    MapContainer,
-    // HelloWorld
   },
   // 默认加载
   mounted() {
@@ -37,12 +26,7 @@ body {
   padding: 0;
 }
 #app {
-  /* font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50; */
-  /* margin-top: 60px; */
+  height: 100vh;
 }
 
 #digital-clock-1 {
@@ -51,5 +35,8 @@ body {
   line-height: 100vh;
   font-family: "Courier New", Courier, monospace;
   display: none;
+}
+#map-container {
+  height: 100vh;
 }
 </style>

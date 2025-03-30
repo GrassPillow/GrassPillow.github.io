@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
+    "ant-design-vue": "^4.2.6",
     "axios": "^1.7.3",
     "core-js": "^3.8.3",
     "mapbox-gl": "^3.5.2",

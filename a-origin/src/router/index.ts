@@ -5,6 +5,7 @@ import AboutView from '../views/AboutView.vue'
 
 const routes = [
   { path: '/', component: HomeView },
+  { path: '/home', component: HomeView },
   { path: '/about', component: AboutView },
   { path: '/map', component: () => import('../views/MapView.vue') },
   { path: '/clock', component: () => import('../views/ClockView.vue') },

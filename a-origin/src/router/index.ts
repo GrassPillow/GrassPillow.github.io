@@ -1,8 +1,9 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import AboutView from '../views/AboutView.vue'
+import HomeView from '../views/HomeView.vue'
 
 const routes = [
-  { path: '/', redirect: '/earthquake' },
+  { path: '/', component: HomeView },
   { path: '/earthquake', component: () => import('../components/EarthquakeList.vue') },
   { path: '/about', component: AboutView },
   { path: '/map', component: () => import('../views/MapView.vue') },

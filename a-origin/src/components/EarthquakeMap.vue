@@ -1,14 +1,43 @@
 <template>
   <div class="earthquake-map">
-    <h3>地震分布地图 - 按时间顺序展示</h3>
+    <div class="map-header">
+      <h3>地震分布地图 - 按时间顺序展示</h3>
+      <div class="legend">
+        <span class="legend-item">
+          <span class="legend-marker severity-minor"></span>
+          <span>&lt; 5.0 级</span>
+        </span>
+        <span class="legend-item">
+          <span class="legend-marker severity-medium"></span>
+          <span>5.0 - 7.0 级</span>
+        </span>
+        <span class="legend-item">
+          <span class="legend-marker severity-major"></span>
+          <span>&gt;= 7.0 级</span>
+        </span>
+      </div>
+    </div>
     <div id="map-container" ref="mapContainer"></div>
     <div class="controls">
-      <button @click="startAnimation" :disabled="isAnimating">开始动画</button>
-      <button @click="stopAnimation" :disabled="!isAnimating">停止动画</button>
-      <button @click="resetAnimation">重置</button>
-      <input type="range" v-model.number="animationSpeed" min="50" max="1000" step="50" 
-             @input="updateAnimationSpeed" placeholder="动画速度">
-      <span>{{ animationSpeed }}ms</span>
+      <button class="control-btn start-btn" @click="startAnimation" :disabled="isAnimating">
+        <i class="control-icon">▶</i> 开始动画
+      </button>
+      <button class="control-btn stop-btn" @click="stopAnimation" :disabled="!isAnimating">
+        <i class="control-icon">■</i> 停止动画
+      </button>
+      <button class="control-btn reset-btn" @click="resetAnimation">
+        <i class="control-icon">⟳</i> 重置
+      </button>
+      <div class="speed-control">
+        <label for="animation-speed">动画速度:</label>
+        <input id="animation-speed" type="range" v-model.number="animationSpeed" min="50" max="1000" step="50" 
+               @input="updateAnimationSpeed">
+        <span class="speed-value">{{ animationSpeed }}ms</span>
+      </div>
+      <div class="animation-status" v-if="isAnimating">
+        <span class="status-indicator"></span>
+        <span>动画进行中...</span>
+      </div>
     </div>
   </div>
 </template>
@@ -298,7 +327,36 @@ const createMarker = (item, index) => {
       }
       
       // 创建带有动画效果的标记
-      const content = `<div style="width: ${markerSize}px; height: ${markerSize}px; background-color: ${markerColor}; border-radius: 50%; opacity: 0.8; display: flex; align-items: center; justify-content: center; border: 2px solid white; animation: pulse 0.6s ease-in-out;">${magnitude || ''}</div>`;
+      const content = `
+        <div class="earthquake-marker" style="
+          width: ${markerSize}px; 
+          height: ${markerSize}px; 
+          background-color: ${markerColor}; 
+          border-radius: 50%; 
+          opacity: 0.8; 
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          border: 2px solid white; 
+          box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+          font-size: ${Math.max(10, markerSize * 0.4)}px;
+          font-weight: 600;
+          color: white;
+          text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        ">${magnitude || ''}</div>
+        <div class="marker-pulse" style="
+          position: absolute;
+          width: ${markerSize * 1.5}px;
+          height: ${markerSize * 1.5}px;
+          background-color: ${markerColor};
+          border-radius: 50%;
+          opacity: 0.5;
+          animation: pulse-ring 1.5s infinite;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        "></div>
+      `;
       
       const marker = new AMap.Marker({
         position: [coords.lon, coords.lat],
@@ -527,42 +585,215 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* 地图头部样式 */
+.map-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.map-header h3 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* 图例样式 */
+.legend {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+}
+
+.legend-marker {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.legend-marker.severity-minor {
+  background-color: #FF9999;
+}
+
+.legend-marker.severity-medium {
+  background-color: #FF6600;
+}
+
+.legend-marker.severity-major {
+  background-color: #FF0000;
 }
 
 #map-container {
   width: 100%;
-  height: 700px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  height: 500px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* 控件样式 */
 .controls {
-  margin-top: 10px;
+  margin-top: 20px;
   display: flex;
-  gap: 10px;
+  gap: 15px;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  background: white;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.controls button {
-  padding: 8px 16px;
+/* 按钮样式 */
+.control-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.control-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.control-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.start-btn {
   background-color: #4CAF50;
   color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
 }
 
-.controls button:hover:not(:disabled) {
+.start-btn:hover:not(:disabled) {
   background-color: #45a049;
 }
 
-.controls button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
+.stop-btn {
+  background-color: #f44336;
+  color: white;
 }
 
-.controls input[type="range"] {
+.stop-btn:hover:not(:disabled) {
+  background-color: #d32f2f;
+}
+
+.reset-btn {
+  background-color: #2196F3;
+  color: white;
+}
+
+.reset-btn:hover:not(:disabled) {
+  background-color: #1976D2;
+}
+
+.control-icon {
+  font-size: 16px;
+}
+
+/* 速度控制样式 */
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.speed-control label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  white-space: nowrap;
+}
+
+.speed-control input[type="range"] {
   width: 150px;
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd;
+  outline: none;
+  transition: background 0.3s;
+}
+
+.speed-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #2196F3;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(33, 150, 243, 0.3);
+  transition: all 0.3s ease;
+}
+
+.speed-control input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 3px 10px rgba(33, 150, 243, 0.5);
+}
+
+.speed-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2196F3;
+  min-width: 60px;
+}
+
+/* 动画状态指示器 */
+.animation-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4CAF50;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  animation: status-blink 1s infinite;
 }
 
 /* 添加脉冲动画效果 */
@@ -581,49 +812,160 @@ onUnmounted(() => {
   }
 }
 
+/* 脉冲环动画 */
+@keyframes pulse-ring {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0.7;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* 状态指示器闪烁动画 */
+@keyframes status-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .earthquake-map {
+    padding: 15px;
+  }
+  
+  .map-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .map-header h3 {
+    font-size: 20px;
+  }
+  
+  .legend {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  #map-container {
+    height: 350px;
+  }
+  
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .control-btn {
+    justify-content: center;
+  }
+  
+  .speed-control {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .speed-control input[type="range"] {
+    width: 100%;
+  }
+}
+
 /* 信息窗口样式 */
 :deep(.earthquake-info-window) {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  max-width: 300px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  max-width: 320px;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+:deep(.earthquake-info-window:hover) {
+  transform: translateY(-2px);
 }
 
 :deep(.earthquake-info-window .info-header) {
-  background-color: #1E88E5;
+  background: linear-gradient(135deg, #1E88E5 0%, #1976D2 100%);
   color: white;
-  padding: 10px 15px;
+  padding: 12px 16px;
   margin: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+:deep(.earthquake-info-window .info-header::after) {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%);
 }
 
 :deep(.earthquake-info-window .info-header h4) {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
+  position: relative;
+  z-index: 1;
 }
 
 :deep(.earthquake-info-window .info-body) {
   background-color: white;
-  padding: 12px 15px;
+  padding: 16px;
 }
 
 :deep(.earthquake-info-window .info-body div) {
-  margin: 6px 0;
+  margin: 8px 0;
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.5;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #f5f5f5;
+  padding-bottom: 6px;
+}
+
+:deep(.earthquake-info-window .info-body div:last-child) {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 :deep(.earthquake-info-window .info-body strong) {
+  color: #555;
+  font-weight: 600;
+  flex: 1;
+  margin-right: 10px;
+}
+
+:deep(.earthquake-info-window .info-body div > span:last-child) {
   color: #333;
-  display: inline-block;
-  width: 80px;
+  font-weight: 500;
+  text-align: right;
+  flex: 1;
 }
 
 :deep(.earthquake-info-window .info-magnitude) {
-  font-size: 16px !important;
-  font-weight: 600;
-  margin-bottom: 10px !important;
+  font-size: 18px !important;
+  font-weight: 700;
+  margin-bottom: 12px !important;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e0e0e0;
 }
 
 :deep(.earthquake-info-window .severity-major) {

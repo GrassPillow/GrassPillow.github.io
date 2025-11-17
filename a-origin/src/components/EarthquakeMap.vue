@@ -38,28 +38,148 @@ const animationSpeed = ref(300); // 默认300ms
 let sortedData = []; // 存储按时间排序后的数据
 
 // 显示信息窗口 - 确保在正确的作用域内
-const showInfoWindow = (marker) => {
+const showInfoWindow = (marker, autoClose = true) => {
   console.log('Showing info window');
   if (!map || !marker || !AMap) return;
   
   const data = marker.getExtData();
-  let infoContent = '<div style="padding: 10px;">';
   
-  // 添加关键信息
-  if (data.EventID) infoContent += `<p><strong>事件ID:</strong> ${data.EventID}</p>`;
-  if (data.OriginTime) infoContent += `<p><strong>发生时间:</strong> ${data.OriginTime}</p>`;
-  if (data.Latitude && data.Longitude) infoContent += `<p><strong>位置:</strong> 纬度${data.Latitude}, 经度${data.Longitude}</p>`;
-  if (data.Depth) infoContent += `<p><strong>深度:</strong> ${data.Depth} km</p>`;
-  if (data.Magnitude) infoContent += `<p><strong>震级:</strong> ${data.Magnitude}</p>`;
-  if (data.Location) infoContent += `<p><strong>地点:</strong> ${data.Location}</p>`;
+  // 创建更美观的信息窗口内容
+  let infoContent = `
+    <div class="earthquake-info-window">
+      <div class="info-header">
+        <h4>地震详情</h4>
+      </div>
+      <div class="info-body">
+  `;
   
-  infoContent += '</div>';
+  // 已显示字段的跟踪，避免重复显示
+  const displayedFields = new Set();
+  
+  // 添加关键信息，优先显示重要字段
+  if (data.Magnitude) {
+    const magnitude = parseFloat(data.Magnitude);
+    const severityClass = magnitude >= 7 ? 'severity-major' : 
+                          magnitude >= 5 ? 'severity-medium' : 'severity-minor';
+    infoContent += `<div class="info-magnitude ${severityClass}"><strong>震级:</strong> ${magnitude}</div>`;
+    displayedFields.add('Magnitude');
+  }
+  
+  // 处理时间字段 - 支持多种可能的时间字段名
+  let timeField = null;
+  const timeFields = ['OriginTime', 'time', 'Time', 'timestamp', 'Timestamp'];
+  for (const field of timeFields) {
+    if (data[field]) {
+      timeField = field;
+      break;
+    }
+  }
+  
+  if (timeField) {
+    // 尝试格式化时间
+    let formattedTime = data[timeField];
+    try {
+      const date = new Date(data[timeField]);
+      if (!isNaN(date.getTime())) {
+        formattedTime = date.toLocaleString('zh-CN', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+      }
+    } catch (e) {
+      console.warn('Failed to format time:', e);
+    }
+    infoContent += `<div><strong>发生时间:</strong> ${formattedTime}</div>`;
+    displayedFields.add(timeField);
+  }
+  
+  // 处理位置字段
+  if (data.Location) {
+    infoContent += `<div><strong>地点:</strong> ${data.Location}</div>`;
+    displayedFields.add('Location');
+  } else if (data.Latitude && data.Longitude) {
+    infoContent += `<div><strong>位置坐标:</strong> 纬度${data.Latitude}, 经度${data.Longitude}</div>`;
+    displayedFields.add('Latitude');
+    displayedFields.add('Longitude');
+  }
+  
+  // 处理震源深度
+  if (data.Depth) {
+    infoContent += `<div><strong>震源深度:</strong> ${data.Depth} km</div>`;
+    displayedFields.add('Depth');
+  }
+  
+  // 处理事件ID
+  if (data.EventID) {
+    infoContent += `<div><strong>事件ID:</strong> ${data.EventID}</div>`;
+    displayedFields.add('EventID');
+  }
+  
+  // 添加额外信息字段
+  const additionalFields = ['Source', 'Region', 'Type'];
+  additionalFields.forEach(field => {
+    if (data[field]) {
+      infoContent += `<div><strong>${field}:</strong> ${data[field]}</div>`;
+      displayedFields.add(field);
+    }
+  });
+  
+  // 添加分隔线，准备显示其他所有可用字段
+  infoContent += '<hr style="margin: 10px 0; border: none; border-top: 1px solid #eee;">';
+  infoContent += '<div style="font-size: 12px; margin-bottom: 8px; color: #666; font-weight: 500;">详细信息:</div>';
+  
+  // 显示所有其他未显示的非空字段
+  let extraFieldCount = 0;
+  for (const [key, value] of Object.entries(data)) {
+    // 跳过已显示的字段和空值
+    if (displayedFields.has(key) || value === null || value === undefined || value === '') {
+      continue;
+    }
+    
+    // 跳过复杂对象和数组，只显示简单类型的值
+    if (typeof value === 'object' && value !== null) {
+      continue;
+    }
+    
+    // 格式化键名，使其更易读（例如将驼峰命名转换为空格分隔的形式）
+    let formattedKey = key.replace(/([A-Z])/g, ' $1').trim();
+    formattedKey = formattedKey.charAt(0).toUpperCase() + formattedKey.slice(1);
+    
+    infoContent += `<div><strong>${formattedKey}:</strong> ${String(value)}</div>`;
+    extraFieldCount++;
+  }
+  
+  // 如果没有额外字段，显示提示信息
+  if (extraFieldCount === 0) {
+    infoContent += '<div style="color: #999; font-style: italic; font-size: 12px;">暂无其他详细信息</div>';
+  }
+  
+  infoContent += `
+      </div>
+    </div>
+  `;
+  
+  // 创建信息窗口配置
+  const infoWindowConfig = {
+    content: infoContent,
+    offset: new AMap.Pixel(0, -30),
+    autoMove: true,
+    closeWhenClickMap: autoClose
+  };
   
   // 创建并打开信息窗口
-  map.openInfoWindow(new AMap.InfoWindow({
-    content: infoContent,
-    offset: new AMap.Pixel(0, -30)
-  }), marker.getPosition());
+  const infoWindow = new AMap.InfoWindow(infoWindowConfig);
+  // 在高德地图2.0版本中，使用infoWindow.open而不是map.openInfoWindow
+  infoWindow.open(map, marker.getPosition());
+  
+  // 保存信息窗口引用到标记对象
+  marker.infoWindow = infoWindow;
+  
+  return infoWindow;
 };
 
 // 获取经纬度数据，支持多种可能的字段名
@@ -155,6 +275,9 @@ const sortByTime = (data) => {
   });
 };
 
+// 记录上一个打开的信息窗口，用于自动关闭
+let lastOpenedInfoWindow = null;
+
 // 创建单个标记
 const createMarker = (item, index) => {
   try {
@@ -166,8 +289,16 @@ const createMarker = (item, index) => {
       const magnitude = getMagnitude(item);
       const markerSize = Math.max(10, magnitude * 3); // 最小10，根据震级放大
       
-      // 创建带有动画效果的红色圆形标记
-      const content = `<div style="width: ${markerSize}px; height: ${markerSize}px; background-color: #FF0000; border-radius: 50%; opacity: 0.8; display: flex; align-items: center; justify-content: center; border: 2px solid white; animation: pulse 0.6s ease-in-out;">${magnitude || ''}</div>`;
+      // 根据震级设置不同颜色
+      let markerColor = '#FF9999'; // 小地震 - 浅红色
+      if (magnitude >= 5 && magnitude < 7) {
+        markerColor = '#FF6600'; // 中等地震 - 橙色
+      } else if (magnitude >= 7) {
+        markerColor = '#FF0000'; // 大地震 - 红色
+      }
+      
+      // 创建带有动画效果的标记
+      const content = `<div style="width: ${markerSize}px; height: ${markerSize}px; background-color: ${markerColor}; border-radius: 50%; opacity: 0.8; display: flex; align-items: center; justify-content: center; border: 2px solid white; animation: pulse 0.6s ease-in-out;">${magnitude || ''}</div>`;
       
       const marker = new AMap.Marker({
         position: [coords.lon, coords.lat],
@@ -179,14 +310,42 @@ const createMarker = (item, index) => {
       
       // 添加点击事件
       marker.on('click', (e) => {
-        showInfoWindow(e.target);
+        showInfoWindow(e.target, false); // 点击时不自动关闭，用户可以主动关闭
       });
       
       markers.push(marker);
       marker.setMap(map);
       
+      // 在添加标记后自动显示信息窗口，并管理之前打开的窗口
+      setTimeout(() => {
+        // 如果之前有打开的信息窗口，先关闭它
+        if (lastOpenedInfoWindow && lastOpenedInfoWindow.getMap()) {
+          lastOpenedInfoWindow.close();
+        }
+        
+        // 为当前标记显示信息窗口，并设置为不随地图点击关闭
+        const infoWindow = showInfoWindow(marker, false);
+        lastOpenedInfoWindow = infoWindow;
+        
+        // 设置自动关闭计时器，3秒后自动关闭，除非用户手动交互
+        const closeTimer = setTimeout(() => {
+          if (infoWindow === lastOpenedInfoWindow && infoWindow.getMap()) {
+            infoWindow.close();
+          }
+        }, 3000);
+        
+        // 监听信息窗口的打开和关闭事件
+        infoWindow.on('open', () => {
+          lastOpenedInfoWindow = infoWindow;
+        });
+        
+        infoWindow.on('close', () => {
+          clearTimeout(closeTimer);
+        });
+      }, 500); // 延迟显示信息窗口，让标记动画先完成
+      
       // 调试信息
-      console.log(`Marker added: ${index + 1}/${sortedData.length}, Time: ${item.OriginTime || item.time || 'Unknown'}`);
+      console.log(`Marker added: ${index + 1}/${sortedData.length}, Time: ${item.OriginTime || item.time || 'Unknown'}, Magnitude: ${magnitude}`);
       
       return true;
     } else {
@@ -420,5 +579,62 @@ onUnmounted(() => {
     transform: scale(1);
     opacity: 0.8;
   }
+}
+
+/* 信息窗口样式 */
+:deep(.earthquake-info-window) {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 300px;
+}
+
+:deep(.earthquake-info-window .info-header) {
+  background-color: #1E88E5;
+  color: white;
+  padding: 10px 15px;
+  margin: 0;
+}
+
+:deep(.earthquake-info-window .info-header h4) {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+:deep(.earthquake-info-window .info-body) {
+  background-color: white;
+  padding: 12px 15px;
+}
+
+:deep(.earthquake-info-window .info-body div) {
+  margin: 6px 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+:deep(.earthquake-info-window .info-body strong) {
+  color: #333;
+  display: inline-block;
+  width: 80px;
+}
+
+:deep(.earthquake-info-window .info-magnitude) {
+  font-size: 16px !important;
+  font-weight: 600;
+  margin-bottom: 10px !important;
+}
+
+:deep(.earthquake-info-window .severity-major) {
+  color: #C62828;
+}
+
+:deep(.earthquake-info-window .severity-medium) {
+  color: #E65100;
+}
+
+:deep(.earthquake-info-window .severity-minor) {
+  color: #1B5E20;
 }
 </style>

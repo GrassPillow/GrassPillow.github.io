@@ -9,6 +9,10 @@
           <span class="nav-text">图书</span>
         </router-link>
         <span class="nav-divider"></span>
+        <router-link to="/weather" class="nav-link">
+          <span class="nav-text">天气</span>
+        </router-link>
+        <span class="nav-divider"></span>
         <router-link to="/earthquake" class="nav-link">
           <span class="nav-text">地震</span>
         </router-link>
@@ -256,9 +260,10 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* 主页和图书列表页特殊样式 - 全屏显示 */
+/* 主页、图书列表页和天气页特殊样式 - 全屏显示 */
 .router-view .home-view,
-.router-view .book-list-view {
+.router-view .book-list-view,
+.router-view .weather-view {
   margin: -20px;
   padding: 0;
 }

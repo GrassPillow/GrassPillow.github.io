@@ -69,9 +69,16 @@ let sortedData = []; // 存储按时间排序后的数据
 // 显示信息窗口 - 确保在正确的作用域内
 const showInfoWindow = (marker, autoClose = true) => {
   console.log('Showing info window');
-  if (!map || !marker || !AMap) return;
+  if (!map || !marker || !AMap) {
+    console.warn('Cannot show info window: map, marker, or AMap is not available');
+    return null;
+  }
   
   const data = marker.getExtData();
+  if (!data) {
+    console.warn('Marker has no extData');
+    return null;
+  }
   
   // 创建更美观的信息窗口内容
   let infoContent = `
@@ -201,14 +208,30 @@ const showInfoWindow = (marker, autoClose = true) => {
   };
   
   // 创建并打开信息窗口
-  const infoWindow = new AMap.InfoWindow(infoWindowConfig);
-  // 在高德地图2.0版本中，使用infoWindow.open而不是map.openInfoWindow
-  infoWindow.open(map, marker.getPosition());
-  
-  // 保存信息窗口引用到标记对象
-  marker.infoWindow = infoWindow;
-  
-  return infoWindow;
+  try {
+    const infoWindow = new AMap.InfoWindow(infoWindowConfig);
+    if (!infoWindow) {
+      console.warn('Failed to create AMap.InfoWindow');
+      return null;
+    }
+    
+    // 在高德地图2.0版本中，使用infoWindow.open而不是map.openInfoWindow
+    const position = marker.getPosition();
+    if (!position) {
+      console.warn('Marker has no position');
+      return null;
+    }
+    
+    infoWindow.open(map, position);
+    
+    // 保存信息窗口引用到标记对象
+    marker.infoWindow = infoWindow;
+    
+    return infoWindow;
+  } catch (error) {
+    console.error('Error creating info window:', error);
+    return null;
+  }
 };
 
 // 获取经纬度数据，支持多种可能的字段名
@@ -377,29 +400,38 @@ const createMarker = (item, index) => {
       // 在添加标记后自动显示信息窗口，并管理之前打开的窗口
       setTimeout(() => {
         // 如果之前有打开的信息窗口，先关闭它
-        if (lastOpenedInfoWindow && lastOpenedInfoWindow.getMap()) {
+        if (lastOpenedInfoWindow && typeof lastOpenedInfoWindow.getMap === 'function' && lastOpenedInfoWindow.getMap()) {
           lastOpenedInfoWindow.close();
         }
         
         // 为当前标记显示信息窗口，并设置为不随地图点击关闭
         const infoWindow = showInfoWindow(marker, false);
+        if (!infoWindow) {
+          console.warn('Failed to create info window for marker');
+          return;
+        }
+        
         lastOpenedInfoWindow = infoWindow;
         
         // 设置自动关闭计时器，3秒后自动关闭，除非用户手动交互
         const closeTimer = setTimeout(() => {
-          if (infoWindow === lastOpenedInfoWindow && infoWindow.getMap()) {
+          if (infoWindow === lastOpenedInfoWindow && 
+              typeof infoWindow.getMap === 'function' && 
+              infoWindow.getMap()) {
             infoWindow.close();
           }
         }, 3000);
         
-        // 监听信息窗口的打开和关闭事件
-        infoWindow.on('open', () => {
-          lastOpenedInfoWindow = infoWindow;
-        });
-        
-        infoWindow.on('close', () => {
-          clearTimeout(closeTimer);
-        });
+        // 监听信息窗口的打开和关闭事件（需要检查方法是否存在）
+        if (infoWindow && typeof infoWindow.on === 'function') {
+          infoWindow.on('open', () => {
+            lastOpenedInfoWindow = infoWindow;
+          });
+          
+          infoWindow.on('close', () => {
+            clearTimeout(closeTimer);
+          });
+        }
       }, 500); // 延迟显示信息窗口，让标记动画先完成
       
       // 调试信息

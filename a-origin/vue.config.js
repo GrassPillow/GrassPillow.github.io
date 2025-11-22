@@ -26,11 +26,23 @@ module.exports = defineConfig({
         // 自定义错误过滤函数
         runtimeErrors: (error) => {
           // 过滤掉ResizeObserver循环错误
-          if (error && error.message && 
-              (error.message.includes('ResizeObserver loop') || 
-               error.message.includes('ResizeObserver loop completed with undelivered notifications'))) {
+          const errorMessage = error?.message || error?.toString() || '';
+          const errorString = typeof error === 'string' ? error : errorMessage;
+          
+          if (errorString.includes('ResizeObserver loop') || 
+              errorString.includes('ResizeObserver loop completed with undelivered notifications') ||
+              errorString.includes('ResizeObserver loop limit exceeded')) {
             return false; // 不显示这些错误
           }
+          
+          // 检查错误堆栈
+          if (error?.stack) {
+            const stack = error.stack.toString();
+            if (stack.includes('ResizeObserver')) {
+              return false;
+            }
+          }
+          
           return true; // 显示其他错误
         }
       }

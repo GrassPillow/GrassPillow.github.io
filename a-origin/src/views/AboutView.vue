@@ -3,7 +3,7 @@
     <div class="about-hero">
       <div class="hero-content">
         <h1 class="about-title">关于我们</h1>
-        <p class="about-subtitle">探索知识的海洋，发现阅读的乐趣</p>
+        <p class="about-subtitle">多功能服务平台 - 为您提供便捷的在线服务体验</p>
       </div>
       <div class="leaves-decoration">
         <div class="leaf leaf-1"></div>
@@ -20,8 +20,8 @@
           </div>
           <h2 class="section-title">我们的使命</h2>
           <p class="section-text">
-            致力于打造一个优质的图书分享平台，让每一本好书都能被更多人发现和阅读。
-            我们相信阅读能够改变人生，知识能够启迪智慧。
+            致力于打造一个多功能服务平台，整合图书管理、AI工具、地震监测、时钟工具等实用功能。
+            我们相信技术能够改变生活，工具能够提升效率。
           </p>
         </div>
         
@@ -29,10 +29,10 @@
           <div class="card-icon">
             <div class="icon-leaf"></div>
           </div>
-          <h2 class="section-title">自然与阅读</h2>
+          <h2 class="section-title">功能丰富</h2>
           <p class="section-text">
-            正如大自然中的每一片叶子都有其独特的形状，每一本书也都有其独特的价值。
-            我们以自然为主题，营造一个宁静、舒适的阅读环境。
+            平台集成了多种实用工具，从图书管理到AI工具，从地震监测到时钟工具，
+            满足您在不同场景下的需求，提供一站式的服务体验。
           </p>
         </div>
         
@@ -40,10 +40,10 @@
           <div class="card-icon">
             <div class="icon-light"></div>
           </div>
-          <h2 class="section-title">知识之光</h2>
+          <h2 class="section-title">简洁高效</h2>
           <p class="section-text">
-            书籍是知识的载体，阅读是智慧的源泉。我们希望通过这个平台，
-            让知识的阳光照亮每一个热爱阅读的心灵。
+            我们注重用户体验，界面简洁美观，操作流畅直观。
+            让每一个功能都能快速上手，让每一次使用都成为愉快的体验。
           </p>
         </div>
       </div>
@@ -53,23 +53,23 @@
         <div class="features-grid">
           <div class="feature-item">
             <div class="feature-number">01</div>
-            <h3 class="feature-name">精选图书</h3>
-            <p class="feature-desc">精心挑选优质图书，涵盖文学、历史、科学等多个领域</p>
+            <h3 class="feature-name">图书管理</h3>
+            <p class="feature-desc">精美的图书列表展示，支持分类浏览和搜索，发现阅读的乐趣</p>
           </div>
           <div class="feature-item">
             <div class="feature-number">02</div>
-            <h3 class="feature-name">便捷浏览</h3>
-            <p class="feature-desc">流畅的阅读体验，支持分页加载，轻松浏览海量图书</p>
+            <h3 class="feature-name">AI工具</h3>
+            <p class="feature-desc">丰富的AI工具集合，包括文本处理、代码格式化、密码生成等</p>
           </div>
           <div class="feature-item">
             <div class="feature-number">03</div>
-            <h3 class="feature-name">实时数据</h3>
-            <p class="feature-desc">提供地震数据、地图展示等实用功能，信息实时更新</p>
+            <h3 class="feature-name">地震监测</h3>
+            <p class="feature-desc">全球地震数据实时更新，详细的地震信息和地理分布展示</p>
           </div>
           <div class="feature-item">
             <div class="feature-number">04</div>
-            <h3 class="feature-name">自然设计</h3>
-            <p class="feature-desc">以自然为主题的设计风格，营造舒适的视觉体验</p>
+            <h3 class="feature-name">时钟工具</h3>
+            <p class="feature-desc">精美的数字时钟，支持多种主题模式，满足不同场景需求</p>
           </div>
         </div>
       </div>

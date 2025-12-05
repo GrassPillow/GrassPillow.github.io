@@ -21,15 +21,15 @@ import GridCard from './GridCard.vue'
 
 const gridCards = [
   {
-    title: '天气预报',
-    description: '实时天气信息，智能穿衣推荐，支持全球城市查询，为您的生活出行提供便利。',
+    title: '图书管理',
+    description: '精美的图书列表展示，支持分类浏览和搜索，发现阅读的乐趣。',
     icon: 'flower',
     backgroundColor: '#2d7a6b',
     iconColor: 'white'
   },
   {
-    title: '股票市场',
-    description: '实时股票行情，数据可视化展示，支持美股和A股，助您做出明智的投资决策。',
+    title: 'AI工具',
+    description: '丰富的AI工具集合，包括文本处理、代码格式化、密码生成等，提升工作效率。',
     icon: 'leaf',
     backgroundColor: '#5a4a3a',
     iconColor: 'white'
@@ -55,13 +55,6 @@ const gridCards = [
     icon: 'flower',
     backgroundColor: '#5a4a3a',
     iconColor: 'white'
-  },
-  {
-    title: '地图服务',
-    description: '交互式地图展示，支持多种地图功能，为您提供便捷的地理信息服务。',
-    icon: 'hexagon',
-    backgroundColor: '#c9a882',
-    iconColor: '#5a4a3a'
   }
 ]
 </script>

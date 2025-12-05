@@ -140,15 +140,15 @@ onMounted(async () => {
     // 如果加载失败，使用默认数据
     books.value = [
       {
-        title: '自然之美',
-        author: '作者名',
-        description: '探索大自然的奥秘，感受生命的奇迹。这本书带你走进自然的世界，发现身边的美好。',
+        title: '三体',
+        author: '刘慈欣',
+        description: '刘慈欣所著的科幻小说，讲述了地球文明与三体文明之间的交流与对抗。',
         coverColor: '#2d7a6b',
-        category: '自然'
+        category: '科幻'
       },
       {
-        title: '时光流转',
-        author: '作者名',
+        title: '西游八十一案：大唐梵天记',
+        author: '陈渐',
         description: '记录时光的痕迹，感受岁月的沉淀。每一页都是生活的缩影，每一个故事都值得珍藏。',
         coverColor: '#8b6f47',
         category: '文学'

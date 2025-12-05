@@ -19,16 +19,6 @@ import FeatureCard from './FeatureCard.vue'
 
 const features = [
   {
-    icon: 'clock',
-    title: '实时天气',
-    description: '提供准确的天气预报服务，支持全球城市查询，智能穿衣推荐，让您随时掌握天气变化。'
-  },
-  {
-    icon: 'building',
-    title: '股票行情',
-    description: '实时股票数据展示，支持美股和A股查询，丰富的可视化图表，助您把握投资机会。'
-  },
-  {
     icon: 'trowel',
     title: '地震监测',
     description: '全球地震数据实时更新，详细的地震信息和地理分布，让您了解地球的动态。'
@@ -37,6 +27,16 @@ const features = [
     icon: 'sprout',
     title: '时钟工具',
     description: '精美的数字时钟，支持多种主题模式，白天、黑夜、星空等，满足不同场景需求。'
+  },
+  {
+    icon: 'building',
+    title: 'AI工具',
+    description: '丰富的AI工具集合，包括文本处理、代码格式化、密码生成等，提升您的工作效率。'
+  },
+  {
+    icon: 'clock',
+    title: '图书管理',
+    description: '精美的图书列表展示，支持分类浏览和搜索，发现阅读的乐趣。'
   }
 ]
 </script>

@@ -18,14 +18,6 @@
           <span class="nav-icon">📚</span>
           <span class="nav-label">图书</span>
         </router-link>
-        <router-link to="/weather" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">☀️</span>
-          <span class="nav-label">天气</span>
-        </router-link>
-        <router-link to="/stock" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">📈</span>
-          <span class="nav-label">股票</span>
-        </router-link>
         <router-link to="/ai" class="nav-item" @click="handleNavClick">
           <span class="nav-icon">🤖</span>
           <span class="nav-label">AI工具</span>
@@ -37,10 +29,6 @@
         <router-link to="/clock" class="nav-item" @click="handleNavClick">
           <span class="nav-icon">🕐</span>
           <span class="nav-label">时钟</span>
-        </router-link>
-        <router-link to="/map" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">🗺️</span>
-          <span class="nav-label">地图</span>
         </router-link>
         <router-link to="/about" class="nav-item" @click="handleNavClick">
           <span class="nav-icon">ℹ️</span>
@@ -316,11 +304,9 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* 主页、图书列表页、天气页、股票页和AI页特殊样式 - 全屏显示 */
+/* 主页、图书列表页和AI页特殊样式 - 全屏显示 */
 .router-view .home-view,
 .router-view .book-list-view,
-.router-view .weather-view,
-.router-view .stock-view,
 .router-view .ai-view {
   margin: -20px;
   padding: 0;

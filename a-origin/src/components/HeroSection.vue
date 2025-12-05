@@ -4,9 +4,9 @@
       <div class="hero-content">
         <h1 class="hero-title">多功能服务平台</h1>
         <p class="hero-description">
-          集成了天气预报、股票行情、地震监测、时钟工具等多种实用功能，为您提供便捷的在线服务体验。界面简洁美观，操作流畅，随时随地满足您的需求。
+          集成了图书管理、AI工具、地震监测、时钟工具等多种实用功能，为您提供便捷的在线服务体验。界面简洁美观，操作流畅，随时随地满足您的需求。
         </p>
-        <router-link to="/weather" class="hero-button">开始使用</router-link>
+        <router-link to="/books" class="hero-button">开始使用</router-link>
       </div>
       <div class="leaves-decoration">
         <div class="leaf leaf-1"></div>

@@ -2,11 +2,11 @@
   <section class="hero-section">
     <div class="hero-background">
       <div class="hero-content">
-        <h1 class="hero-title">Rennale Renuelly</h1>
+        <h1 class="hero-title">多功能服务平台</h1>
         <p class="hero-description">
-          Lorem ipeincs.rat lani centevciuar armeric ent. cenum secwbasrten asings troge wuct oaf manidbitreoft on cenol ceasipeos unition melustitioye stonine encjor ectru vratiti croteszitona test faitoto driscste becông. voeracitt eohdombo emtun.
+          集成了天气预报、股票行情、地震监测、时钟工具等多种实用功能，为您提供便捷的在线服务体验。界面简洁美观，操作流畅，随时随地满足您的需求。
         </p>
-        <button class="hero-button">Heses Roge</button>
+        <router-link to="/weather" class="hero-button">开始使用</router-link>
       </div>
       <div class="leaves-decoration">
         <div class="leaf leaf-1"></div>
@@ -67,6 +67,7 @@
 }
 
 .hero-button {
+  display: inline-block;
   background-color: #e8d5c4;
   color: #5a4a3a;
   border: none;
@@ -78,11 +79,13 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  text-decoration: none;
 }
 
 .hero-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  background-color: #f0e4d4;
 }
 
 .leaves-decoration {

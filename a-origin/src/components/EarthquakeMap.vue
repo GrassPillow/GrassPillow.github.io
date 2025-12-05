@@ -30,7 +30,7 @@
       </button>
       <div class="speed-control">
         <label for="animation-speed">动画速度:</label>
-        <input id="animation-speed" type="range" v-model.number="animationSpeed" min="50" max="1000" step="50" 
+        <input id="animation-speed" type="range" v-model.number="animationSpeed" min="500" max="2000" step="100" 
                @input="updateAnimationSpeed">
         <span class="speed-value">{{ animationSpeed }}ms</span>
       </div>
@@ -63,7 +63,7 @@ let AMap = null; // 存储AMap实例
 let animationTimer = null;
 let currentIndex = 0;
 const isAnimating = ref(false);
-const animationSpeed = ref(300); // 默认300ms
+const animationSpeed = ref(1000); // 默认1000ms (500-2000ms范围)
 let sortedData = []; // 存储按时间排序后的数据
 
 // 显示信息窗口 - 确保在正确的作用域内
@@ -80,30 +80,28 @@ const showInfoWindow = (marker, autoClose = true) => {
     return null;
   }
   
-  // 创建更美观的信息窗口内容
+  // 创建简洁的信息窗口内容，只显示关键信息，紧凑为一行
   let infoContent = `
     <div class="earthquake-info-window">
-      <div class="info-header">
-        <h4>地震详情</h4>
-      </div>
       <div class="info-body">
   `;
   
-  // 已显示字段的跟踪，避免重复显示
-  const displayedFields = new Set();
+  // 收集所有要显示的信息片段
+  const infoParts = [];
   
-  // 添加关键信息，优先显示重要字段
-  if (data.Magnitude) {
-    const magnitude = parseFloat(data.Magnitude);
-    const severityClass = magnitude >= 7 ? 'severity-major' : 
-                          magnitude >= 5 ? 'severity-medium' : 'severity-minor';
-    infoContent += `<div class="info-magnitude ${severityClass}"><strong>震级:</strong> ${magnitude}</div>`;
-    displayedFields.add('Magnitude');
+  // 添加震级
+  if (data.Magnitude || data.magnitude || data.M || data.leve) {
+    const magnitude = parseFloat(data.Magnitude || data.magnitude || data.M || data.leve);
+    if (!isNaN(magnitude)) {
+      const severityClass = magnitude >= 7 ? 'severity-major' : 
+                            magnitude >= 5 ? 'severity-medium' : 'severity-minor';
+      infoParts.push(`<span class="info-magnitude ${severityClass}">${magnitude}</span>`);
+    }
   }
   
-  // 处理时间字段 - 支持多种可能的时间字段名
+  // 处理时间字段 - 支持多种可能的时间字段名，优先显示发生时间
   let timeField = null;
-  const timeFields = ['OriginTime', 'time', 'Time', 'timestamp', 'Timestamp'];
+  const timeFields = ['OriginTime', 'time', 'addtime'];
   for (const field of timeFields) {
     if (data[field]) {
       timeField = field;
@@ -129,70 +127,32 @@ const showInfoWindow = (marker, autoClose = true) => {
     } catch (e) {
       console.warn('Failed to format time:', e);
     }
-    infoContent += `<div><strong>发生时间:</strong> ${formattedTime}</div>`;
-    displayedFields.add(timeField);
+    infoParts.push(`${formattedTime}`);
   }
   
-  // 处理位置字段
-  if (data.Location) {
-    infoContent += `<div><strong>地点:</strong> ${data.Location}</div>`;
-    displayedFields.add('Location');
-  } else if (data.Latitude && data.Longitude) {
-    infoContent += `<div><strong>位置坐标:</strong> 纬度${data.Latitude}, 经度${data.Longitude}</div>`;
-    displayedFields.add('Latitude');
-    displayedFields.add('Longitude');
+  // 处理位置字段 - 优先显示中文位置，避免重复
+  if (data.Location || data.weizhi || data.placeName) {
+    const location = data.Location || data.weizhi || data.placeName;
+    infoParts.push(`${location}`);
   }
   
   // 处理震源深度
-  if (data.Depth) {
-    infoContent += `<div><strong>震源深度:</strong> ${data.Depth} km</div>`;
-    displayedFields.add('Depth');
+  if (data.Depth || data.shendu) {
+    const depth = data.Depth || data.shendu;
+    infoParts.push(`${depth} km`);
   }
   
-  // 处理事件ID
-  if (data.EventID) {
-    infoContent += `<div><strong>事件ID:</strong> ${data.EventID}</div>`;
-    displayedFields.add('EventID');
-  }
-  
-  // 添加额外信息字段
-  const additionalFields = ['Source', 'Region', 'Type'];
-  additionalFields.forEach(field => {
-    if (data[field]) {
-      infoContent += `<div><strong>${field}:</strong> ${data[field]}</div>`;
-      displayedFields.add(field);
+  // 处理经纬度 - 如果位置信息不存在，才显示坐标
+  if (!data.Location && !data.weizhi && !data.placeName) {
+    if (data.Latitude && data.Longitude) {
+      infoParts.push(`${data.Latitude}°N, ${data.Longitude}°E`);
+    } else if (data.weidu && data.jingdu) {
+      infoParts.push(`${data.weidu}°N, ${data.jingdu}°E`);
     }
-  });
-  
-  // 添加分隔线，准备显示其他所有可用字段
-  infoContent += '<hr style="margin: 10px 0; border: none; border-top: 1px solid #eee;">';
-  infoContent += '<div style="font-size: 12px; margin-bottom: 8px; color: #666; font-weight: 500;">详细信息:</div>';
-  
-  // 显示所有其他未显示的非空字段
-  let extraFieldCount = 0;
-  for (const [key, value] of Object.entries(data)) {
-    // 跳过已显示的字段和空值
-    if (displayedFields.has(key) || value === null || value === undefined || value === '') {
-      continue;
-    }
-    
-    // 跳过复杂对象和数组，只显示简单类型的值
-    if (typeof value === 'object' && value !== null) {
-      continue;
-    }
-    
-    // 格式化键名，使其更易读（例如将驼峰命名转换为空格分隔的形式）
-    let formattedKey = key.replace(/([A-Z])/g, ' $1').trim();
-    formattedKey = formattedKey.charAt(0).toUpperCase() + formattedKey.slice(1);
-    
-    infoContent += `<div><strong>${formattedKey}:</strong> ${String(value)}</div>`;
-    extraFieldCount++;
   }
   
-  // 如果没有额外字段，显示提示信息
-  if (extraFieldCount === 0) {
-    infoContent += '<div style="color: #999; font-style: italic; font-size: 12px;">暂无其他详细信息</div>';
-  }
+  // 将所有信息片段用分隔符连接成一行
+  infoContent += `<div class="info-line">${infoParts.join(' | ')}</div>`;
   
   infoContent += `
       </div>
@@ -542,8 +502,8 @@ const updateMarkers = (data) => {
     })));
   }
   
-  // 自动开始动画
-  startAnimation();
+  // 默认不开启动画，用户需要手动点击"开始动画"按钮
+  // startAnimation();
 };
 
 // 初始化地图
@@ -931,73 +891,25 @@ onUnmounted(() => {
   transform: translateY(-2px);
 }
 
-:deep(.earthquake-info-window .info-header) {
-  background: linear-gradient(135deg, #1E88E5 0%, #1976D2 100%);
-  color: white;
-  padding: 12px 16px;
-  margin: 0;
-  position: relative;
-  overflow: hidden;
-}
-
-:deep(.earthquake-info-window .info-header::after) {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%);
-}
-
-:deep(.earthquake-info-window .info-header h4) {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  position: relative;
-  z-index: 1;
-}
-
 :deep(.earthquake-info-window .info-body) {
   background-color: white;
-  padding: 16px;
+  padding: 8px 12px;
+  border-radius: 8px;
 }
 
-:deep(.earthquake-info-window .info-body div) {
-  margin: 8px 0;
-  font-size: 14px;
-  line-height: 1.5;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid #f5f5f5;
-  padding-bottom: 6px;
-}
-
-:deep(.earthquake-info-window .info-body div:last-child) {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-:deep(.earthquake-info-window .info-body strong) {
-  color: #555;
-  font-weight: 600;
-  flex: 1;
-  margin-right: 10px;
-}
-
-:deep(.earthquake-info-window .info-body div > span:last-child) {
+:deep(.earthquake-info-window .info-line) {
+  font-size: 13px;
+  line-height: 1.4;
   color: #333;
-  font-weight: 500;
-  text-align: right;
-  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 :deep(.earthquake-info-window .info-magnitude) {
-  font-size: 18px !important;
+  font-size: 15px !important;
   font-weight: 700;
-  margin-bottom: 12px !important;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #e0e0e0;
+  margin-right: 4px;
 }
 
 :deep(.earthquake-info-window .severity-major) {

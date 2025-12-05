@@ -20,23 +20,23 @@ import FeatureCard from './FeatureCard.vue'
 const features = [
   {
     icon: 'clock',
-    title: 'Exetgar is',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.'
+    title: '实时天气',
+    description: '提供准确的天气预报服务，支持全球城市查询，智能穿衣推荐，让您随时掌握天气变化。'
   },
   {
     icon: 'building',
-    title: 'Nartomersi',
-    description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'
+    title: '股票行情',
+    description: '实时股票数据展示，支持美股和A股查询，丰富的可视化图表，助您把握投资机会。'
   },
   {
     icon: 'trowel',
-    title: 'Cleotewes',
-    description: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+    title: '地震监测',
+    description: '全球地震数据实时更新，详细的地震信息和地理分布，让您了解地球的动态。'
   },
   {
     icon: 'sprout',
-    title: 'Weohe sloasarcion',
-    description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est.'
+    title: '时钟工具',
+    description: '精美的数字时钟，支持多种主题模式，白天、黑夜、星空等，满足不同场景需求。'
   }
 ]
 </script>

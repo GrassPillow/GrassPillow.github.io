@@ -5,7 +5,7 @@ echo "deploying start " $(date "+%Y-%m-%d %H:%M:%S")
 
 echo "开始删除 " $(date "+%Y-%m-%d %H:%M:%S")
 # 保留的文件和文件夹列表
-KEEP_ITEMS=(".idea" "a-origin" ".gitignore" "deploy.sh" "README.md" ".git")
+KEEP_ITEMS=(".idea" "origin" ".gitignore" "deploy.sh" "README.md" ".git")
 
 # 遍历当前目录下的所有文件和文件夹
 for item in * .*; do
@@ -32,7 +32,7 @@ done
 echo "删除完成 " $(date "+%Y-%m-%d %H:%M:%S")
 
 echo "开始构建 " $(date "+%Y-%m-%d %H:%M:%S")
-cd a-origin
+cd origin
 npm run build
 echo "构建完成 " $(date "+%Y-%m-%d %H:%M:%S")
 

@@ -1,0 +1,32 @@
+name,url,description,category
+ChatGPT,https://chat.openai.com,OpenAI开发的对话AI助手,chat
+Claude,https://claude.ai,Anthropic开发的AI助手,chat
+文心一言,https://yiyan.baidu.com,百度开发的对话AI助手,chat
+通义千问,https://tongyi.aliyun.com,阿里巴巴开发的对话AI助手,chat
+豆包,https://www.doubao.com,字节跳动开发的对话AI助手,chat
+智谱清言,https://chatglm.cn,智谱AI开发的对话AI助手,chat
+Kimi,https://kimi.moonshot.cn,月之暗面开发的AI助手,chat
+讯飞星火,https://xinghuo.xfyun.cn,科大讯飞开发的对话AI助手,chat
+腾讯混元,https://hunyuan.tencent.com,腾讯开发的对话AI助手,chat
+Midjourney,https://www.midjourney.com,AI图像生成工具,image
+DALL-E,https://openai.com/dall-e-2,OpenAI的图像生成AI,image
+Stable Diffusion,https://stability.ai,开源的图像生成模型,image
+文心一格,https://yige.baidu.com,百度开发的AI图像生成工具,image
+通义万相,https://tongyi.aliyun.com/wanxiang,阿里巴巴开发的AI图像生成工具,image
+6pen,https://6pen.art,AI绘画平台,image
+GitHub Copilot,https://github.com/features/copilot,AI代码助手,code
+Cursor,https://cursor.sh,AI驱动的代码编辑器,code
+通义灵码,https://tongyi.aliyun.com/lingma,阿里巴巴开发的AI代码助手,code
+Notion AI,https://www.notion.so/product/ai,AI写作助手,writing
+Jasper,https://www.jasper.ai,AI内容创作平台,writing
+Runway,https://runwayml.com,AI视频生成工具,video
+Figma AI,https://www.figma.com,AI设计工具,design
+Perplexity,https://www.perplexity.ai,AI搜索引擎,search
+通义听悟,https://tingwu.aliyun.com,阿里巴巴开发的AI音视频转写工具,audio
+发现AI,https://faxianai.com,AI工具导航+深度内容，2025年较受欢迎的AI导航站之一,navigation
+Toolify.ai,https://toolify.ai,全球向AI工具导航，收录上万款AI工具，配有筛选和评分,navigation
+TopAI,https://topai.tools,全球向AI工具导航，收录大量AI工具,navigation
+AIHub,https://aihub.com,全球向AI工具导航，提供AI工具评测,navigation
+优设AI导航,https://ai.uisdc.com,面向中文用户的AI工具导航，按分类整理,navigation
+AI工具集,https://ai-bot.cn,面向中文用户的AI工具导航，方便快速找到合适网站,navigation
+AMZ123 AI工具箱,https://www.amz123.com/ai,面向中文用户的AI工具导航，按聊天、绘画、音视频等分类,navigation

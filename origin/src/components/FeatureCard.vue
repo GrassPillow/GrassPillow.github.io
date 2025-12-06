@@ -32,68 +32,23 @@ defineProps({
   flex-direction: column;
   align-items: center;
   text-align: center;
-  color: white;
-  padding: 30px 20px;
-  border-radius: 24px;
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  position: relative;
-  cursor: pointer;
-}
-
-.feature-card-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.feature-card-item:hover::before {
-  opacity: 1;
-}
-
-.feature-card-item:hover {
-  transform: translateY(-8px) scale(1.02);
-  background: rgba(255, 255, 255, 0.05);
 }
 
 .icon-wrapper {
-  width: 100px;
-  height: 100px;
-  margin-bottom: 24px;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  z-index: 1;
-  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.feature-card-item:hover .icon-wrapper {
-  transform: scale(1.1) rotate(5deg);
 }
 
 .icon {
-  width: 70px;
-  height: 70px;
-  border: 3px solid rgba(255, 255, 255, 0.9);
+  width: 48px;
+  height: 48px;
+  border: 2px solid #2d7a6b;
   border-radius: 50%;
   position: relative;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2),
-              inset 0 2px 4px rgba(255, 255, 255, 0.3);
-  transition: all 0.4s ease;
-}
-
-.feature-card-item:hover .icon {
-  border-color: white;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3),
-              inset 0 2px 4px rgba(255, 255, 255, 0.4);
-  transform: scale(1.05);
 }
 
 .icon-clock::before {
@@ -102,9 +57,9 @@ defineProps({
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
-  border: 2px solid white;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #2d7a6b;
   border-radius: 50%;
 }
 
@@ -115,14 +70,14 @@ defineProps({
   left: 50%;
   transform: translate(-50%, -50%);
   width: 2px;
-  height: 8px;
-  background: white;
+  height: 6px;
+  background: #2d7a6b;
   transform-origin: bottom center;
   transform: translate(-50%, -100%) rotate(45deg);
 }
 
 .icon-building {
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .icon-building::before {
@@ -131,10 +86,10 @@ defineProps({
   top: 20%;
   left: 50%;
   transform: translateX(-50%);
-  width: 30px;
-  height: 30px;
-  border: 2px solid white;
-  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #2d7a6b;
+  border-radius: 3px;
 }
 
 .icon-building::after {
@@ -143,10 +98,10 @@ defineProps({
   top: 60%;
   left: 50%;
   transform: translateX(-50%);
-  width: 30px;
-  height: 20px;
-  border: 2px solid white;
-  border-radius: 4px;
+  width: 24px;
+  height: 16px;
+  border: 2px solid #2d7a6b;
+  border-radius: 3px;
 }
 
 .icon-trowel::before {
@@ -155,9 +110,9 @@ defineProps({
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(45deg);
-  width: 25px;
+  width: 20px;
   height: 2px;
-  background: white;
+  background: #2d7a6b;
   border-radius: 2px;
 }
 
@@ -169,10 +124,10 @@ defineProps({
   transform: translate(-50%, -50%) rotate(45deg);
   width: 0;
   height: 0;
-  border-left: 8px solid white;
-  border-top: 4px solid transparent;
-  border-bottom: 4px solid transparent;
-  margin-left: 12px;
+  border-left: 6px solid #2d7a6b;
+  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  margin-left: 10px;
 }
 
 .icon-sprout::before {
@@ -183,9 +138,9 @@ defineProps({
   transform: translate(-50%, -50%);
   width: 0;
   height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 20px solid white;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 16px solid #2d7a6b;
 }
 
 .icon-sprout::after {
@@ -195,40 +150,23 @@ defineProps({
   left: 50%;
   transform: translateX(-50%);
   width: 2px;
-  height: 15px;
-  background: white;
+  height: 12px;
+  background: #2d7a6b;
 }
 
 .feature-title {
-  font-size: 1.4rem;
-  font-weight: 700;
-  margin: 0 0 16px 0;
-  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+  color: #2d5a4f;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  position: relative;
-  z-index: 1;
-  transition: transform 0.3s ease;
-}
-
-.feature-card-item:hover .feature-title {
-  transform: translateY(-2px);
 }
 
 .feature-description {
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 0.95rem;
+  line-height: 1.6;
   margin: 0;
-  color: white;
-  opacity: 0.95;
+  color: #666;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  position: relative;
-  z-index: 1;
-  transition: opacity 0.3s ease;
-}
-
-.feature-card-item:hover .feature-description {
-  opacity: 1;
 }
 </style>
-

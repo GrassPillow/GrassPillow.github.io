@@ -16,11 +16,15 @@
         </div>
       </div>
     </div>
-    <div v-if="searchQuery && filteredBooks.length === 0 && !isLoading && books.length > 0" class="no-results">
+    <div v-if="!isLoading && books.length === 0" class="no-results">
+      <p class="no-results-text">暂无图书数据</p>
+      <p class="no-results-hint">请稍后重试</p>
+    </div>
+    <div v-else-if="searchQuery && filteredBooks.length === 0 && !isLoading && books.length > 0" class="no-results">
       <p class="no-results-text">未找到相关图书</p>
       <p class="no-results-hint">试试搜索其他关键词</p>
     </div>
-    <div v-else-if="displayedBooks.length > 0 || !searchQuery" class="book-container">
+    <div v-else-if="displayedBooks.length > 0" class="book-container">
       <BookCard
         v-for="(book, index) in displayedBooks"
         :key="`${book.title || 'book'}-${index}`"
@@ -48,6 +52,9 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import axios from 'axios'
 import BookCard from '../components/BookCard.vue'
+import { useToast } from '../composables/useToast.js'
+
+const toast = useToast()
 
 const books = ref([])
 const displayedBooks = ref([])
@@ -87,19 +94,30 @@ const filteredBooks = computed(() => {
 
 // 解析CSV数据
 function parseCSV(csvText) {
-  const lines = csvText.trim().split('\n')
-  const headers = lines[0].split(',')
+  if (!csvText || !csvText.trim()) {
+    console.warn('CSV text is empty')
+    return []
+  }
+  
+  const lines = csvText.trim().split('\n').filter(line => line.trim()) // 过滤空行
+  if (lines.length < 2) {
+    console.warn('CSV file has no data rows')
+    return []
+  }
+  
+  const headers = lines[0].split(',').map(h => h.trim())
   const data = []
   
   for (let i = 1; i < lines.length; i++) {
-    if (!lines[i].trim()) continue // 跳过空行
+    const line = lines[i].trim()
+    if (!line) continue // 跳过空行
     
     const values = []
     let currentValue = ''
     let inQuotes = false
     
-    for (let j = 0; j < lines[i].length; j++) {
-      const char = lines[i][j]
+    for (let j = 0; j < line.length; j++) {
+      const char = line[j]
       
       if (char === '"') {
         inQuotes = !inQuotes
@@ -110,17 +128,24 @@ function parseCSV(csvText) {
         currentValue += char
       }
     }
-    values.push(currentValue.trim())
+    values.push(currentValue.trim()) // 添加最后一个值
     
+    // 确保值的数量匹配表头数量
     if (values.length === headers.length) {
       const book = {}
       headers.forEach((header, index) => {
-        book[header] = values[index]
+        book[header] = values[index] || ''
       })
-      data.push(book)
+      // 确保必要字段存在
+      if (book.title && book.author) {
+        data.push(book)
+      }
+    } else {
+      console.warn(`Row ${i} has ${values.length} values, expected ${headers.length}:`, values)
     }
   }
   
+  console.log(`Parsed ${data.length} books from CSV`)
   return data
 }
 
@@ -202,16 +227,63 @@ function handleScroll(event) {
 
 onMounted(async () => {
   try {
+    isLoading.value = true
     const response = await axios.get('/books.csv')
+    console.log('CSV Response:', response.data.substring(0, 200)) // 调试：查看前200个字符
+    
     const csvData = parseCSV(response.data)
+    console.log('Parsed CSV Data:', csvData) // 调试：查看解析后的数据
+    
     books.value = csvData
+    
+    // 等待数据设置完成，确保响应式更新
+    await new Promise(resolve => setTimeout(resolve, 200))
+    
+    console.log('Books after assignment:', books.value.length) // 调试：查看图书数量
     
     // 初始加载第一页
     if (books.value.length > 0) {
-      loadMoreBooks()
+      // 重置分页状态
+      displayedBooks.value = []
+      currentPage.value = 1
+      hasMore.value = true
+      
+      // 使用 nextTick 确保 computed 已更新
+      await new Promise(resolve => {
+        setTimeout(() => {
+          const filtered = filteredBooks.value
+          console.log('Filtered books:', filtered.length) // 调试：查看过滤后的数量
+          
+          if (filtered.length > 0) {
+            // 直接加载第一页数据，不使用 loadMoreBooks 的延迟
+            const startIndex = 0
+            const endIndex = Math.min(pageSize.value, filtered.length)
+            const newBooks = filtered.slice(startIndex, endIndex)
+            
+            displayedBooks.value = [...newBooks]
+            currentPage.value = 2
+            
+            if (endIndex >= filtered.length) {
+              hasMore.value = false
+            }
+            
+            isLoading.value = false
+            toast.success(`成功加载 ${books.value.length} 本图书`)
+          } else {
+            console.warn('Filtered books is empty')
+            isLoading.value = false
+          }
+          resolve()
+        }, 100)
+      })
+    } else {
+      console.warn('No books loaded from CSV')
+      toast.warning('未找到图书数据')
+      isLoading.value = false
     }
   } catch (error) {
     console.error('Failed to load books from CSV:', error)
+    toast.error('加载图书数据失败，已使用默认数据')
     // 如果加载失败，使用默认数据
     books.value = [
       {
@@ -272,9 +344,18 @@ onMounted(async () => {
       }
     ]
     
+    // 等待数据设置完成
+    await new Promise(resolve => setTimeout(resolve, 100))
+    
     if (books.value.length > 0) {
+      // 重置分页状态
+      displayedBooks.value = []
+      currentPage.value = 1
+      hasMore.value = true
+      
       loadMoreBooks()
     }
+    isLoading.value = false
   }
 })
 

@@ -228,52 +228,6 @@ export default {
       return Object.keys(this.filteredCategorizedWebsites).length
     }
   },
-  async mounted() {
-    try {
-      // 从CSV文件加载数据
-      const response = await axios.get('/ai-websites.csv')
-      const csvData = parseCSV(response.data)
-      this.aiWebsites = csvData
-      
-      // 从本地存储加载用户添加的网站（合并到CSV数据）
-    const saved = localStorage.getItem('aiWebsites')
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved)
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            // 合并本地存储的网站（避免重复）
-            parsed.forEach(savedSite => {
-              const exists = this.aiWebsites.some(site => 
-                site.url === savedSite.url || site.name === savedSite.name
-              )
-              if (!exists) {
-                this.aiWebsites.push(savedSite)
-              }
-            })
-        }
-      } catch (e) {
-          console.error('Failed to load saved websites from localStorage:', e)
-        }
-      }
-    } catch (error) {
-      console.error('Failed to load AI websites from CSV:', error)
-      // 如果加载失败，使用默认数据
-      this.aiWebsites = [
-        { name: 'ChatGPT', url: 'https://chat.openai.com', description: 'OpenAI开发的对话AI助手', category: 'chat' },
-        { name: 'Claude', url: 'https://claude.ai', description: 'Anthropic开发的AI助手', category: 'chat' },
-        { name: 'Midjourney', url: 'https://www.midjourney.com', description: 'AI图像生成工具', category: 'image' },
-        { name: 'DALL-E', url: 'https://openai.com/dall-e-2', description: 'OpenAI的图像生成AI', category: 'image' },
-        { name: 'Stable Diffusion', url: 'https://stability.ai', description: '开源的图像生成模型', category: 'image' },
-        { name: 'GitHub Copilot', url: 'https://github.com/features/copilot', description: 'AI代码助手', category: 'code' },
-        { name: 'Cursor', url: 'https://cursor.sh', description: 'AI驱动的代码编辑器', category: 'code' },
-        { name: 'Notion AI', url: 'https://www.notion.so/product/ai', description: 'AI写作助手', category: 'writing' },
-        { name: 'Jasper', url: 'https://www.jasper.ai', description: 'AI内容创作平台', category: 'writing' },
-        { name: 'Runway', url: 'https://runwayml.com', description: 'AI视频生成工具', category: 'video' },
-        { name: 'Figma AI', url: 'https://www.figma.com', description: 'AI设计工具', category: 'design' },
-        { name: 'Perplexity', url: 'https://www.perplexity.ai', description: 'AI搜索引擎', category: 'other' }
-      ]
-    }
-  },
   methods: {
     getCategoryName(category) {
       const names = {
@@ -294,12 +248,70 @@ export default {
       this.collapsedCategories[category] = !this.collapsedCategories[category]
     },
     showToastMessage(message, type = 'success') {
-      this.toastMessage = message
-      this.toastType = type
-      this.showToast = true
-      setTimeout(() => {
-        this.showToast = false
-      }, 3000)
+      // 使用全局 Toast
+      if (window.$toast) {
+        window.$toast[type](message)
+      } else {
+        // 降级到本地 Toast
+        this.toastMessage = message
+        this.toastType = type
+        this.showToast = true
+        setTimeout(() => {
+          this.showToast = false
+        }, 3000)
+      }
+    }
+  },
+  async mounted() {
+    try {
+      // 从CSV文件加载数据
+      const response = await axios.get('/ai-websites.csv')
+      const csvData = parseCSV(response.data)
+      this.aiWebsites = csvData
+      
+      // 从本地存储加载用户添加的网站（合并到CSV数据）
+      const saved = localStorage.getItem('aiWebsites')
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved)
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            // 合并本地存储的网站（避免重复）
+            parsed.forEach(savedSite => {
+              const exists = this.aiWebsites.some(site => 
+                site.url === savedSite.url || site.name === savedSite.name
+              )
+              if (!exists) {
+                this.aiWebsites.push(savedSite)
+              }
+            })
+          }
+        } catch (e) {
+          console.error('Failed to load saved websites from localStorage:', e)
+          this.showToastMessage('加载本地保存的网站失败', 'warning')
+        }
+      }
+      
+      if (this.aiWebsites.length > 0) {
+        this.showToastMessage(`成功加载 ${this.aiWebsites.length} 个AI网站`, 'success')
+      }
+    } catch (error) {
+      console.error('Failed to load AI websites from CSV:', error)
+      this.showToastMessage('加载AI网站数据失败，已使用默认数据', 'error')
+      // 如果加载失败，使用默认数据
+      this.aiWebsites = [
+        { name: 'ChatGPT', url: 'https://chat.openai.com', description: 'OpenAI开发的对话AI助手', category: 'chat' },
+        { name: 'Claude', url: 'https://claude.ai', description: 'Anthropic开发的AI助手', category: 'chat' },
+        { name: 'Midjourney', url: 'https://www.midjourney.com', description: 'AI图像生成工具', category: 'image' },
+        { name: 'DALL-E', url: 'https://openai.com/dall-e-2', description: 'OpenAI的图像生成AI', category: 'image' },
+        { name: 'Stable Diffusion', url: 'https://stability.ai', description: '开源的图像生成模型', category: 'image' },
+        { name: 'GitHub Copilot', url: 'https://github.com/features/copilot', description: 'AI代码助手', category: 'code' },
+        { name: 'Cursor', url: 'https://cursor.sh', description: 'AI驱动的代码编辑器', category: 'code' },
+        { name: 'Notion AI', url: 'https://www.notion.so/product/ai', description: 'AI写作助手', category: 'writing' },
+        { name: 'Jasper', url: 'https://www.jasper.ai', description: 'AI内容创作平台', category: 'writing' },
+        { name: 'Runway', url: 'https://runwayml.com', description: 'AI视频生成工具', category: 'video' },
+        { name: 'Figma AI', url: 'https://www.figma.com', description: 'AI设计工具', category: 'design' },
+        { name: 'Perplexity', url: 'https://www.perplexity.ai', description: 'AI搜索引擎', category: 'other' }
+      ]
     }
   }
 }

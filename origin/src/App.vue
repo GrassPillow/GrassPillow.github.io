@@ -1,6 +1,14 @@
 <template>
   <div>
-    <router-view></router-view>
+    <router-view v-slot="{ Component, route }">
+      <transition name="page" mode="out-in">
+        <component :is="Component" :key="route.path" />
+      </transition>
+    </router-view>
+    <!-- Toast 提示组件 -->
+    <Toast />
+    <!-- 回到顶部按钮 -->
+    <BackToTop />
     <!-- 悬浮球导航 -->
     <div class="floating-nav-ball" :class="{ 'nav-hidden': isNavHidden, 'nav-expanded': isExpanded }">
       <!-- 主悬浮球按钮 -->
@@ -30,6 +38,10 @@
           <span class="nav-icon">🕐</span>
           <span class="nav-label">时钟</span>
         </router-link>
+        <router-link to="/product-3d" class="nav-item" @click="handleNavClick">
+          <span class="nav-icon">🎨</span>
+          <span class="nav-label">3D展示</span>
+        </router-link>
         <router-link to="/about" class="nav-item" @click="handleNavClick">
           <span class="nav-icon">ℹ️</span>
           <span class="nav-label">关于</span>
@@ -40,8 +52,15 @@
 </template>
 
 <script>
+import Toast from './components/Toast.vue'
+import BackToTop from './components/BackToTop.vue'
+
 export default {
   name: "App",
+  components: {
+    Toast,
+    BackToTop
+  },
   data() {
     return {
       isNavHidden: false,
@@ -119,9 +138,11 @@ body {
 }
 
 /* 主悬浮球按钮 */
-.ball-button {
-  width: 64px;
-  height: 64px;
+  .ball-button {
+    width: 64px;
+    height: 64px;
+    min-width: 44px;
+    min-height: 44px;
   border-radius: 50%;
   background: linear-gradient(135deg, #2d7a6b 0%, #3a8a7a 50%, #8b6f47 100%);
   border: 3px solid rgba(255, 255, 255, 0.4);
@@ -237,11 +258,12 @@ body {
   }
 }
 
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 18px;
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    min-height: 44px;
   color: white;
   text-decoration: none;
   border-radius: 18px;
@@ -427,5 +449,21 @@ body {
   .nav-label {
     font-size: 0.8rem;
   }
+}
+
+/* 页面过渡动画 */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
 }
 </style>

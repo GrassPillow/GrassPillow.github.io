@@ -115,6 +115,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 const canvasWrapper = ref(null)
 let scene = null
@@ -247,6 +248,26 @@ const products = ref([
     ],
     geometry: 'car',
     color: 0xe74c3c
+  },
+  {
+    id: 6,
+    name: '两栖坦克',
+    description: '强大的两栖作战坦克，具备陆地和水上双重作战能力。',
+    specs: {
+      '类型': '两栖坦克',
+      '重量': '约30吨',
+      '最大速度': '陆地65km/h，水上10km/h',
+      '武器': '主炮、机枪',
+      '乘员': '4人'
+    },
+    features: [
+      '两栖作战',
+      '强大火力',
+      '高机动性',
+      '防护装甲'
+    ],
+    modelPath: '/model/AmphibiousTank.glb',
+    color: 0x4a4a4a
   }
 ])
 
@@ -430,11 +451,46 @@ function onWindowResize() {
 function createProduct(product) {
   // 移除旧的产品
   if (currentMesh) {
-    scene.remove(currentMesh)
-    currentMesh.geometry.dispose()
-    currentMesh.material.dispose()
+    if (currentMesh.isGroup || currentMesh.isScene) {
+      // 如果是组或场景，遍历所有子对象并清理
+      currentMesh.traverse((child) => {
+        if (child.geometry) child.geometry.dispose()
+        if (child.material) {
+          if (Array.isArray(child.material)) {
+            child.material.forEach(mat => mat.dispose())
+          } else {
+            child.material.dispose()
+          }
+        }
+      })
+      scene.remove(currentMesh)
+    } else {
+      if (currentMesh.geometry) currentMesh.geometry.dispose()
+      if (currentMesh.material) {
+        if (Array.isArray(currentMesh.material)) {
+          currentMesh.material.forEach(mat => mat.dispose())
+        } else {
+          currentMesh.material.dispose()
+        }
+      }
+      scene.remove(currentMesh)
+    }
   }
   
+  // 如果是 GLTF 模型
+  if (product.modelPath) {
+    loadGLTFModel(product.modelPath)
+    return
+  }
+  
+  // 如果是汽车模型
+  if (product.geometry === 'car') {
+    currentMesh = createCarModel(product.color)
+    scene.add(currentMesh)
+    return
+  }
+  
+  // 创建简单几何体
   let geometry
   
   switch (product.geometry) {
@@ -472,6 +528,251 @@ function createProduct(product) {
     new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 2 })
   )
   currentMesh.add(line)
+}
+
+// 加载 GLTF 模型
+function loadGLTFModel(path) {
+  const loader = new GLTFLoader()
+  
+  loader.load(
+    path,
+    (gltf) => {
+      // 移除旧模型
+      if (currentMesh) {
+        if (currentMesh.isGroup || currentMesh.isScene) {
+          currentMesh.traverse((child) => {
+            if (child.geometry) child.geometry.dispose()
+            if (child.material) {
+              if (Array.isArray(child.material)) {
+                child.material.forEach(mat => mat.dispose())
+              } else {
+                child.material.dispose()
+              }
+            }
+          })
+        }
+        scene.remove(currentMesh)
+      }
+      
+      // 获取模型
+      const model = gltf.scene
+      
+      // 计算模型的边界框以居中显示
+      const box = new THREE.Box3().setFromObject(model)
+      const center = box.getCenter(new THREE.Vector3())
+      const size = box.getSize(new THREE.Vector3())
+      
+      // 居中模型
+      model.position.x = -center.x
+      model.position.y = -center.y
+      model.position.z = -center.z
+      
+      // 根据模型大小调整相机位置
+      const maxDim = Math.max(size.x, size.y, size.z)
+      const fov = camera.fov * (Math.PI / 180)
+      let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2))
+      cameraZ *= 1.5 // 增加一些距离以便查看
+      camera.position.set(0, 0, cameraZ)
+      camera.lookAt(0, 0, 0)
+      
+      currentMesh = model
+      scene.add(model)
+    },
+    (progress) => {
+      // 加载进度
+      console.log('加载进度:', (progress.loaded / progress.total * 100) + '%')
+    },
+    (error) => {
+      console.error('加载模型失败:', error)
+      // 加载失败时显示错误提示
+      alert('模型加载失败，请确保文件格式为 GLTF/GLB，且文件路径正确')
+    }
+  )
+}
+
+// 创建汽车模型
+function createCarModel(color) {
+  const carGroup = new THREE.Group()
+  
+  // 车身主体
+  const bodyGeometry = new THREE.BoxGeometry(3, 0.8, 1.5)
+  const bodyMaterial = new THREE.MeshPhongMaterial({
+    color: color,
+    shininess: 100,
+    specular: 0x333333
+  })
+  const body = new THREE.Mesh(bodyGeometry, bodyMaterial)
+  body.position.set(0, 0.4, 0)
+  carGroup.add(body)
+  
+  // 车顶
+  const roofGeometry = new THREE.BoxGeometry(1.5, 0.6, 1.3)
+  const roof = new THREE.Mesh(roofGeometry, bodyMaterial)
+  roof.position.set(-0.3, 1.1, 0)
+  carGroup.add(roof)
+  
+  // 前挡风玻璃
+  const windshieldGeometry = new THREE.BoxGeometry(0.1, 0.7, 1.3)
+  const windshieldMaterial = new THREE.MeshPhongMaterial({
+    color: 0x87ceeb,
+    transparent: true,
+    opacity: 0.6,
+    shininess: 100
+  })
+  const windshield = new THREE.Mesh(windshieldGeometry, windshieldMaterial)
+  windshield.position.set(0.7, 1.05, 0)
+  windshield.rotation.z = -0.3
+  carGroup.add(windshield)
+  
+  // 后挡风玻璃
+  const rearWindshield = new THREE.Mesh(windshieldGeometry, windshieldMaterial)
+  rearWindshield.position.set(-1.1, 1.05, 0)
+  rearWindshield.rotation.z = 0.3
+  carGroup.add(rearWindshield)
+  
+  // 前轮（左）
+  const wheelGeometry = new THREE.CylinderGeometry(0.4, 0.4, 0.3, 32)
+  const wheelMaterial = new THREE.MeshPhongMaterial({
+    color: 0x1a1a1a,
+    shininess: 50
+  })
+  const wheelFL = new THREE.Mesh(wheelGeometry, wheelMaterial)
+  wheelFL.rotation.z = Math.PI / 2
+  wheelFL.position.set(1, 0.4, 0.9)
+  carGroup.add(wheelFL)
+  
+  // 前轮（右）
+  const wheelFR = new THREE.Mesh(wheelGeometry, wheelMaterial)
+  wheelFR.rotation.z = Math.PI / 2
+  wheelFR.position.set(1, 0.4, -0.9)
+  carGroup.add(wheelFR)
+  
+  // 后轮（左）
+  const wheelRL = new THREE.Mesh(wheelGeometry, wheelMaterial)
+  wheelRL.rotation.z = Math.PI / 2
+  wheelRL.position.set(-1, 0.4, 0.9)
+  carGroup.add(wheelRL)
+  
+  // 后轮（右）
+  const wheelRR = new THREE.Mesh(wheelGeometry, wheelMaterial)
+  wheelRR.rotation.z = Math.PI / 2
+  wheelRR.position.set(-1, 0.4, -0.9)
+  carGroup.add(wheelRR)
+  
+  // 轮毂
+  const hubcapGeometry = new THREE.CylinderGeometry(0.25, 0.25, 0.32, 16)
+  const hubcapMaterial = new THREE.MeshPhongMaterial({
+    color: 0xc0c0c0,
+    shininess: 200,
+    specular: 0xffffff
+  })
+  
+  const hubcapFL = new THREE.Mesh(hubcapGeometry, hubcapMaterial)
+  hubcapFL.rotation.z = Math.PI / 2
+  hubcapFL.position.set(1, 0.4, 0.9)
+  carGroup.add(hubcapFL)
+  
+  const hubcapFR = new THREE.Mesh(hubcapGeometry, hubcapMaterial)
+  hubcapFR.rotation.z = Math.PI / 2
+  hubcapFR.position.set(1, 0.4, -0.9)
+  carGroup.add(hubcapFR)
+  
+  const hubcapRL = new THREE.Mesh(hubcapGeometry, hubcapMaterial)
+  hubcapRL.rotation.z = Math.PI / 2
+  hubcapRL.position.set(-1, 0.4, 0.9)
+  carGroup.add(hubcapRL)
+  
+  const hubcapRR = new THREE.Mesh(hubcapGeometry, hubcapMaterial)
+  hubcapRR.rotation.z = Math.PI / 2
+  hubcapRR.position.set(-1, 0.4, -0.9)
+  carGroup.add(hubcapRR)
+  
+  // 前保险杠
+  const bumperGeometry = new THREE.BoxGeometry(0.2, 0.3, 1.5)
+  const bumperMaterial = new THREE.MeshPhongMaterial({
+    color: 0x2c2c2c,
+    shininess: 50
+  })
+  const frontBumper = new THREE.Mesh(bumperGeometry, bumperMaterial)
+  frontBumper.position.set(1.6, 0.2, 0)
+  carGroup.add(frontBumper)
+  
+  // 后保险杠
+  const rearBumper = new THREE.Mesh(bumperGeometry, bumperMaterial)
+  rearBumper.position.set(-1.6, 0.2, 0)
+  carGroup.add(rearBumper)
+  
+  // 前大灯
+  const headlightGeometry = new THREE.SphereGeometry(0.15, 16, 16)
+  const headlightMaterial = new THREE.MeshPhongMaterial({
+    color: 0xffffff,
+    emissive: 0xffffaa,
+    emissiveIntensity: 0.5,
+    shininess: 200
+  })
+  const headlightL = new THREE.Mesh(headlightGeometry, headlightMaterial)
+  headlightL.position.set(1.65, 0.5, 0.5)
+  carGroup.add(headlightL)
+  
+  const headlightR = new THREE.Mesh(headlightGeometry, headlightMaterial)
+  headlightR.position.set(1.65, 0.5, -0.5)
+  carGroup.add(headlightR)
+  
+  // 后尾灯
+  const taillightGeometry = new THREE.SphereGeometry(0.12, 16, 16)
+  const taillightMaterial = new THREE.MeshPhongMaterial({
+    color: 0xff0000,
+    emissive: 0xff0000,
+    emissiveIntensity: 0.3,
+    shininess: 100
+  })
+  const taillightL = new THREE.Mesh(taillightGeometry, taillightMaterial)
+  taillightL.position.set(-1.65, 0.5, 0.5)
+  carGroup.add(taillightL)
+  
+  const taillightR = new THREE.Mesh(taillightGeometry, taillightMaterial)
+  taillightR.position.set(-1.65, 0.5, -0.5)
+  carGroup.add(taillightR)
+  
+  // 后视镜（左）
+  const mirrorGeometry = new THREE.BoxGeometry(0.15, 0.1, 0.2)
+  const mirrorMaterial = new THREE.MeshPhongMaterial({
+    color: 0x333333,
+    shininess: 150
+  })
+  const mirrorL = new THREE.Mesh(mirrorGeometry, mirrorMaterial)
+  mirrorL.position.set(0.5, 1.2, 0.85)
+  carGroup.add(mirrorL)
+  
+  // 后视镜（右）
+  const mirrorR = new THREE.Mesh(mirrorGeometry, mirrorMaterial)
+  mirrorR.position.set(0.5, 1.2, -0.85)
+  carGroup.add(mirrorR)
+  
+  // 车门把手
+  const handleGeometry = new THREE.BoxGeometry(0.2, 0.05, 0.1)
+  const handleMaterial = new THREE.MeshPhongMaterial({
+    color: 0x666666,
+    shininess: 200
+  })
+  const handleL = new THREE.Mesh(handleGeometry, handleMaterial)
+  handleL.position.set(-0.5, 0.7, 0.85)
+  carGroup.add(handleL)
+  
+  const handleR = new THREE.Mesh(handleGeometry, handleMaterial)
+  handleR.position.set(-0.5, 0.7, -0.85)
+  carGroup.add(handleR)
+  
+  // 添加边缘线到车身
+  const bodyEdges = new THREE.EdgesGeometry(bodyGeometry)
+  const bodyLine = new THREE.LineSegments(
+    bodyEdges,
+    new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 1 })
+  )
+  bodyLine.position.set(0, 0.4, 0)
+  carGroup.add(bodyLine)
+  
+  return carGroup
 }
 
 // 切换产品

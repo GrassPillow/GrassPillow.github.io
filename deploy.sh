@@ -5,7 +5,7 @@ echo "deploying start " $(date "+%Y-%m-%d %H:%M:%S")
 
 echo "开始删除 " $(date "+%Y-%m-%d %H:%M:%S")
 # 保留的文件和文件夹列表
-KEEP_ITEMS=(".idea" "a-origin" ".gitignore" "deploy.sh" "README.md")
+KEEP_ITEMS=(".idea" "a-origin" ".gitignore" "deploy.sh" "README.md" ".git")
 
 # 遍历当前目录下的所有文件和文件夹
 for item in * .*; do

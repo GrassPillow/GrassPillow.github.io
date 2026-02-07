@@ -22,6 +22,10 @@
           <span class="nav-icon">🏠</span>
           <span class="nav-label">首页</span>
         </router-link>
+        <router-link to="/blog" class="nav-item" @click="handleNavClick">
+          <span class="nav-icon">📝</span>
+          <span class="nav-label">博客</span>
+        </router-link>
         <router-link to="/books" class="nav-item" @click="handleNavClick">
           <span class="nav-icon">📚</span>
           <span class="nav-label">图书</span>

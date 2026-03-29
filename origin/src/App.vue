@@ -22,33 +22,21 @@
           <span class="nav-icon">🏠</span>
           <span class="nav-label">首页</span>
         </router-link>
+        <router-link to="/about" class="nav-item" @click="handleNavClick">
+          <span class="nav-icon">👋</span>
+          <span class="nav-label">关于</span>
+        </router-link>
+        <router-link to="/projects" class="nav-item" @click="handleNavClick">
+          <span class="nav-icon">💼</span>
+          <span class="nav-label">作品</span>
+        </router-link>
         <router-link to="/blog" class="nav-item" @click="handleNavClick">
           <span class="nav-icon">📝</span>
           <span class="nav-label">博客</span>
         </router-link>
-        <router-link to="/books" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">📚</span>
-          <span class="nav-label">图书</span>
-        </router-link>
-        <router-link to="/ai" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">🤖</span>
-          <span class="nav-label">AI工具</span>
-        </router-link>
-        <router-link to="/earthquake" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">🌍</span>
-          <span class="nav-label">地震</span>
-        </router-link>
-        <router-link to="/clock" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">🕐</span>
-          <span class="nav-label">时钟</span>
-        </router-link>
-        <router-link to="/product-3d" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">🎨</span>
-          <span class="nav-label">3D展示</span>
-        </router-link>
-        <router-link to="/about" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">ℹ️</span>
-          <span class="nav-label">关于</span>
+        <router-link to="/tools" class="nav-item" @click="handleNavClick">
+          <span class="nav-icon">🛠️</span>
+          <span class="nav-label">工具</span>
         </router-link>
       </div>
     </div>

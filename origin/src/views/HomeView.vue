@@ -1,694 +1,535 @@
 <template>
   <div class="home-view">
-    <div class="blog-hero">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-bg">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+      </div>
       <div class="hero-content">
-        <h1 class="hero-title">GrassPillow 博客</h1>
-        <p class="hero-subtitle">分享技术、记录生活、探索世界</p>
-        <div class="hero-actions">
-          <router-link to="/blog" class="primary-button">
-            <span class="button-icon">📝</span>
-            浏览博客
-          </router-link>
-          <router-link to="/blog/manage" class="secondary-button">
-            <span class="button-icon">✏️</span>
-            写文章
-          </router-link>
+        <div class="hero-avatar">
+          <img src="https://picsum.photos/seed/grasspillow/200/200.jpg" alt="GrassPillow" loading="lazy" />
         </div>
-      </div>
-      <div class="hero-image">
-        <img src="https://picsum.photos/seed/blog-hero/600/400.jpg" alt="Blog Hero" />
-      </div>
-    </div>
-
-    <div class="latest-posts-section">
-      <div class="section-header">
-        <h2 class="section-title">最新文章</h2>
-        <router-link to="/blog" class="view-all-link">查看全部</router-link>
-      </div>
-      
-      <div class="posts-grid">
-        <div 
-          v-for="post in latestPosts" 
-          :key="post.id" 
-          class="post-card"
-          @click="goToPost(post.id)"
-        >
-          <div class="post-cover" v-if="post.coverImage">
-            <img :src="post.coverImage" :alt="post.title" />
-          </div>
-          <div class="post-content">
-            <div class="post-meta">
-              <span class="post-category" :style="{ backgroundColor: getCategoryColor(post.categoryId) }">
-                {{ getCategoryName(post.categoryId) }}
-              </span>
-              <span class="post-date">{{ formatDate(post.createdAt) }}</span>
-            </div>
-            <h3 class="post-title">{{ post.title }}</h3>
-            <p class="post-excerpt">{{ post.excerpt }}</p>
-            <div class="post-footer">
-              <div class="post-tags">
-                <span 
-                  v-for="tagId in post.tagIds.slice(0, 2)" 
-                  :key="tagId"
-                  class="post-tag"
-                  :style="{ backgroundColor: getTagColor(tagId) }"
-                >
-                  {{ getTagName(tagId) }}
-                </span>
-              </div>
-              <div class="post-stats">
-                <span class="stat-item">
-                  <span class="stat-icon">👁</span>
-                  {{ post.views }}
-                </span>
-                <span class="stat-item">
-                  <span class="stat-icon">👍</span>
-                  {{ post.likes }}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="about-section">
-      <div class="about-content">
-        <h2 class="about-title">关于我</h2>
-        <div class="about-avatar">
-          <img src="https://picsum.photos/seed/avatar/150/150.jpg" alt="Avatar" />
-        </div>
-        <p class="about-description">
-          我是 GrassPillow，一名热爱技术的开发者。这个博客记录了我的技术学习、项目经验和生活感悟。
-          我相信技术可以改变世界，也希望通过分享与更多人交流学习。
+        <h1 class="hero-name">GrassPillow</h1>
+        <p class="hero-title">全栈开发者 · 技术博主 · 开源爱好者</p>
+        <p class="hero-description">
+          热爱技术，享受创造。专注于构建优雅、高效的Web应用，
+          致力于用代码解决实际问题，让技术服务于生活。
         </p>
-        <div class="about-stats">
-          <div class="stat-card">
-            <div class="stat-number">{{ totalPosts }}</div>
-            <div class="stat-label">文章</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">{{ totalCategories }}</div>
-            <div class="stat-label">分类</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">{{ totalTags }}</div>
-            <div class="stat-label">标签</div>
-          </div>
+        <div class="hero-actions">
+          <router-link to="/about" class="btn btn-primary">
+            <span>👋</span> 了解更多
+          </router-link>
+          <router-link to="/projects" class="btn btn-secondary">
+            <span>💼</span> 查看作品
+          </router-link>
         </div>
-        <router-link to="/about" class="about-link">了解更多 →</router-link>
+        <div class="hero-social">
+          <a href="https://github.com/GrassPillow" target="_blank" class="social-link" title="GitHub" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+          <a href="mailto:contact@grasspillow.com" class="social-link" title="Email" aria-label="Email">
+            <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </a>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="categories-section">
-      <div class="section-header">
-        <h2 class="section-title">文章分类</h2>
-      </div>
-      <div class="categories-grid">
-        <div 
-          v-for="category in categories" 
-          :key="category.id"
-          class="category-card"
-          @click="goToCategory(category.id)"
-        >
-          <div class="category-icon">{{ getCategoryIcon(category.id) }}</div>
-          <h3 class="category-name">{{ category.name }}</h3>
-          <p class="category-count">{{ getCategoryPostCount(category.id) }} 篇文章</p>
+    <!-- Skills Section -->
+    <section class="skills-section">
+      <div class="container">
+        <h2 class="section-title">技术栈</h2>
+        <div class="skills-grid">
+          <div class="skill-card" v-for="skill in skills" :key="skill.name">
+            <div class="skill-icon">{{ skill.icon }}</div>
+            <h3 class="skill-name">{{ skill.name }}</h3>
+            <p class="skill-desc">{{ skill.description }}</p>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects-section">
+      <div class="container">
+        <h2 class="section-title">精选项目</h2>
+        <div class="projects-grid">
+          <div class="project-card" v-for="project in projects" :key="project.name">
+            <div class="project-image">
+              <img :src="project.image" :alt="project.name" loading="lazy" />
+            </div>
+            <div class="project-content">
+              <h3 class="project-name">{{ project.name }}</h3>
+              <p class="project-desc">{{ project.description }}</p>
+              <div class="project-tags">
+                <span class="tag" v-for="tag in project.tags" :key="tag">{{ tag }}</span>
+              </div>
+              <div class="project-links">
+                <a :href="project.demo" target="_blank" class="project-link" v-if="project.demo">在线演示</a>
+                <a :href="project.github" target="_blank" class="project-link" v-if="project.github">GitHub</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact CTA Section -->
+    <section class="contact-section">
+      <div class="container">
+        <div class="contact-card">
+          <h2>一起创造</h2>
+          <p>有项目想法或合作机会？欢迎联系我！</p>
+          <a href="mailto:contact@grasspillow.com" class="btn btn-primary btn-large">
+            <span>✉️</span> 发送邮件
+          </a>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 
-const router = useRouter()
+const skills = ref([
+  { icon: '🎨', name: '前端开发', description: 'Vue.js, React, TypeScript, CSS3' },
+  { icon: '⚙️', name: '后端开发', description: 'Node.js, Express, Python, RESTful API' },
+  { icon: '🗄️', name: '数据库', description: 'MySQL, MongoDB, PostgreSQL, Redis' },
+  { icon: '🛠️', name: '开发工具', description: 'Git, Docker, VS Code, Linux' }
+])
 
-// 模拟数据
-const posts = ref([
+const projects = ref([
   {
-    id: 1,
-    title: 'Vue 3 Composition API 深度解析',
-    excerpt: 'Vue 3 引入的 Composition API 为我们提供了更灵活的组件逻辑组织方式。本文将深入探讨 Composition API 的核心概念、使用场景以及最佳实践...',
-    author: 'GrassPillow',
-    categoryId: 1,
-    tagIds: [1, 2],
-    coverImage: 'https://picsum.photos/seed/vue3/800/400.jpg',
-    createdAt: new Date('2025-01-05'),
-    status: 'published',
-    views: 1250,
-    likes: 42,
-    comments: 8
+    name: '个人博客',
+    description: '基于Vue 3构建的个人博客系统，支持文章发布、分类管理、标签筛选等功能。',
+    image: 'https://picsum.photos/seed/blog/400/250.jpg',
+    tags: ['Vue 3', 'TypeScript', 'Vue Router'],
+    demo: '/',
+    github: 'https://github.com/GrassPillow'
   },
   {
-    id: 2,
-    title: '现代前端开发工具链配置指南',
-    excerpt: '从零开始搭建一个高效的前端开发环境，包括构建工具、代码规范、测试框架等。本文将详细介绍如何配置一个现代化的前端开发工具链...',
-    author: 'GrassPillow',
-    categoryId: 1,
-    tagIds: [1, 3],
-    coverImage: 'https://picsum.photos/seed/frontend/800/400.jpg',
-    createdAt: new Date('2025-01-03'),
-    status: 'published',
-    views: 980,
-    likes: 35,
-    comments: 5
+    name: 'AI工具集合',
+    description: '集成多种AI工具的在线平台，包括文本处理、代码格式化、密码生成等实用功能。',
+    image: 'https://picsum.photos/seed/ai/400/250.jpg',
+    tags: ['Vue.js', 'Ant Design', 'Axios'],
+    demo: '/tools/ai',
+    github: null
   },
   {
-    id: 3,
-    title: '个人博客搭建全记录',
-    excerpt: '记录从零开始搭建个人博客的整个过程，包括技术选型、设计实现、部署上线等。希望对想要搭建自己博客的朋友有所帮助...',
-    author: 'GrassPillow',
-    categoryId: 2,
-    tagIds: [2, 4],
-    coverImage: 'https://picsum.photos/seed/blog/800/400.jpg',
-    createdAt: new Date('2025-01-01'),
-    status: 'published',
-    views: 2100,
-    likes: 68,
-    comments: 12
+    name: '地震监测系统',
+    description: '实时展示全球地震数据，支持地图可视化和历史数据查询分析。',
+    image: 'https://picsum.photos/seed/earthquake/400/250.jpg',
+    tags: ['Mapbox', '数据可视化', 'API'],
+    demo: '/tools/earthquake',
+    github: null
+  },
+  {
+    name: '3D产品展示',
+    description: '使用Three.js构建的3D产品展示页面，提供沉浸式的视觉体验。',
+    image: 'https://picsum.photos/seed/3d/400/250.jpg',
+    tags: ['Three.js', 'WebGL', 'CSS3'],
+    demo: '/product-3d',
+    github: null
   }
 ])
-
-const categories = ref([
-  { id: 1, name: '技术' },
-  { id: 2, name: '生活' },
-  { id: 3, name: '随笔' }
-])
-
-const tags = ref([
-  { id: 1, name: 'Vue', color: '#4FC08D' },
-  { id: 2, name: '博客', color: '#2d7a6b' },
-  { id: 3, name: 'CSS', color: '#1572B6' },
-  { id: 4, name: '生活', color: '#8b6f47' },
-  { id: 5, name: 'JavaScript', color: '#F7DF1E' },
-  { id: 6, name: '布局', color: '#E34C26' },
-  { id: 7, name: '年度总结', color: '#FF6B6B' }
-])
-
-// 计算属性
-const latestPosts = computed(() => {
-  return posts.value
-    .filter(post => post.status === 'published')
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    .slice(0, 3)
-})
-
-const totalPosts = computed(() => posts.value.length)
-const totalCategories = computed(() => categories.value.length)
-const totalTags = computed(() => tags.value.length)
-
-// 方法
-const getCategoryName = (categoryId) => {
-  const category = categories.value.find(c => c.id === categoryId)
-  return category ? category.name : ''
-}
-
-const getCategoryColor = (categoryId) => {
-  const colors = {
-    1: '#4FC08D', // 技术 - 绿色
-    2: '#8b6f47', // 生活 - 棕色
-    3: '#FF6B6B'  // 随笔 - 红色
-  }
-  return colors[categoryId] || '#ccc'
-}
-
-const getCategoryIcon = (categoryId) => {
-  const icons = {
-    1: '💻', // 技术
-    2: '🌱', // 生活
-    3: '✍️'  // 随笔
-  }
-  return icons[categoryId] || '📁'
-}
-
-const getCategoryPostCount = (categoryId) => {
-  return posts.value.filter(post => post.categoryId === categoryId).length
-}
-
-const getTagName = (tagId) => {
-  const tag = tags.value.find(t => t.id === tagId)
-  return tag ? tag.name : ''
-}
-
-const getTagColor = (tagId) => {
-  const tag = tags.value.find(t => t.id === tagId)
-  return tag ? tag.color : '#ccc'
-}
-
-const formatDate = (date) => {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' }
-  return date.toLocaleDateString('zh-CN', options)
-}
-
-const goToPost = (postId) => {
-  router.push(`/blog/post/${postId}`)
-}
-
-const goToCategory = (categoryId) => {
-  router.push(`/blog?category=${categoryId}`)
-}
-
-// 生命周期
-onMounted(() => {
-  // 可以在这里从API获取数据
-})
 </script>
 
 <style scoped>
 .home-view {
   width: 100%;
-  min-height: calc(100vh - 40px);
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-  background: #f5f5f7;
+  min-height: 100vh;
+  background: #f8f9fa;
 }
 
-/* 博客英雄区域 */
-.blog-hero {
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Hero Section */
+.hero-section {
+  position: relative;
+  min-height: 80vh;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 4rem 2rem;
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
-  color: white;
-  position: relative;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 40%, #8b6f47 100%);
+  overflow: hidden;
+  padding: 60px 24px;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
 }
 
-.blog-hero::before {
-  content: '';
+.floating-orb {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/><circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/><circle cx="50" cy="50" r="20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></svg>');
-  background-size: 100px 100px;
-  opacity: 0.3;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  animation: float 20s infinite ease-in-out;
+}
+
+.orb-1 {
+  width: 400px;
+  height: 400px;
+  top: -150px;
+  right: -100px;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 300px;
+  height: 300px;
+  bottom: -100px;
+  left: -80px;
+  animation-delay: -7s;
+}
+
+.orb-3 {
+  width: 200px;
+  height: 200px;
+  top: 40%;
+  left: 60%;
+  animation-delay: -14s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -40px) scale(1.1); }
+  66% { transform: translate(-20px, 30px) scale(0.9); }
 }
 
 .hero-content {
-  max-width: 600px;
   position: relative;
   z-index: 1;
+  text-align: center;
+  max-width: 700px;
+}
+
+.hero-avatar {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.hero-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-name {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 12px;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .hero-title {
-  font-size: 3.5rem;
-  font-weight: 800;
-  margin: 0 0 1rem 0;
-  line-height: 1.2;
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 20px;
+  font-weight: 500;
 }
 
-.hero-subtitle {
-  font-size: 1.5rem;
-  margin: 0 0 2rem 0;
-  opacity: 0.9;
-  line-height: 1.4;
+.hero-description {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.7;
+  margin: 0 0 32px;
 }
 
 .hero-actions {
   display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 32px;
 }
 
-.primary-button, .secondary-button {
-  display: flex;
+.btn {
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 1.5rem;
-  border-radius: 50px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.3s;
-}
-
-.primary-button {
-  background: white;
-  color: #2d7a6b;
-}
-
-.primary-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.secondary-button {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.secondary-button:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.hero-image {
-  flex: 0 0 400px;
-  position: relative;
-  z-index: 1;
-}
-
-.hero-image img {
-  width: 100%;
-  height: auto;
+  gap: 8px;
+  padding: 14px 28px;
   border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-}
-
-/* 最新文章区域 */
-.latest-posts-section {
-  padding: 4rem 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin: 0;
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.view-all-link {
-  color: #2d7a6b;
-  text-decoration: none;
+  font-size: 1rem;
   font-weight: 600;
-  font-size: 1.1rem;
-  transition: color 0.3s;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
-.view-all-link:hover {
+.btn-primary {
+  background: #fff;
   color: #1e5a4a;
 }
 
-.posts-grid {
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+}
+
+.btn-large {
+  padding: 16px 36px;
+  font-size: 1.1rem;
+}
+
+.hero-social {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.social-link {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+}
+
+/* Section Styles */
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 48px;
+  color: #1e5a4a;
+}
+
+/* Skills Section */
+.skills-section {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
 }
 
-.post-card {
-  background: white;
-  border-radius: 12px;
+.skill-card {
+  background: linear-gradient(145deg, #f8f9fa 0%, #fff 100%);
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+  border: 1px solid rgba(45, 122, 107, 0.1);
+  transition: all 0.3s ease;
+}
+
+.skill-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(45, 122, 107, 0.12);
+  border-color: rgba(45, 122, 107, 0.2);
+}
+
+.skill-icon {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+}
+
+.skill-name {
+  font-size: 1.2rem;
+  color: #1e5a4a;
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+.skill-desc {
+  font-size: 0.9rem;
+  color: #5a6a5f;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Projects Section */
+.projects-section {
+  padding: 80px 0;
+  background: linear-gradient(180deg, #f8f9fa 0%, #f0f4f2 100%);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.project-card {
+  background: #fff;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s;
-  cursor: pointer;
+  border: 1px solid rgba(45, 122, 107, 0.1);
+  transition: all 0.3s ease;
 }
 
-.post-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+.project-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(45, 122, 107, 0.15);
 }
 
-.post-cover {
+.project-image {
   height: 200px;
   overflow: hidden;
 }
 
-.post-cover img {
+.project-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s;
+  transition: transform 0.3s ease;
 }
 
-.post-card:hover .post-cover img {
+.project-card:hover .project-image img {
   transform: scale(1.05);
 }
 
-.post-content {
-  padding: 1.5rem;
+.project-content {
+  padding: 24px;
 }
 
-.post-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
-}
-
-.post-category {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 50px;
-  color: white;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.post-date {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.post-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin: 0 0 0.75rem 0;
-  line-height: 1.3;
-  color: #333;
-}
-
-.post-excerpt {
-  color: #666;
-  margin: 0 0 1rem 0;
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.post-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.post-tags {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.post-tag {
-  display: inline-block;
-  padding: 0.125rem 0.5rem;
-  border-radius: 50px;
-  color: white;
-  font-size: 0.75rem;
-}
-
-.post-stats {
-  display: flex;
-  gap: 1rem;
-}
-
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.stat-icon {
-  font-size: 0.8rem;
-}
-
-/* 关于我区域 */
-.about-section {
-  background: white;
-  padding: 4rem 2rem;
-}
-
-.about-content {
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.about-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin: 0 0 2rem 0;
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.about-avatar {
-  margin-bottom: 2rem;
-}
-
-.about-avatar img {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #f5f5f7;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.about-description {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: #666;
-  margin: 0 0 2rem 0;
-}
-
-.about-stats {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 2rem;
-}
-
-.stat-card {
-  text-align: center;
-}
-
-.stat-number {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #2d7a6b;
-  margin-bottom: 0.5rem;
-}
-
-.stat-label {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.about-link {
-  display: inline-block;
-  color: #2d7a6b;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1.1rem;
-  transition: color 0.3s;
-}
-
-.about-link:hover {
+.project-name {
+  font-size: 1.3rem;
   color: #1e5a4a;
+  margin: 0 0 12px;
+  font-weight: 600;
 }
 
-/* 分类区域 */
-.categories-section {
-  padding: 4rem 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+.project-desc {
+  font-size: 0.95rem;
+  color: #5a6a5f;
+  line-height: 1.6;
+  margin: 0 0 16px;
 }
 
-.categories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 2rem;
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
-.category-card {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
+.tag {
+  padding: 4px 12px;
+  background: linear-gradient(135deg, rgba(45, 122, 107, 0.1) 0%, rgba(139, 111, 71, 0.1) 100%);
+  color: #2d7a6b;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+.project-links {
+  display: flex;
+  gap: 12px;
+}
+
+.project-link {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.project-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(45, 122, 107, 0.3);
+}
+
+/* Contact Section */
+.contact-section {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.contact-card {
+  background: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 50%, #8b6f47 100%);
+  border-radius: 24px;
+  padding: 60px 40px;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s;
-  cursor: pointer;
+  color: #fff;
 }
 
-.category-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-}
-
-.category-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.category-name {
-  font-size: 1.5rem;
+.contact-card h2 {
+  font-size: 2rem;
   font-weight: 700;
-  margin: 0 0 0.5rem 0;
-  color: #333;
+  margin: 0 0 12px;
 }
 
-.category-count {
-  color: #666;
-  margin: 0;
+.contact-card p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin: 0 0 32px;
 }
 
-/* 响应式设计 */
+/* Responsive */
+@media (max-width: 1024px) {
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
-  .blog-hero {
-    flex-direction: column;
-    padding: 3rem 1.5rem;
-    text-align: center;
+  .hero-section {
+    min-height: auto;
+    padding: 60px 24px;
   }
   
-  .hero-content {
-    max-width: 100%;
-    margin-bottom: 2rem;
+  .hero-name {
+    font-size: 2.2rem;
   }
   
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 1.1rem;
   }
   
-  .hero-subtitle {
-    font-size: 1.2rem;
-  }
-  
-  .hero-image {
-    flex: 0 0 auto;
-    width: 100%;
-    max-width: 400px;
-  }
-  
-  .latest-posts-section, .categories-section {
-    padding: 3rem 1.5rem;
-  }
-  
-  .section-header {
+  .hero-actions {
     flex-direction: column;
-    gap: 1rem;
-    align-items: flex-start;
+    align-items: center;
+  }
+  
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .projects-grid {
+    grid-template-columns: 1fr;
   }
   
   .section-title {
-    font-size: 2rem;
-  }
-  
-  .posts-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  
-  .about-stats {
-    gap: 1.5rem;
-  }
-  
-  .categories-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    font-size: 1.8rem;
   }
 }
 </style>
-

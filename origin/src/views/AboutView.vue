@@ -1,397 +1,736 @@
 <template>
   <div class="about-view">
-    <div class="about-hero">
+    <!-- Hero Section -->
+    <header class="hero-section">
+      <div class="hero-background">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
+      </div>
       <div class="hero-content">
-        <h1 class="about-title">关于我们</h1>
-        <p class="about-subtitle">多功能服务平台 - 为您提供便捷的在线服务体验</p>
-      </div>
-      <div class="leaves-decoration">
-        <div class="leaf leaf-1"></div>
-        <div class="leaf leaf-2"></div>
-        <div class="leaf leaf-3"></div>
-      </div>
-    </div>
-    
-    <div class="about-content">
-      <div class="content-section">
-        <div class="section-card">
-          <div class="card-icon">
-            <div class="icon-book"></div>
+        <div class="profile-avatar">
+          <div class="avatar-ring"></div>
+          <img src="https://picsum.photos/seed/grasspillow/200/200.jpg" alt="GrassPillow" class="avatar-image" />
+        </div>
+        <h1 class="hero-title">GrassPillow</h1>
+        <p class="hero-tagline">全栈开发者 | 技术爱好者 | 终身学习者</p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">10+</span>
+            <span class="stat-label">项目经验</span>
           </div>
-          <h2 class="section-title">我们的使命</h2>
-          <p class="section-text">
-            致力于打造一个多功能服务平台，整合图书管理、AI工具、地震监测、时钟工具等实用功能。
-            我们相信技术能够改变生活，工具能够提升效率。
-          </p>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-number">5+</span>
+            <span class="stat-label">技术栈</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-number">∞</span>
+            <span class="stat-label">学习热情</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- About Section -->
+    <section class="about-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">关于我</span>
+          <h2 class="section-title">你好，我是 GrassPillow</h2>
+          <p class="section-subtitle">一名热爱技术的开发者，专注于构建优雅、高效的Web应用</p>
         </div>
         
-        <div class="section-card">
-          <div class="card-icon">
-            <div class="icon-leaf"></div>
+        <div class="about-intro">
+          <div class="intro-card">
+            <div class="intro-icon">👋</div>
+            <h3>我的故事</h3>
+            <p>
+              我是一名热衷于技术创新的开发者，拥有丰富的全栈开发经验。
+              从 Vue.js 到 Node.js，从数据库设计到 API 开发，我享受技术带来的每一个挑战。
+              这个博客是我记录成长、分享知识的小天地。
+            </p>
           </div>
-          <h2 class="section-title">功能丰富</h2>
-          <p class="section-text">
-            平台集成了多种实用工具，从图书管理到AI工具，从地震监测到时钟工具，
-            满足您在不同场景下的需求，提供一站式的服务体验。
-          </p>
-        </div>
-        
-        <div class="section-card">
-          <div class="card-icon">
-            <div class="icon-light"></div>
+          <div class="intro-card">
+            <div class="intro-icon">🎯</div>
+            <h3>我的目标</h3>
+            <p>
+              致力于打造高质量的开源项目和技术内容，帮助更多开发者提升技能。
+              我相信代码不仅是工具，更是表达创意和解决问题的艺术。
+            </p>
           </div>
-          <h2 class="section-title">简洁高效</h2>
-          <p class="section-text">
-            我们注重用户体验，界面简洁美观，操作流畅直观。
-            让每一个功能都能快速上手，让每一次使用都成为愉快的体验。
-          </p>
+          <div class="intro-card">
+            <div class="intro-icon">💡</div>
+            <h3>我的理念</h3>
+            <p>
+              技术应该服务于人，而非束缚于人。简洁的设计、清晰的代码、
+              良好的用户体验，是我追求的每一个项目的标准。
+            </p>
+          </div>
         </div>
       </div>
-      
-      <div class="features-section">
-        <h2 class="features-title">平台特色</h2>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">技术能力</span>
+          <h2 class="section-title">专业技能</h2>
+        </div>
+        
+        <div class="skills-grid">
+          <div class="skill-category">
+            <h3 class="category-title">
+              <span class="category-icon">🎨</span>
+              前端开发
+            </h3>
+            <div class="skill-tags">
+              <span class="skill-tag">Vue.js</span>
+              <span class="skill-tag">React</span>
+              <span class="skill-tag">TypeScript</span>
+              <span class="skill-tag">JavaScript</span>
+              <span class="skill-tag">HTML5/CSS3</span>
+              <span class="skill-tag">Tailwind CSS</span>
+            </div>
+          </div>
+          
+          <div class="skill-category">
+            <h3 class="category-title">
+              <span class="category-icon">⚙️</span>
+              后端开发
+            </h3>
+            <div class="skill-tags">
+              <span class="skill-tag">Node.js</span>
+              <span class="skill-tag">Express</span>
+              <span class="skill-tag">Python</span>
+              <span class="skill-tag">RESTful API</span>
+              <span class="skill-tag">GraphQL</span>
+            </div>
+          </div>
+          
+          <div class="skill-category">
+            <h3 class="category-title">
+              <span class="category-icon">🗄️</span>
+              数据库
+            </h3>
+            <div class="skill-tags">
+              <span class="skill-tag">MySQL</span>
+              <span class="skill-tag">MongoDB</span>
+              <span class="skill-tag">PostgreSQL</span>
+              <span class="skill-tag">Redis</span>
+            </div>
+          </div>
+          
+          <div class="skill-category">
+            <h3 class="category-title">
+              <span class="category-icon">🛠️</span>
+              开发工具
+            </h3>
+            <div class="skill-tags">
+              <span class="skill-tag">Git</span>
+              <span class="skill-tag">Docker</span>
+              <span class="skill-tag">VS Code</span>
+              <span class="skill-tag">Linux</span>
+              <span class="skill-tag">CI/CD</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">平台特色</span>
+          <h2 class="section-title">博客功能</h2>
+        </div>
+        
         <div class="features-grid">
-          <div class="feature-item">
-            <div class="feature-number">01</div>
-            <h3 class="feature-name">图书管理</h3>
-            <p class="feature-desc">精美的图书列表展示，支持分类浏览和搜索，发现阅读的乐趣</p>
-          </div>
-          <div class="feature-item">
-            <div class="feature-number">02</div>
-            <h3 class="feature-name">AI工具</h3>
-            <p class="feature-desc">丰富的AI工具集合，包括文本处理、代码格式化、密码生成等</p>
-          </div>
-          <div class="feature-item">
-            <div class="feature-number">03</div>
-            <h3 class="feature-name">地震监测</h3>
-            <p class="feature-desc">全球地震数据实时更新，详细的地震信息和地理分布展示</p>
-          </div>
-          <div class="feature-item">
-            <div class="feature-number">04</div>
-            <h3 class="feature-name">时钟工具</h3>
-            <p class="feature-desc">精美的数字时钟，支持多种主题模式，满足不同场景需求</p>
+          <div class="feature-card" v-for="feature in features" :key="feature.id">
+            <div class="feature-icon">{{ feature.icon }}</div>
+            <h3 class="feature-title">{{ feature.title }}</h3>
+            <p class="feature-desc">{{ feature.description }}</p>
           </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+      <div class="container">
+        <div class="contact-card">
+          <h2 class="contact-title">联系我</h2>
+          <p class="contact-subtitle">有有趣的想法或合作机会？欢迎与我交流！</p>
+          
+          <div class="contact-links">
+            <a href="mailto:contact@grasspillow.com" class="contact-link">
+              <span class="link-icon">📧</span>
+              <span class="link-text">发送邮件</span>
+            </a>
+            <a href="https://github.com/GrassPillow" target="_blank" class="contact-link">
+              <span class="link-icon">💻</span>
+              <span class="link-text">GitHub</span>
+            </a>
+            <a href="#" class="contact-link">
+              <span class="link-icon">📝</span>
+              <span class="link-text">技术博客</span>
+            </a>
+          </div>
+          
+          <div class="tech-stack">
+            <span class="tech-label">本站技术栈</span>
+            <div class="tech-badges">
+              <span class="tech-badge">Vue 3</span>
+              <span class="tech-badge">TypeScript</span>
+              <span class="tech-badge">Vue Router</span>
+              <span class="tech-badge">Ant Design Vue</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+      <p>© 2024 GrassPillow. 用心构建，用爱分享。</p>
+    </footer>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'AboutView'
-}
+<script setup>
+import { ref } from 'vue'
+
+const features = ref([
+  {
+    id: 1,
+    icon: '📚',
+    title: '图书管理',
+    description: '精美的图书列表展示，支持分类浏览和搜索，发现阅读的乐趣'
+  },
+  {
+    id: 2,
+    icon: '🤖',
+    title: 'AI工具集',
+    description: '丰富的AI工具集合，包括文本处理、代码格式化、密码生成等'
+  },
+  {
+    id: 3,
+    icon: '🌍',
+    title: '地震监测',
+    description: '全球地震数据实时更新，详细的地震信息和地理分布展示'
+  },
+  {
+    id: 4,
+    icon: '🕐',
+    title: '时钟工具',
+    description: '精美的数字时钟，支持多种主题模式，满足不同场景需求'
+  },
+  {
+    id: 5,
+    icon: '🎨',
+    title: '3D展示',
+    description: '使用Three.js构建的3D产品展示，沉浸式视觉体验'
+  },
+  {
+    id: 6,
+    icon: '📝',
+    title: '技术博客',
+    description: '记录技术学习、项目经验和生活感悟，与读者共同成长'
+  }
+])
 </script>
 
 <style scoped>
 .about-view {
   width: 100%;
-  min-height: calc(100vh - 60px);
-  background: linear-gradient(180deg, 
-    #f5f5f7 0%, 
-    rgba(45, 122, 107, 0.05) 30%,
-    rgba(139, 111, 71, 0.05) 70%,
-    #f5f5f7 100%);
+  min-height: 100vh;
+  background: #f8f9fa;
 }
 
-.about-hero {
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Hero Section */
+.hero-section {
   position: relative;
-  background: linear-gradient(135deg, 
-    rgba(45, 122, 107, 0.15) 0%, 
-    rgba(45, 122, 107, 0.1) 50%,
-    rgba(139, 111, 71, 0.1) 50%,
-    rgba(139, 111, 71, 0.15) 100%);
-  padding: 100px 20px 80px;
-  text-align: center;
+  background: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 40%, #8b6f47 100%);
+  padding: 100px 24px 80px;
   overflow: hidden;
+}
+
+.hero-background {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.floating-shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  animation: float 20s infinite ease-in-out;
+}
+
+.shape-1 {
+  width: 300px;
+  height: 300px;
+  top: -100px;
+  right: -50px;
+  animation-delay: 0s;
+}
+
+.shape-2 {
+  width: 200px;
+  height: 200px;
+  bottom: -80px;
+  left: -60px;
+  animation-delay: -5s;
+}
+
+.shape-3 {
+  width: 150px;
+  height: 150px;
+  top: 50%;
+  right: 20%;
+  animation-delay: -10s;
+}
+
+.shape-4 {
+  width: 100px;
+  height: 100px;
+  top: 20%;
+  left: 10%;
+  animation-delay: -15s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(20px, -30px) rotate(5deg); }
+  50% { transform: translate(-10px, 20px) rotate(-5deg); }
+  75% { transform: translate(30px, 10px) rotate(3deg); }
 }
 
 .hero-content {
   position: relative;
-  z-index: 2;
-  max-width: 800px;
+  z-index: 1;
+  text-align: center;
+  max-width: 600px;
   margin: 0 auto;
 }
 
-.about-title {
-  font-size: 4rem;
-  font-weight: 700;
-  margin: 0 0 20px 0;
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+.profile-avatar {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 30px;
 }
 
-.about-subtitle {
-  font-size: 1.3rem;
-  color: #2d5a4f;
-  margin: 0;
-  opacity: 0.9;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-.leaves-decoration {
+.avatar-ring {
   position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.5) 100%);
+  animation: rotate 8s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.avatar-image {
+  position: relative;
   width: 100%;
   height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  overflow: hidden;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-.leaf {
-  position: absolute;
-  opacity: 0.3;
+.hero-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 12px;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.leaf-1 {
-  top: 10%;
-  right: 10%;
-  width: 60px;
-  height: 60px;
-  background-color: #4a7c59;
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  transform: rotate(25deg);
+.hero-tagline {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 40px;
 }
 
-.leaf-2 {
-  top: 30%;
-  left: 10%;
-  width: 50px;
-  height: 50px;
-  background-color: #8b6f47;
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  transform: rotate(-15deg);
-}
-
-.leaf-3 {
-  bottom: 20%;
-  right: 20%;
-  width: 70px;
-  height: 70px;
-  background-color: #6b8e5a;
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  transform: rotate(45deg);
-}
-
-.about-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 60px 20px 80px;
-}
-
-.content-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
-  margin-bottom: 80px;
-}
-
-.section-card {
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.95) 0%, 
-    rgba(255, 255, 255, 0.9) 100%);
-  border-radius: 20px;
-  padding: 40px 30px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1),
-              0 2px 8px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid rgba(45, 122, 107, 0.1);
-}
-
-.section-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(45, 122, 107, 0.2),
-              0 4px 12px rgba(139, 111, 71, 0.15);
-}
-
-.card-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 20px;
+.hero-stats {
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, 
-    rgba(45, 122, 107, 0.15) 0%, 
-    rgba(139, 111, 71, 0.15) 100%);
-  border-radius: 50%;
+  align-items: center;
+  gap: 30px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 24px 40px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.icon-book,
-.icon-leaf,
-.icon-light {
-  width: 40px;
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.stat-divider {
+  width: 1px;
   height: 40px;
-  position: relative;
+  background: rgba(255, 255, 255, 0.3);
 }
 
-.icon-book::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 30px;
-  height: 40px;
-  background: #2d7a6b;
-  border-radius: 2px 4px 4px 2px;
-  box-shadow: 2px 0 0 rgba(0, 0, 0, 0.1);
+/* Section Styles */
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
 }
 
-.icon-book::after {
-  content: '';
-  position: absolute;
-  top: 10px;
-  left: 5px;
-  width: 20px;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 1px;
-  box-shadow: 0 5px 0 rgba(255, 255, 255, 0.8),
-              0 10px 0 rgba(255, 255, 255, 0.8),
-              0 15px 0 rgba(255, 255, 255, 0.8);
-}
-
-.icon-leaf {
-  background: #2d7a6b;
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  border-radius: 50% 0;
-}
-
-.icon-light {
-  background: #8b6f47;
-  clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
-}
-
-.icon-light::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 50%;
+.section-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  background: linear-gradient(135deg, rgba(45, 122, 107, 0.1) 0%, rgba(139, 111, 71, 0.1) 100%);
+  color: #2d7a6b;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 20px;
+  margin-bottom: 16px;
 }
 
 .section-title {
-  font-size: 1.6rem;
-  font-weight: 600;
-  margin: 0 0 15px 0;
-  color: #1e5a4a;
-  text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-.section-text {
-  font-size: 1rem;
-  line-height: 1.8;
-  color: #2d5a4f;
-  margin: 0;
-  text-align: center;
-  opacity: 0.85;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-.features-section {
-  margin-top: 60px;
-}
-
-.features-title {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: 700;
-  text-align: center;
-  margin: 0 0 50px 0;
   color: #1e5a4a;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0 0 12px;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: #5a7a6a;
+  margin: 0;
+}
+
+/* About Section */
+.about-section {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.about-intro {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.intro-card {
+  background: linear-gradient(145deg, #f8f9fa 0%, #fff 100%);
+  border-radius: 20px;
+  padding: 36px 28px;
+  border: 1px solid rgba(45, 122, 107, 0.1);
+  transition: all 0.3s ease;
+}
+
+.intro-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(45, 122, 107, 0.15);
+  border-color: rgba(45, 122, 107, 0.2);
+}
+
+.intro-icon {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+}
+
+.intro-card h3 {
+  font-size: 1.3rem;
+  color: #1e5a4a;
+  margin: 0 0 12px;
+  font-weight: 600;
+}
+
+.intro-card p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #5a6a5f;
+  margin: 0;
+}
+
+/* Skills Section */
+.skills-section {
+  padding: 80px 0;
+  background: linear-gradient(180deg, #f8f9fa 0%, #f0f4f2 100%);
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.skill-category {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  border: 1px solid rgba(45, 122, 107, 0.08);
+  transition: all 0.3s ease;
+}
+
+.skill-category:hover {
+  box-shadow: 0 8px 30px rgba(45, 122, 107, 0.1);
+}
+
+.category-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  color: #1e5a4a;
+  margin: 0 0 16px;
+  font-weight: 600;
+}
+
+.category-icon {
+  font-size: 1.4rem;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skill-tag {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, rgba(45, 122, 107, 0.08) 0%, rgba(139, 111, 71, 0.08) 100%);
+  color: #2d7a6b;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.skill-tag:hover {
+  background: linear-gradient(135deg, rgba(45, 122, 107, 0.15) 0%, rgba(139, 111, 71, 0.15) 100%);
+  transform: translateY(-2px);
+}
+
+/* Features Section */
+.features-section {
+  padding: 80px 0;
+  background: #fff;
 }
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
 }
 
-.feature-item {
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.95) 0%, 
-    rgba(255, 255, 255, 0.9) 100%);
-  border-radius: 16px;
-  padding: 30px 25px;
+.feature-card {
+  background: linear-gradient(145deg, #f8f9fa 0%, #fff 100%);
+  border-radius: 20px;
+  padding: 32px 24px;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid rgba(45, 122, 107, 0.1);
+  border: 1px solid rgba(45, 122, 107, 0.08);
+  transition: all 0.3s ease;
 }
 
-.feature-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(45, 122, 107, 0.15);
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 35px rgba(45, 122, 107, 0.12);
+  border-color: rgba(45, 122, 107, 0.2);
 }
 
-.feature-number {
+.feature-icon {
   font-size: 3rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 15px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin-bottom: 16px;
 }
 
-.feature-name {
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin: 0 0 12px 0;
+.feature-title {
+  font-size: 1.2rem;
   color: #1e5a4a;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0 0 10px;
+  font-weight: 600;
 }
 
 .feature-desc {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   line-height: 1.6;
-  color: #2d5a4f;
+  color: #5a6a5f;
   margin: 0;
+}
+
+/* Contact Section */
+.contact-section {
+  padding: 80px 0;
+  background: linear-gradient(180deg, #f8f9fa 0%, #f0f4f2 100%);
+}
+
+.contact-card {
+  background: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 50%, #8b6f47 100%);
+  border-radius: 24px;
+  padding: 60px 40px;
+  text-align: center;
+  color: #fff;
+}
+
+.contact-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.contact-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin: 0 0 40px;
+}
+
+.contact-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.contact-link:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.link-icon {
+  font-size: 1.3rem;
+}
+
+.tech-stack {
+  padding-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tech-label {
+  display: block;
+  font-size: 0.9rem;
   opacity: 0.8;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin-bottom: 16px;
+}
+
+.tech-badges {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tech-badge {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Footer */
+.page-footer {
+  padding: 30px;
+  text-align: center;
+  background: #fff;
+  border-top: 1px solid rgba(45, 122, 107, 0.1);
+}
+
+.page-footer p {
+  margin: 0;
+  color: #7a8a7f;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
-  .about-title {
-    font-size: 2.5rem;
-  }
-  
-  .about-subtitle {
-    font-size: 1.1rem;
-  }
-  
-  .about-hero {
+  .hero-section {
     padding: 60px 20px 50px;
   }
   
-  .content-section {
-    grid-template-columns: 1fr;
-    gap: 30px;
-    margin-bottom: 60px;
+  .hero-title {
+    font-size: 2.2rem;
   }
   
-  .features-title {
-    font-size: 2rem;
-    margin-bottom: 40px;
+  .hero-stats {
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 30px;
+  }
+  
+  .stat-divider {
+    width: 60px;
+    height: 1px;
+  }
+  
+  .about-intro {
+    grid-template-columns: 1fr;
+  }
+  
+  .skills-grid {
+    grid-template-columns: 1fr;
   }
   
   .features-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
   }
   
-  .about-content {
-    padding: 40px 15px 60px;
+  .contact-links {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .contact-card {
+    padding: 40px 24px;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
   }
 }
 </style>

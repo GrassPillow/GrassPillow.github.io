@@ -133,7 +133,7 @@ const viewMode = ref('grid') // 'grid' 或 'list'
 let scrollTimeout = null
 
 // 分类列表
-const categories = ['全部', '科幻', '文学', '悬疑', '网文']
+const categories = ['全部', '科幻', '文学', '悬疑', '网文', '历史', '社科', '技术']
 
 // 切换视图模式
 function toggleViewMode(mode) {

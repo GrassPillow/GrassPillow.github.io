@@ -229,13 +229,7 @@ const features = ref([
     title: '时钟工具',
     description: '精美的数字时钟，支持多种主题模式，满足不同场景需求'
   },
-  {
-    id: 5,
-    icon: '🎨',
-    title: '3D展示',
-    description: '使用Three.js构建的3D产品展示，沉浸式视觉体验'
-  },
-  {
+{
     id: 6,
     icon: '📝',
     title: '技术博客',

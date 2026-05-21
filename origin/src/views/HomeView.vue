@@ -125,14 +125,6 @@ const projects = ref([
     demo: '/tools/earthquake',
     github: null
   },
-  {
-    name: '3D产品展示',
-    description: '使用Three.js构建的3D产品展示页面，提供沉浸式的视觉体验。',
-    image: 'https://picsum.photos/seed/3d/400/250.jpg',
-    tags: ['Three.js', 'WebGL', 'CSS3'],
-    demo: '/product-3d',
-    github: null
-  }
 ])
 </script>
 

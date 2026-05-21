@@ -112,17 +112,7 @@ const projects = ref([
     demo: '/tools/earthquake',
     github: null
   },
-  {
-    id: 4,
-    title: '3D产品展示',
-    description: '使用Three.js构建的3D产品展示页面，提供沉浸式的视觉体验和交互效果。',
-    image: 'https://picsum.photos/seed/3d-product/600/400.jpg',
-    category: 'demo',
-    tags: ['Three.js', 'WebGL', 'CSS3'],
-    demo: '/product-3d',
-    github: null
-  },
-  {
+{
     id: 5,
     title: '图书管理系统',
     description: '精美的图书管理应用，支持图书浏览、分类筛选、详情查看等功能，界面简洁美观。',

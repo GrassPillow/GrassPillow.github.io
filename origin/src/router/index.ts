@@ -50,11 +50,6 @@ const routes = [
     component: () => import('../views/BookListView.vue'),
     meta: { title: '阅读清单 - GrassPillow' }
   },
-  {
-    path: '/product-3d',
-    component: () => import('../views/Product3DView.vue'),
-    meta: { title: '3D展示 - GrassPillow' }
-  }
 ]
 
 const router = createRouter({

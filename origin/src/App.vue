@@ -114,66 +114,37 @@ onUnmounted(() => {
 </script>
 
 <style>
-/* CSS Variables for Theming */
 :root {
-  /* Colors - Light Theme */
-  --primary-color: #2d7a6b;
-  --primary-light: #3a8a7a;
-  --primary-dark: #1e5a4a;
-  --accent-color: #8b6f47;
-  --accent-light: #a68a5a;
+  /* Colors */
+  --c-primary: #2d7a6b;
+  --c-primary-light: #e8f5f1;
+  --c-primary-dark: #1e5a4a;
+  --c-bg-page: #faf9f7;
+  --c-bg-card: #ffffff;
+  --c-bg-warm: #f5f3ef;
+  --c-border: #e8e4df;
+  --c-text: #2c3e2d;
+  --c-text-secondary: #6b7a6d;
+  --c-text-muted: #9ba89c;
 
-  /* Background Colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-tertiary: #f0f4f2;
-  --card-bg: #ffffff;
-
-  /* Text Colors */
-  --text-primary: #1a1a1a;
-  --text-secondary: #5a6a5f;
-  --text-muted: #888;
-
-  /* Border Colors */
-  --border-color: rgba(45, 122, 107, 0.15);
-  --border-light: rgba(45, 122, 107, 0.08);
+  /* Font sizes */
+  --fs-hero: 3rem;
+  --fs-h1: 2.2rem;
+  --fs-h2: 1.6rem;
+  --fs-h3: 1.2rem;
+  --fs-body: 1rem;
+  --fs-sm: 0.875rem;
+  --fs-xs: 0.75rem;
 
   /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.12);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08);
 
-  /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
-  --gradient-hero: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 40%, #8b6f47 100%);
-}
-
-/* Dark Theme */
-[data-theme="dark"] {
-  --primary-color: #3a8a7a;
-  --primary-light: #4a9a8a;
-  --primary-dark: #2d7a6b;
-  --accent-color: #a68a5a;
-  --accent-light: #c9a86a;
-
-  --bg-primary: #0f0f0f;
-  --bg-secondary: #1a1a1a;
-  --bg-tertiary: #242424;
-  --card-bg: #1e1e1e;
-
-  --text-primary: #f0f0f0;
-  --text-secondary: #b0b0b0;
-  --text-muted: #666;
-
-  --border-color: rgba(58, 138, 122, 0.25);
-  --border-light: rgba(58, 138, 122, 0.12);
-
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.45);
-
-  --gradient-primary: linear-gradient(135deg, #3a8a7a 0%, #a68a5a 100%);
-  --gradient-hero: linear-gradient(135deg, #0f2e28 0%, #1a4a40 40%, #4a3a25 100%);
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
 }
 
 /* Theme toggle container */
@@ -206,7 +177,7 @@ onUnmounted(() => {
 }
 
 body {
-  background: var(--bg-secondary);
+  background: var(--c-bg-page);
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   min-height: 100vh;
@@ -240,7 +211,7 @@ body {
     min-width: 44px;
     min-height: 44px;
   border-radius: 50%;
-  background: var(--gradient-primary);
+  background: var(--c-primary);
   border: 3px solid rgba(255, 255, 255, 0.4);
   box-shadow: var(--shadow-lg);
   cursor: pointer;
@@ -299,7 +270,7 @@ body {
 
 .ball-button.active {
   transform: rotate(90deg) scale(1.15);
-  background: linear-gradient(135deg, #1e5a4a 0%, #2d7a6b 50%, #6b5537 100%);
+  background: linear-gradient(135deg, #1a4d3e, var(--c-primary-dark));
   animation: none;
 }
 
@@ -320,13 +291,7 @@ body {
   flex-direction: column;
   gap: 10px;
   padding: 20px;
-  background: linear-gradient(135deg, 
-    rgba(45, 122, 107, 0.98) 0%, 
-    rgba(45, 122, 107, 0.96) 30%,
-    rgba(45, 122, 107, 0.95) 50%, 
-    rgba(139, 111, 71, 0.95) 50%,
-    rgba(139, 111, 71, 0.96) 70%,
-    rgba(139, 111, 71, 0.98) 100%);
+  background: linear-gradient(135deg, rgba(45, 122, 107, 0.97), rgba(30, 90, 74, 0.97));
   backdrop-filter: blur(24px) saturate(200%);
   -webkit-backdrop-filter: blur(24px) saturate(200%);
   border-radius: 28px;

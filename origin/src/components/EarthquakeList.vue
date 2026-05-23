@@ -1,8 +1,8 @@
 <script setup>
-import { Table } from 'ant-design-vue';
 import axios from 'axios';
 import { ref, onMounted, onBeforeUnmount, computed, h } from 'vue';
-import EarthquakeMap from './EarthquakeMap.vue'; // 导入地图组件
+import EarthquakeMap from './EarthquakeMap.vue';
+import DataTable from './DataTable.vue'
 
 const columns = ref([]);
 const dataSource = ref([]);
@@ -495,13 +495,13 @@ onBeforeUnmount(() => {
       
       <!-- 添加外部容器来处理滚动，避免Table内部的ResizeObserver问题 -->
       <div class="table-wrapper">
-        <Table 
-          :columns="columns" 
-          :data-source="filteredDataSource" 
+        <DataTable
+          :columns="columns"
+          :data-source="filteredDataSource"
           :loading="loading"
-          :pagination="{ 
-            pageSize: 20, 
-            showSizeChanger: true, 
+          :pagination="{
+            pageSize: 20,
+            showSizeChanger: true,
             showQuickJumper: true,
             showTotal: total => `共 ${total} 条记录`,
             pageSizeOptions: ['10', '20', '50', '100']
@@ -845,42 +845,5 @@ onBeforeUnmount(() => {
   .table-header h2 {
     font-size: 1.3rem;
   }
-}
-
-/* 加载状态样式 */
-:deep(.ant-table-placeholder) {
-  min-height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* 美化表格行悬停效果 */
-:deep(.ant-table-tbody > tr:hover) {
-  background-color: #f0f7ff;
-  transition: background-color 0.2s ease;
-}
-
-/* 美化表格头部 */
-:deep(.ant-table-thead > tr > th) {
-  background: #fafafa;
-  font-weight: 600;
-  color: #333;
-}
-
-/* 美化固定列 */
-:deep(.ant-table-cell-fix-left) {
-  background: white;
-}
-
-:deep(.ant-table-tbody > tr:hover .ant-table-cell-fix-left) {
-  background: #f0f7ff;
-}
-
-/* 美化分页控件 */
-:deep(.ant-pagination) {
-  margin-top: 1.5rem;
-  display: flex;
-  justify-content: center;
 }
 </style>

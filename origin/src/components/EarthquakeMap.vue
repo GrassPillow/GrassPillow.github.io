@@ -2,49 +2,25 @@
   <div class="earthquake-map">
     <div class="map-header">
       <h3>地震分布地图 - 按时间顺序展示</h3>
-      <div class="legend">
-        <span class="legend-item">
-          <span class="legend-marker severity-minor"></span>
-          <span>&lt; 5.0 级</span>
-        </span>
-        <span class="legend-item">
-          <span class="legend-marker severity-medium"></span>
-          <span>5.0 - 7.0 级</span>
-        </span>
-        <span class="legend-item">
-          <span class="legend-marker severity-major"></span>
-          <span>&gt;= 7.0 级</span>
-        </span>
-      </div>
+      <MapLegend />
     </div>
     <div id="map-container" ref="mapContainer"></div>
-    <div class="controls">
-      <button class="control-btn start-btn" @click="startAnimation" :disabled="isAnimating">
-        <i class="control-icon">▶</i> 开始动画
-      </button>
-      <button class="control-btn stop-btn" @click="stopAnimation" :disabled="!isAnimating">
-        <i class="control-icon">■</i> 停止动画
-      </button>
-      <button class="control-btn reset-btn" @click="resetAnimation">
-        <i class="control-icon">⟳</i> 重置
-      </button>
-      <div class="speed-control">
-        <label for="animation-speed">动画速度:</label>
-        <input id="animation-speed" type="range" v-model.number="animationSpeed" min="500" max="2000" step="100" 
-               @input="updateAnimationSpeed">
-        <span class="speed-value">{{ animationSpeed }}ms</span>
-      </div>
-      <div class="animation-status" v-if="isAnimating">
-        <span class="status-indicator"></span>
-        <span>动画进行中...</span>
-      </div>
-    </div>
+    <AnimationControls
+      :isAnimating="isAnimating"
+      :animationSpeed="animationSpeed"
+      @start="startAnimation"
+      @stop="stopAnimation"
+      @reset="resetAnimation"
+      @update:speed="animationSpeed = $event; updateAnimationSpeed()"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted, watch, defineProps } from 'vue';
 import AMapLoader from '@amap/amap-jsapi-loader';
+import MapLegend from './MapLegend.vue';
+import AnimationControls from './AnimationControls.vue';
 
 // 接收地震数据作为props
 const props = defineProps({
@@ -601,42 +577,6 @@ onUnmounted(() => {
   font-weight: 600;
 }
 
-/* 图例样式 */
-.legend {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: #555;
-  font-weight: 500;
-}
-
-.legend-marker {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-}
-
-.legend-marker.severity-minor {
-  background-color: #FF9999;
-}
-
-.legend-marker.severity-medium {
-  background-color: #FF6600;
-}
-
-.legend-marker.severity-major {
-  background-color: #FF0000;
-}
-
 #map-container {
   width: 100%;
   height: 500px;
@@ -644,164 +584,6 @@ onUnmounted(() => {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* 控件样式 */
-.controls {
-  margin-top: 20px;
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-  background: white;
-  padding: 15px 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-/* 按钮样式 */
-.control-btn {
-  padding: 10px 18px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.control-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.control-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.start-btn {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.start-btn:hover:not(:disabled) {
-  background-color: #45a049;
-}
-
-.stop-btn {
-  background-color: #f44336;
-  color: white;
-}
-
-.stop-btn:hover:not(:disabled) {
-  background-color: #d32f2f;
-}
-
-.reset-btn {
-  background-color: #2196F3;
-  color: white;
-}
-
-.reset-btn:hover:not(:disabled) {
-  background-color: #1976D2;
-}
-
-.control-icon {
-  font-size: 16px;
-}
-
-/* 速度控制样式 */
-.speed-control {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #f8f9fa;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-}
-
-.speed-control label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #555;
-  white-space: nowrap;
-}
-
-.speed-control input[type="range"] {
-  width: 150px;
-  height: 6px;
-  border-radius: 3px;
-  background: #ddd;
-  outline: none;
-  transition: background 0.3s;
-}
-
-.speed-control input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #2196F3;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(33, 150, 243, 0.3);
-  transition: all 0.3s ease;
-}
-
-.speed-control input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
-  box-shadow: 0 3px 10px rgba(33, 150, 243, 0.5);
-}
-
-.speed-value {
-  font-size: 14px;
-  font-weight: 600;
-  color: #2196F3;
-  min-width: 60px;
-}
-
-/* 动画状态指示器 */
-.animation-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #4CAF50;
-}
-
-.status-indicator {
-  width: 8px;
-  height: 8px;
-  background-color: #4CAF50;
-  border-radius: 50%;
-  animation: status-blink 1s infinite;
-}
-
-/* 添加脉冲动画效果 */
-@keyframes pulse {
-  0% {
-    transform: scale(0.8);
-    opacity: 0.6;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
 }
 
 /* 脉冲环动画 */
@@ -817,16 +599,6 @@ onUnmounted(() => {
   100% {
     transform: translate(-50%, -50%) scale(0.8);
     opacity: 0;
-  }
-}
-
-/* 状态指示器闪烁动画 */
-@keyframes status-blink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
   }
 }
 
@@ -846,32 +618,8 @@ onUnmounted(() => {
     font-size: 20px;
   }
   
-  .legend {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  
   #map-container {
     height: 350px;
-  }
-  
-  .controls {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-  
-  .control-btn {
-    justify-content: center;
-  }
-  
-  .speed-control {
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .speed-control input[type="range"] {
-    width: 100%;
   }
 }
 

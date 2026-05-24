@@ -21,8 +21,8 @@
           </div>
         </div>
         <div class="post-tags">
-          <span 
-            v-for="tagId in post.tagIds" 
+          <span
+            v-for="tagId in post.tagIds"
             :key="tagId"
             class="post-tag"
             :style="{ backgroundColor: getTagColor(tagId) }"
@@ -36,7 +36,30 @@
         <img :src="post.coverImage" :alt="post.title" />
       </div>
 
-      <div class="post-content" v-html="post.content"></div>
+      <!-- Article Content with TOC -->
+      <div class="post-body">
+        <div class="post-content" ref="contentRef" v-html="post.content"></div>
+
+        <!-- Table of Contents Sidebar -->
+        <aside class="toc-sidebar" :class="{ 'toc-fixed': isTocFixed }">
+          <div class="toc-container">
+            <h4 class="toc-title">目录</h4>
+            <nav class="toc-nav">
+              <a
+                v-for="item in tocItems"
+                :key="item.id"
+                :href="'#' + item.id"
+                class="toc-item"
+                :class="{ active: activeTocId === item.id }"
+                :style="{ paddingLeft: (item.level - 1) * 12 + 'px' }"
+                @click.prevent="scrollToHeading(item.id)"
+              >
+                {{ item.text }}
+              </a>
+            </nav>
+          </div>
+        </aside>
+      </div>
 
       <div class="post-actions">
         <button class="action-button like-button" @click="toggleLike">
@@ -157,7 +180,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -167,6 +190,68 @@ const postId = ref(parseInt(route.params.id))
 const isLiked = ref(false)
 const showShareMenu = ref(false)
 const newComment = ref('')
+const contentRef = ref(null)
+const tocItems = ref([])
+const activeTocId = ref('')
+const isTocFixed = ref(false)
+
+// 解析文章内容生成目录
+const generateToc = () => {
+  if (!contentRef.value) return
+
+  const headings = contentRef.value.querySelectorAll('h2, h3')
+  const items = []
+
+  headings.forEach((heading, index) => {
+    const id = `heading-${index}`
+    heading.id = id
+
+    items.push({
+      id,
+      text: heading.textContent,
+      level: parseInt(heading.tagName.replace('H', ''))
+    })
+  })
+
+  tocItems.value = items
+}
+
+// 滚动到指定标题
+const scrollToHeading = (id) => {
+  const element = document.getElementById(id)
+  if (element) {
+    const offset = 100
+    const elementPosition = element.getBoundingClientRect().top
+    const offsetPosition = elementPosition + window.pageYOffset - offset
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    })
+
+    activeTocId.value = id
+  }
+}
+
+// 监听滚动更新目录高亮
+const handleScroll = () => {
+  // 更新目录固定状态
+  isTocFixed.value = window.scrollY > 400
+
+  // 更新当前高亮的目录项
+  const headings = tocItems.value.map(item => ({
+    id: item.id,
+    element: document.getElementById(item.id)
+  })).filter(item => item.element)
+
+  for (let i = headings.length - 1; i >= 0; i--) {
+    const rect = headings[i].element.getBoundingClientRect()
+    if (rect.top <= 150) {
+      activeTocId.value = headings[i].id
+      break
+    }
+  }
+}
 
 // 模拟文章数据
 const posts = ref([
@@ -435,6 +520,21 @@ const likeReply = (replyId) => {
 onMounted(() => {
   // 增加浏览量
   post.value.views++
+
+  // 生成目录
+  nextTick(() => {
+    generateToc()
+    if (tocItems.value.length > 0) {
+      activeTocId.value = tocItems.value[0].id
+    }
+  })
+
+  // 添加滚动监听
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
 })
 </script>
 
@@ -596,6 +696,79 @@ onMounted(() => {
   margin: 1rem 0;
   color: #666;
   font-style: italic;
+}
+
+/* Post Body with TOC */
+.post-body {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Table of Contents Sidebar */
+.toc-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  display: none;
+}
+
+.toc-fixed {
+  position: fixed;
+  top: 80px;
+}
+
+.toc-container {
+  position: sticky;
+  top: 100px;
+}
+
+.toc-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.toc-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toc-item {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toc-item:hover {
+  background: var(--bg-tertiary);
+  color: var(--primary-color);
+}
+
+.toc-item.active {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+@media (min-width: 1200px) {
+  .toc-sidebar {
+    display: block;
+  }
+
+  .post-content {
+    flex: 1;
+    max-width: calc(100% - 220px);
+  }
 }
 
 .post-actions {

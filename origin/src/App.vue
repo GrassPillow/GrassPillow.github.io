@@ -1,14 +1,18 @@
 <template>
   <div>
     <router-view v-slot="{ Component, route }">
-      <transition name="page" mode="out-in">
+      <PageTransition mode="out-in">
         <component :is="Component" :key="route.path" />
-      </transition>
+      </PageTransition>
     </router-view>
     <!-- Toast 提示组件 -->
     <Toast />
     <!-- 回到顶部按钮 -->
     <BackToTop />
+    <!-- 主题切换按钮 -->
+    <div class="theme-toggle-container">
+      <ThemeToggle />
+    </div>
     <!-- 悬浮球导航 -->
     <div class="floating-nav-ball" :class="{ 'nav-hidden': isNavHidden, 'nav-expanded': isExpanded }">
       <!-- 主悬浮球按钮 -->
@@ -34,6 +38,22 @@
           <span class="nav-icon">📝</span>
           <span class="nav-label">博客</span>
         </router-link>
+        <router-link to="/gallery" class="nav-item" @click="handleNavClick">
+          <span class="nav-icon">🖼️</span>
+          <span class="nav-label">相册</span>
+        </router-link>
+        <router-link to="/timeline" class="nav-item" @click="handleNavClick">
+          <span class="nav-icon">📅</span>
+          <span class="nav-label">时间线</span>
+        </router-link>
+        <router-link to="/todo" class="nav-item" @click="handleNavClick">
+          <span class="nav-icon">✅</span>
+          <span class="nav-label">待办</span>
+        </router-link>
+        <router-link to="/music" class="nav-item" @click="handleNavClick">
+          <span class="nav-icon">🎵</span>
+          <span class="nav-label">音乐</span>
+        </router-link>
         <router-link to="/tools" class="nav-item" @click="handleNavClick">
           <span class="nav-icon">🛠️</span>
           <span class="nav-label">工具</span>
@@ -46,12 +66,16 @@
 <script>
 import Toast from './components/Toast.vue'
 import BackToTop from './components/BackToTop.vue'
+import ThemeToggle from './components/ThemeToggle.vue'
+import PageTransition from './components/PageTransition.vue'
 
 export default {
   name: "App",
   components: {
     Toast,
-    BackToTop
+    BackToTop,
+    ThemeToggle,
+    PageTransition
   },
   data() {
     return {
@@ -102,11 +126,82 @@ export default {
 </script>
 
 <style>
+/* CSS Variables for Theming */
+:root {
+  /* Colors - Light Theme */
+  --primary-color: #2d7a6b;
+  --primary-light: #3a8a7a;
+  --primary-dark: #1e5a4a;
+  --accent-color: #8b6f47;
+  --accent-light: #a68a5a;
+
+  /* Background Colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #f0f4f2;
+  --card-bg: #ffffff;
+
+  /* Text Colors */
+  --text-primary: #1a1a1a;
+  --text-secondary: #5a6a5f;
+  --text-muted: #888;
+
+  /* Border Colors */
+  --border-color: rgba(45, 122, 107, 0.15);
+  --border-light: rgba(45, 122, 107, 0.08);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.12);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
+  --gradient-hero: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 40%, #8b6f47 100%);
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  --primary-color: #3a8a7a;
+  --primary-light: #4a9a8a;
+  --primary-dark: #2d7a6b;
+  --accent-color: #a68a5a;
+  --accent-light: #c9a86a;
+
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #242424;
+  --card-bg: #1e1e1e;
+
+  --text-primary: #f0f0f0;
+  --text-secondary: #b0b0b0;
+  --text-muted: #666;
+
+  --border-color: rgba(58, 138, 122, 0.25);
+  --border-light: rgba(58, 138, 122, 0.12);
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.45);
+
+  --gradient-primary: linear-gradient(135deg, #3a8a7a 0%, #a68a5a 100%);
+  --gradient-hero: linear-gradient(135deg, #0f2e28 0%, #1a4a40 40%, #4a3a25 100%);
+}
+
+/* Theme toggle container */
+.theme-toggle-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1001;
+}
+
 body {
-  background: linear-gradient(180deg, #f5f5f7 0%, #ffffff 100%);
+  background: var(--bg-secondary);
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   min-height: 100vh;
+  transition: background-color 0.3s ease;
 }
 #app {
   min-height: 100vh;
@@ -136,12 +231,9 @@ body {
     min-width: 44px;
     min-height: 44px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2d7a6b 0%, #3a8a7a 50%, #8b6f47 100%);
+  background: var(--gradient-primary);
   border: 3px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 12px 32px rgba(45, 122, 107, 0.5),
-              0 6px 16px rgba(139, 111, 71, 0.4),
-              inset 0 2px 4px rgba(255, 255, 255, 0.3),
-              inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-lg);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -443,19 +535,4 @@ body {
   }
 }
 
-/* 页面过渡动画 */
-.page-enter-active,
-.page-leave-active {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.page-enter-from {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.page-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
 </style>

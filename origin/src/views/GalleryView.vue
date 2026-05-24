@@ -31,7 +31,7 @@
           @click="openLightbox(item)"
         >
           <div class="item-image">
-            <img :src="item.thumbnail" :alt="item.title" loading="lazy" />
+            <img v-lazy-img="item.thumbnail" :alt="item.title" />
             <div class="item-overlay">
               <div class="item-info">
                 <h3 class="item-title">{{ item.title }}</h3>
@@ -67,6 +67,9 @@
 
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
+import { lazyImgDirective } from '../composables/useLazyLoad.js'
+
+const vLazyImg = lazyImgDirective
 
 const categories = [
   { id: 'all', name: '全部' },

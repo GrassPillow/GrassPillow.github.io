@@ -12,7 +12,7 @@
     <section class="stats-section">
       <div class="stats-container">
         <div class="stat-card" v-for="stat in stats" :key="stat.label">
-          <div class="stat-value">{{ stat.value }}</div>
+          <div class="stat-value"><CountUp :end="stat.count" :suffix="stat.suffix" /></div>
           <div class="stat-label">{{ stat.label }}</div>
         </div>
       </div>
@@ -23,33 +23,38 @@
       <div class="timeline-container">
         <div class="timeline-line"></div>
 
-        <div
+        <AnimatedItem
           v-for="(event, index) in timelineEvents"
           :key="event.id"
-          class="timeline-item"
-          :class="{ 'item-right': index % 2 === 1 }"
+          :type="index % 2 === 1 ? 'fadeLeft' : 'fadeRight'"
+          :delay="index * 0.15"
         >
-          <div class="timeline-dot" :style="{ background: event.color }">
-            <span class="dot-icon">{{ event.icon }}</span>
-          </div>
+          <div
+            class="timeline-item"
+            :class="{ 'item-right': index % 2 === 1 }"
+          >
+            <div class="timeline-dot" :style="{ background: event.color }">
+              <span class="dot-icon">{{ event.icon }}</span>
+            </div>
 
-          <div class="timeline-card">
-            <div class="card-header">
-              <span class="event-date">{{ event.date }}</span>
-              <span class="event-type" :style="{ background: event.color + '20', color: event.color }">
-                {{ event.type }}
-              </span>
-            </div>
-            <h3 class="event-title">{{ event.title }}</h3>
-            <p class="event-description">{{ event.description }}</p>
-            <div class="event-tags" v-if="event.tags">
-              <span class="tag" v-for="tag in event.tags" :key="tag">{{ tag }}</span>
-            </div>
-            <div class="event-links" v-if="event.link">
-              <a :href="event.link" target="_blank" class="event-link">查看详情 →</a>
+            <div class="timeline-card">
+              <div class="card-header">
+                <span class="event-date">{{ event.date }}</span>
+                <span class="event-type" :style="{ background: event.color + '20', color: event.color }">
+                  {{ event.type }}
+                </span>
+              </div>
+              <h3 class="event-title">{{ event.title }}</h3>
+              <p class="event-description">{{ event.description }}</p>
+              <div class="event-tags" v-if="event.tags">
+                <span class="tag" v-for="tag in event.tags" :key="tag">{{ tag }}</span>
+              </div>
+              <div class="event-links" v-if="event.link">
+                <a :href="event.link" target="_blank" class="event-link">查看详情 →</a>
+              </div>
             </div>
           </div>
-        </div>
+        </AnimatedItem>
       </div>
     </section>
   </div>
@@ -57,12 +62,14 @@
 
 <script setup>
 import { ref } from 'vue'
+import AnimatedItem from '../components/AnimatedItem.vue'
+import CountUp from '../components/CountUp.vue'
 
 const stats = ref([
-  { value: '6+', label: '年编程经验' },
-  { value: '50+', label: '完成项目' },
-  { value: '20+', label: '技术文章' },
-  { value: '1000+', label: 'GitHub Stars' }
+  { count: 6, suffix: '+', label: '年编程经验' },
+  { count: 50, suffix: '+', label: '完成项目' },
+  { count: 20, suffix: '+', label: '技术文章' },
+  { count: 1000, suffix: '+', label: 'GitHub Stars' }
 ])
 
 const timelineEvents = ref([

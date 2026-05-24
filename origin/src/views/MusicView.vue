@@ -373,20 +373,6 @@ onUnmounted(() => {
   text-align: center;
 }
 
-.page-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: #fff;
-  margin: 0 0 12px;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.page-subtitle {
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 0;
-}
-
 /* Player Section */
 .player-section {
   max-width: 600px;
@@ -739,10 +725,6 @@ onUnmounted(() => {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .page-title {
-    font-size: 2rem;
-  }
-
   .player-container {
     padding: 24px;
   }

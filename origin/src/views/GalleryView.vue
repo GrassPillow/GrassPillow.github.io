@@ -235,20 +235,6 @@ onUnmounted(() => {
   margin-bottom: 32px;
 }
 
-.page-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: #fff;
-  margin: 0 0 12px;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.page-subtitle {
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 0;
-}
-
 .filter-tabs {
   display: flex;
   justify-content: center;
@@ -517,10 +503,6 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
-  .page-title {
-    font-size: 2rem;
-  }
-
   .gallery-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;

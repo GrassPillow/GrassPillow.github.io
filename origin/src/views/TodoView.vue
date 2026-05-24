@@ -301,20 +301,6 @@ const cancelEdit = () => {
   text-align: center;
 }
 
-.page-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: #fff;
-  margin: 0 0 12px;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.page-subtitle {
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 0;
-}
-
 .todo-container {
   max-width: 800px;
   margin: 0 auto;
@@ -775,10 +761,6 @@ const cancelEdit = () => {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .page-title {
-    font-size: 2rem;
-  }
-
   .add-todo-form {
     flex-direction: column;
   }

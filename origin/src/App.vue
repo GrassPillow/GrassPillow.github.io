@@ -63,66 +63,54 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 import Toast from './components/Toast.vue'
 import BackToTop from './components/BackToTop.vue'
 import ThemeToggle from './components/ThemeToggle.vue'
 import PageTransition from './components/PageTransition.vue'
 
-export default {
-  name: "App",
-  components: {
-    Toast,
-    BackToTop,
-    ThemeToggle,
-    PageTransition
-  },
-  data() {
-    return {
-      isNavHidden: false,
-      isExpanded: false,
-      lastScrollTop: 0,
-      scrollTimeout: null
-    }
-  },
-  mounted() {
-    window.addEventListener('scroll', this.handleScroll)
-  },
-  beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll)
-    if (this.scrollTimeout) {
-      clearTimeout(this.scrollTimeout)
-    }
-  },
-  methods: {
-    handleScroll() {
-      // 防抖处理
-      if (this.scrollTimeout) {
-        clearTimeout(this.scrollTimeout)
-      }
-      
-      this.scrollTimeout = setTimeout(() => {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-        
-        // 当向下滚动超过100px且滚动距离大于上次位置时，隐藏导航栏
-        if (scrollTop > 100 && scrollTop > this.lastScrollTop) {
-          this.isNavHidden = true
-        } else {
-          this.isNavHidden = false
-        }
-        
-        this.lastScrollTop = scrollTop
-      }, 50)
-    },
-    toggleNav() {
-      this.isExpanded = !this.isExpanded
-    },
-    handleNavClick() {
-      // 点击导航项后自动收起菜单
-      this.isExpanded = false
-    }
+const isNavHidden = ref(false)
+const isExpanded = ref(false)
+const lastScrollTop = ref(0)
+const scrollTimeout = ref(null)
+
+const handleScroll = () => {
+  if (scrollTimeout.value) {
+    clearTimeout(scrollTimeout.value)
   }
-};
+
+  scrollTimeout.value = setTimeout(() => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+
+    if (scrollTop > 100 && scrollTop > lastScrollTop.value) {
+      isNavHidden.value = true
+    } else {
+      isNavHidden.value = false
+    }
+
+    lastScrollTop.value = scrollTop
+  }, 50)
+}
+
+const toggleNav = () => {
+  isExpanded.value = !isExpanded.value
+}
+
+const handleNavClick = () => {
+  isExpanded.value = false
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+  if (scrollTimeout.value) {
+    clearTimeout(scrollTimeout.value)
+  }
+})
 </script>
 
 <style>

@@ -145,6 +145,14 @@ onUnmounted(() => {
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 20px;
+
+  /* Z-index scale */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
 }
 
 /* Theme toggle container */
@@ -189,13 +197,28 @@ body {
   flex-direction: column;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+p {
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* 悬浮球导航 */
 .floating-nav-ball {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  z-index: 1000;
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: var(--z-toast);
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .floating-nav-ball.nav-hidden {
@@ -218,9 +241,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   position: relative;
-  z-index: 1002;
+  z-index: var(--z-toast);
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
   animation: pulse 2s ease-in-out infinite;
@@ -246,17 +269,16 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 0;
-  height: 0;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.3);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s ease, height 0.6s ease;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.2s ease;
 }
 
 .ball-button:hover::before {
-  width: 100px;
-  height: 100px;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .ball-button:hover {
@@ -270,7 +292,7 @@ body {
 
 .ball-button.active {
   transform: rotate(90deg) scale(1.15);
-  background: linear-gradient(135deg, #1a4d3e, var(--c-primary-dark));
+  background: var(--c-primary-dark);
   animation: none;
 }
 
@@ -291,7 +313,7 @@ body {
   flex-direction: column;
   gap: 10px;
   padding: 20px;
-  background: linear-gradient(135deg, rgba(45, 122, 107, 0.97), rgba(30, 90, 74, 0.97));
+  background: rgba(30, 90, 74, 0.97);
   backdrop-filter: blur(24px) saturate(200%);
   -webkit-backdrop-filter: blur(24px) saturate(200%);
   border-radius: 28px;
@@ -301,7 +323,7 @@ body {
               inset 0 -2px 4px rgba(0, 0, 0, 0.2);
   border: 2px solid rgba(255, 255, 255, 0.25);
   min-width: 150px;
-  animation: slideUp 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: slideUp 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   transform-origin: bottom right;
 }
 
@@ -325,7 +347,7 @@ body {
   color: white;
   text-decoration: none;
   border-radius: 18px;
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.15s cubic-bezier(0.25, 0.8, 0.25, 1);
   position: relative;
   overflow: hidden;
   white-space: nowrap;
@@ -369,7 +391,7 @@ body {
   font-size: 1.4rem;
   line-height: 1;
   position: relative;
-  z-index: 1;
+  z-index: var(--z-base);
   transition: transform 0.3s ease;
 }
 
@@ -380,38 +402,16 @@ body {
 .nav-label {
   font-size: 0.95rem;
   position: relative;
-  z-index: 1;
+  z-index: var(--z-base);
   font-weight: 500;
-  transition: transform 0.3s ease;
+  transition: transform 0.15s ease;
 }
 
 .nav-item:hover .nav-label {
   transform: translateX(2px);
 }
 
-.nav-container::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 100px;
-  height: 100px;
-  background: radial-gradient(circle, rgba(45, 122, 107, 0.1) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.nav-container::after {
-  content: '';
-  position: absolute;
-  bottom: -50%;
-  left: -20%;
-  width: 80px;
-  height: 80px;
-  background: radial-gradient(circle, rgba(139, 111, 71, 0.1) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-}
+/* .nav-container::before/after removed - no corresponding .nav-container element */
 
 .nav-hidden {
   transform: translateY(-140%);
@@ -509,4 +509,19 @@ body {
   }
 }
 
+/* 页面过渡动画 */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
 </style>

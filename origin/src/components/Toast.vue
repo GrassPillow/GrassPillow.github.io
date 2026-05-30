@@ -102,7 +102,7 @@ onUnmounted(() => {
   padding: 1rem 1.25rem;
   min-width: 280px;
   max-width: 400px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%);
+  background: var(--c-bg-card);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 12px;

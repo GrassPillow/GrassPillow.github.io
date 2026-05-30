@@ -307,7 +307,7 @@ export default {
 <style scoped>
 .ai-view {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 30%, #f0f4f8 60%, #f5f7fa 100%);
+  background: var(--c-bg-page);
   padding-bottom: 3rem;
   position: relative;
 }
@@ -319,9 +319,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 30%, rgba(45, 122, 107, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(139, 111, 71, 0.05) 0%, transparent 50%);
+  background: transparent;
   pointer-events: none;
   z-index: 0;
 }
@@ -332,7 +330,7 @@ export default {
 }
 
 .page-header {
-  background: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 20%, #3a8a7a 40%, #4a9a8a 60%, #8b6f47 80%, #a67c52 100%);
+  background: var(--c-primary-dark);
   color: white;
   padding: 5rem 1rem;
   margin-bottom: 3rem;
@@ -348,7 +346,7 @@ export default {
   right: -20%;
   width: 800px;
   height: 800px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 50%;
   animation: float 20s ease-in-out infinite;
 }
@@ -360,7 +358,7 @@ export default {
   left: -10%;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 50%;
   animation: float 15s ease-in-out infinite reverse;
 }
@@ -375,7 +373,7 @@ export default {
 }
 
 .header-content {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   text-align: center;
   position: relative;
@@ -390,10 +388,7 @@ export default {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   letter-spacing: -0.03em;
   animation: fadeInDown 0.8s ease-out;
-  background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.9) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
 }
 
 .page-description {
@@ -436,7 +431,7 @@ export default {
 
 /* 搜索和筛选栏 */
 .search-filter-bar {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%);
+  background: var(--c-bg-card);
   backdrop-filter: blur(10px);
   padding: 2.5rem;
   border-radius: 24px;
@@ -544,7 +539,7 @@ export default {
 }
 
 .filter-tag.active {
-  background: linear-gradient(135deg, #2d7a6b 0%, #3a8a7a 50%, #8b6f47 100%);
+  background: var(--c-primary);
   border-color: transparent;
   color: white;
   box-shadow: 0 6px 20px rgba(45, 122, 107, 0.4),
@@ -558,7 +553,7 @@ export default {
   gap: 2.5rem;
   margin-bottom: 2rem;
   padding: 2rem 2.5rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 249, 250, 0.98) 100%);
+  background: var(--c-bg-card);
   backdrop-filter: blur(10px);
   border-radius: 20px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1),
@@ -594,10 +589,7 @@ export default {
 .stat-value {
   font-size: 2rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1e5a4a;
   letter-spacing: -0.02em;
 }
 
@@ -615,7 +607,7 @@ export default {
 }
 
 .category-section {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%);
+  background: var(--c-bg-card);
   backdrop-filter: blur(10px);
   padding: 2.5rem;
   border-radius: 24px;
@@ -635,7 +627,7 @@ export default {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #2d7a6b 0%, #3a8a7a 50%, #8b6f47 100%);
+  background: var(--c-primary);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.4s ease;
@@ -678,10 +670,7 @@ export default {
 .category-title {
   font-size: 1.9rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #2d5a4f 0%, #2d7a6b 50%, #8b6f47 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1e5a4a;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   display: flex;
@@ -726,7 +715,7 @@ export default {
   font-size: 1rem;
   font-weight: 700;
   color: white;
-  background: linear-gradient(135deg, #2d7a6b 0%, #3a8a7a 50%, #8b6f47 100%);
+  background: var(--c-primary);
   padding: 0.5rem 1.2rem;
   border-radius: 24px;
   box-shadow: 0 4px 12px rgba(45, 122, 107, 0.3),
@@ -749,7 +738,7 @@ export default {
 .empty-state {
   text-align: center;
   padding: 6rem 2rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 249, 250, 0.98) 100%);
+  background: var(--c-bg-card);
   backdrop-filter: blur(10px);
   border-radius: 24px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1),
@@ -780,10 +769,7 @@ export default {
 .empty-title {
   font-size: 2rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #2d5a4f 0%, #2d7a6b 50%, #8b6f47 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1e5a4a;
   margin: 0 0 1rem 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
@@ -801,7 +787,7 @@ export default {
   bottom: 2rem;
   right: 2rem;
   padding: 1.2rem 1.8rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%);
+  background: var(--c-bg-card);
   backdrop-filter: blur(12px);
   border-radius: 16px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25),

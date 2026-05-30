@@ -1,5 +1,5 @@
 <template>
-  <div class="book-list-view" @scroll="handleScroll" ref="scrollContainer">
+  <div class="book-list-view">
     <div class="book-header">
       <h1 class="book-title">图书列表</h1>
       <p class="book-subtitle">探索知识的海洋，发现阅读的乐趣</p>
@@ -18,7 +18,7 @@
       <div class="view-toggle">
         <button
           :class="['view-btn', { active: viewMode === 'grid' }]"
-          @click="toggleViewMode('grid')"
+          @click="viewMode = 'grid'"
           title="网格视图"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -30,7 +30,7 @@
         </button>
         <button
           :class="['view-btn', { active: viewMode === 'list' }]"
-          @click="toggleViewMode('list')"
+          @click="viewMode = 'list'"
           title="列表视图"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -48,24 +48,27 @@
           v-for="category in categories"
           :key="category"
           :class="['category-btn', { active: selectedCategory === category }]"
-          @click="selectCategory(category)"
+          @click="selectedCategory = selectedCategory === category ? '全部' : category"
         >
           {{ category }}
         </button>
       </div>
     </div>
-    <div v-if="!isLoading && books.length === 0" class="no-results">
+
+    <div v-if="books.length === 0 && !isLoading" class="no-results">
       <p class="no-results-text">暂无图书数据</p>
       <p class="no-results-hint">请稍后重试</p>
+      <button class="no-results-btn" @click="fetchBooks">刷新</button>
     </div>
-    <div v-else-if="searchQuery && filteredBooks.length === 0 && !isLoading && books.length > 0" class="no-results">
+    <div v-else-if="searchQuery && filteredBooks.length === 0 && books.length > 0" class="no-results">
       <p class="no-results-text">未找到相关图书</p>
       <p class="no-results-hint">试试搜索其他关键词</p>
+      <button class="no-results-btn" @click="searchQuery = ''">清除搜索</button>
     </div>
-    <div v-else-if="displayedBooks.length > 0" :class="['book-container', viewMode]">
+    <div v-else-if="filteredBooks.length > 0" :class="['book-container', viewMode]">
       <template v-if="viewMode === 'grid'">
         <BookCard
-          v-for="(book, index) in displayedBooks"
+          v-for="(book, index) in filteredBooks"
           :key="`${book.title || 'book'}-${index}`"
           :title="book.title"
           :author="book.author"
@@ -76,7 +79,7 @@
       </template>
       <template v-else>
         <div
-          v-for="(book, index) in displayedBooks"
+          v-for="(book, index) in filteredBooks"
           :key="`${book.title || 'book'}-${index}`"
           class="book-list-item"
           :style="{ '--cover-color': book.coverColor }"
@@ -97,21 +100,11 @@
         </div>
       </template>
     </div>
-    <div v-if="isLoading" class="loading-indicator">
-      <div class="loading-spinner"></div>
-      <p class="loading-text">加载中...</p>
-    </div>
-    <div v-if="hasMore === false && displayedBooks.length > 0 && !searchQuery" class="no-more">
-      <p>已加载全部图书</p>
-    </div>
-    <div v-if="hasMore === false && displayedBooks.length > 0 && searchQuery" class="no-more">
-      <p>已显示全部搜索结果</p>
-    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import BookCard from '../components/BookCard.vue'
@@ -121,26 +114,16 @@ const router = useRouter()
 const toast = useToast()
 
 const books = ref([])
-const displayedBooks = ref([])
-const currentPage = ref(1)
-const pageSize = ref(6) // 每页显示6本书
 const isLoading = ref(false)
-const hasMore = ref(true)
-const scrollContainer = ref(null)
 const searchQuery = ref('')
 const selectedCategory = ref('全部')
-const viewMode = ref('grid') // 'grid' 或 'list'
-let scrollTimeout = null
+const viewMode = ref('grid')
 
-// 分类列表
-const categories = ['全部', '科幻', '文学', '悬疑', '网文', '历史', '社科', '技术']
+const categories = computed(() => {
+  const cats = new Set(books.value.map(b => b.category).filter(Boolean))
+  return ['全部', ...Array.from(cats).sort()]
+})
 
-// 切换视图模式
-function toggleViewMode(mode) {
-  viewMode.value = mode
-}
-
-// 跳转到图书详情
 function goToDetail(title) {
   router.push({
     path: '/book/detail',
@@ -148,82 +131,65 @@ function goToDetail(title) {
   })
 }
 
-// 过滤后的图书列表
 const filteredBooks = computed(() => {
   if (!Array.isArray(books.value) || books.value.length === 0) {
     return []
   }
-  
+
   let result = books.value
-  
-  // 按分类筛选
-  if (selectedCategory.value && selectedCategory.value !== '全部') {
+
+  if (selectedCategory.value !== '全部') {
     result = result.filter(book => book.category === selectedCategory.value)
   }
-  
-  // 按搜索关键词筛选
+
   if (searchQuery.value && searchQuery.value.trim()) {
     const query = searchQuery.value.toLowerCase().trim()
     result = result.filter(book => {
       if (!book) return false
-      
       const title = (book.title || '').toLowerCase()
       const author = (book.author || '').toLowerCase()
       const description = (book.description || '').toLowerCase()
       const category = (book.category || '').toLowerCase()
-      
       return title.includes(query) ||
              author.includes(query) ||
              description.includes(query) ||
              category.includes(query)
     })
   }
-  
+
   return result
 })
 
-// 选择分类
-function selectCategory(category) {
-  selectedCategory.value = category
-  // 重置分页并重新加载
-  displayedBooks.value = []
-  currentPage.value = 1
-  
-  const filtered = filteredBooks.value
-  hasMore.value = filtered.length > 0
-  
-  if (filtered.length > 0) {
-    loadMoreBooks()
-  }
+function handleSearch() {
+  // 输入搜索词后自动由 computed 更新 filteredBooks
 }
 
-// 解析CSV数据
 function parseCSV(csvText) {
   if (!csvText || !csvText.trim()) {
     console.warn('CSV text is empty')
     return []
   }
-  
-  const lines = csvText.trim().split('\n').filter(line => line.trim()) // 过滤空行
+
+  const lines = csvText.trim().split('\n').filter(line => line.trim())
   if (lines.length < 2) {
     console.warn('CSV file has no data rows')
     return []
   }
-  
+
   const headers = lines[0].split(',').map(h => h.trim())
   const data = []
-  
+
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i].trim()
-    if (!line) continue // 跳过空行
-    
+    if (!line) continue
+
     const values = []
     let currentValue = ''
     let inQuotes = false
-    
+
     for (let j = 0; j < line.length; j++) {
       const char = line[j]
-      
+
       if (char === '"') {
         inQuotes = !inQuotes
       } else if (char === ',' && !inQuotes) {
@@ -233,15 +199,13 @@ function parseCSV(csvText) {
         currentValue += char
       }
     }
-    values.push(currentValue.trim()) // 添加最后一个值
-    
-    // 确保值的数量匹配表头数量
+    values.push(currentValue.trim())
+
     if (values.length === headers.length) {
       const book = {}
       headers.forEach((header, index) => {
         book[header] = values[index] || ''
       })
-      // 确保必要字段存在
       if (book.title && book.author) {
         data.push(book)
       }
@@ -249,147 +213,26 @@ function parseCSV(csvText) {
       console.warn(`Row ${i} has ${values.length} values, expected ${headers.length}:`, values)
     }
   }
-  
+
   console.log(`Parsed ${data.length} books from CSV`)
   return data
 }
 
-// 加载更多书籍
-function loadMoreBooks() {
-  if (isLoading.value || !hasMore.value) return
-  
-  const sourceBooks = filteredBooks.value
-  if (!Array.isArray(sourceBooks) || sourceBooks.length === 0) {
-    hasMore.value = false
-    return
-  }
-  
-  isLoading.value = true
-  
-  // 模拟加载延迟，实际使用时可以移除
-  setTimeout(() => {
-    const startIndex = (currentPage.value - 1) * pageSize.value
-    const endIndex = startIndex + pageSize.value
-    const newBooks = sourceBooks.slice(startIndex, endIndex)
-    
-    if (newBooks.length > 0) {
-      displayedBooks.value.push(...newBooks)
-      currentPage.value++
-      
-      // 检查是否还有更多数据
-      if (endIndex >= sourceBooks.length) {
-        hasMore.value = false
-      }
-    } else {
-      hasMore.value = false
-    }
-    
-    isLoading.value = false
-  }, 500) // 500ms延迟，模拟网络请求
-}
-
-// 处理搜索
-function handleSearch() {
-  // 重置分页状态
-  displayedBooks.value = []
-  currentPage.value = 1
-  
-  const filtered = filteredBooks.value
-  hasMore.value = filtered.length > 0
-  
-  // 如果有搜索结果，加载第一页
-  if (filtered.length > 0) {
-    loadMoreBooks()
-  }
-}
-
-// 监听搜索查询变化
-watch(searchQuery, () => {
-  // 确保数据已加载
-  if (Array.isArray(books.value)) {
-    handleSearch()
-  }
-}, { immediate: false })
-
-// 处理滚动事件
-function handleScroll(event) {
-  if (scrollTimeout) {
-    clearTimeout(scrollTimeout)
-  }
-  
-  scrollTimeout = setTimeout(() => {
-    const container = event.target
-    const scrollTop = container.scrollTop
-    const scrollHeight = container.scrollHeight
-    const clientHeight = container.clientHeight
-    
-    // 当滚动到距离底部200px时加载更多
-    if (scrollHeight - scrollTop - clientHeight < 200) {
-      loadMoreBooks()
-    }
-  }, 100) // 防抖处理
-}
-
-onMounted(async () => {
+async function fetchBooks() {
   try {
     isLoading.value = true
     const response = await axios.get('/books.csv')
-    console.log('CSV Response:', response.data.substring(0, 200)) // 调试：查看前200个字符
-    
     const csvData = parseCSV(response.data)
-    console.log('Parsed CSV Data:', csvData) // 调试：查看解析后的数据
-    
     books.value = csvData
-    
-    // 等待数据设置完成，确保响应式更新
-    await new Promise(resolve => setTimeout(resolve, 200))
-    
-    console.log('Books after assignment:', books.value.length) // 调试：查看图书数量
-    
-    // 初始加载第一页
+
     if (books.value.length > 0) {
-      // 重置分页状态
-      displayedBooks.value = []
-      currentPage.value = 1
-      hasMore.value = true
-      
-      // 使用 nextTick 确保 computed 已更新
-      await new Promise(resolve => {
-        setTimeout(() => {
-          const filtered = filteredBooks.value
-          console.log('Filtered books:', filtered.length) // 调试：查看过滤后的数量
-          
-          if (filtered.length > 0) {
-            // 直接加载第一页数据，不使用 loadMoreBooks 的延迟
-            const startIndex = 0
-            const endIndex = Math.min(pageSize.value, filtered.length)
-            const newBooks = filtered.slice(startIndex, endIndex)
-            
-            displayedBooks.value = [...newBooks]
-            currentPage.value = 2
-            
-            if (endIndex >= filtered.length) {
-              hasMore.value = false
-            }
-            
-            isLoading.value = false
-            toast.success(`成功加载 ${books.value.length} 本图书`)
-          } else {
-            console.warn('Filtered books is empty')
-            isLoading.value = false
-          }
-          resolve()
-        }, 100)
-      })
+      toast.success(`成功加载 ${books.value.length} 本图书`)
     } else {
-      console.warn('No books loaded from CSV')
       toast.warning('未找到图书数据')
-      isLoading.value = false
     }
   } catch (error) {
     console.error('Failed to load books from CSV:', error)
     toast.error('加载图书数据失败，已使用默认数据')
-    // 如果加载失败，使用默认数据
     books.value = [
       {
         title: '三体',
@@ -401,99 +244,74 @@ onMounted(async () => {
       {
         title: '西游八十一案：大唐梵天记',
         author: '陈渐',
-        description: '记录时光的痕迹，感受岁月的沉淀。每一页都是生活的缩影，每一个故事都值得珍藏。',
+        description: '记录时光的痕迹，感受岁月的沉淀。',
         coverColor: '#8b6f47',
         category: '文学'
       },
       {
         title: '智慧之光',
         author: '作者名',
-        description: '知识的灯塔，照亮前行的路。汇聚古今中外的智慧结晶，启迪心灵，开阔视野。',
+        description: '知识的灯塔，照亮前行的路。',
         coverColor: '#1e5a4a',
         category: '哲学'
       },
       {
         title: '艺术人生',
         author: '作者名',
-        description: '艺术源于生活，高于生活。感受艺术的魅力，体验创作的快乐，发现美的真谛。',
+        description: '艺术源于生活，高于生活。',
         coverColor: '#5a4a3a',
         category: '艺术'
       },
       {
         title: '科学探索',
         author: '作者名',
-        description: '科学的奥秘等待我们去发现。从微观到宏观，从过去到未来，探索未知的世界。',
+        description: '科学的奥秘等待我们去发现。',
         coverColor: '#2d7a6b',
         category: '科学'
       },
       {
         title: '历史长河',
         author: '作者名',
-        description: '回顾历史，展望未来。了解过去的故事，理解现在的发展，预见未来的趋势。',
+        description: '回顾历史，展望未来。',
         coverColor: '#8b6f47',
         category: '历史'
       },
       {
         title: '心灵之旅',
         author: '作者名',
-        description: '内心的探索，精神的成长。在阅读中寻找答案，在思考中获得智慧，在感悟中提升自我。',
+        description: '内心的探索，精神的成长。',
         coverColor: '#1e5a4a',
         category: '心理'
       },
       {
         title: '创意无限',
         author: '作者名',
-        description: '激发创意，释放潜能。从不同的角度思考问题，用创新的方式解决问题，创造无限可能。',
+        description: '激发创意，释放潜能。',
         coverColor: '#5a4a3a',
         category: '设计'
       }
     ]
-    
-    // 等待数据设置完成
-    await new Promise(resolve => setTimeout(resolve, 100))
-    
-    if (books.value.length > 0) {
-      // 重置分页状态
-      displayedBooks.value = []
-      currentPage.value = 1
-      hasMore.value = true
-      
-      loadMoreBooks()
-    }
+  } finally {
     isLoading.value = false
   }
-})
+}
 
-onUnmounted(() => {
-  if (scrollTimeout) {
-    clearTimeout(scrollTimeout)
-  }
-})
+onMounted(fetchBooks)
 </script>
 
 <style scoped>
 .book-list-view {
   width: 100%;
-  height: calc(100vh - 60px);
-  overflow-y: auto;
-  overflow-x: hidden;
+  min-height: calc(100vh - 60px);
   margin: 0;
   padding: 0;
-  background: linear-gradient(180deg, 
-    #f5f5f7 0%, 
-    rgba(45, 122, 107, 0.05) 50%,
-    rgba(139, 111, 71, 0.05) 100%);
-  scroll-behavior: smooth;
+  background: var(--c-bg-page);
 }
 
 .book-header {
   text-align: center;
   padding: 80px 20px 60px;
-  background: linear-gradient(135deg, 
-    rgba(45, 122, 107, 0.1) 0%, 
-    rgba(45, 122, 107, 0.05) 50%,
-    rgba(139, 111, 71, 0.05) 50%,
-    rgba(139, 111, 71, 0.1) 100%);
+  background: var(--c-bg-warm);
 }
 
 .book-title {
@@ -502,10 +320,7 @@ onUnmounted(() => {
   margin: 0 0 20px 0;
   color: #1e5a4a;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1e5a4a;
 }
 
 .book-subtitle {
@@ -531,7 +346,7 @@ onUnmounted(() => {
   background: white;
   color: #2d5a4f;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
@@ -572,7 +387,7 @@ onUnmounted(() => {
   background: white;
   color: #2d5a4f;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -611,8 +426,24 @@ onUnmounted(() => {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+.no-results-btn {
+  margin-top: 1.5rem;
+  padding: 0.6rem 1.5rem;
+  background: #2d7a6b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.no-results-btn:hover {
+  background: #1e5a4a;
+  transform: translateY(-2px);
+}
+
 .book-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 40px 20px 80px;
   display: grid;
@@ -629,14 +460,12 @@ onUnmounted(() => {
 /* 列表视图样式 */
 .book-list-item {
   display: flex;
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(255, 255, 255, 0.9) 100%);
+  background: var(--c-bg-card);
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
               0 1px 4px rgba(0, 0, 0, 0.04);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.15s cubic-bezier(0.25, 0.8, 0.25, 1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(45, 122, 107, 0.1);
 }
@@ -656,11 +485,7 @@ onUnmounted(() => {
   width: 120px;
   min-width: 120px;
   height: 160px;
-  background: linear-gradient(135deg,
-    var(--cover-color) 0%,
-    var(--cover-color) 50%,
-    rgba(139, 111, 71, 0.8) 50%,
-    rgba(139, 111, 71, 0.8) 100%);
+  background: var(--cover-color);
   position: relative;
   display: flex;
   align-items: center;
@@ -669,35 +494,12 @@ onUnmounted(() => {
 }
 
 .list-cover-pattern {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-  opacity: 0.6;
-}
-
-.list-cover-pattern::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 10px,
-      rgba(255, 255, 255, 0.05) 10px,
-      rgba(255, 255, 255, 0.05) 20px
-    );
+  display: none;
 }
 
 .list-cover-title {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-base);
   color: white;
   font-size: 1rem;
   font-weight: 600;
@@ -739,9 +541,7 @@ onUnmounted(() => {
 .list-book-category {
   display: inline-block;
   padding: 3px 10px;
-  background: linear-gradient(135deg,
-    rgba(45, 122, 107, 0.15) 0%,
-    rgba(139, 111, 71, 0.15) 100%);
+  background: rgba(45, 122, 107, 0.1);
   color: #2d7a6b;
   border-radius: 10px;
   font-size: 0.7rem;
@@ -785,7 +585,7 @@ onUnmounted(() => {
   border-radius: 10px;
   background: white;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -856,45 +656,4 @@ onUnmounted(() => {
     -webkit-line-clamp: 2;
   }
 }
-
-.loading-indicator {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  gap: 16px;
-}
-
-.loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(45, 122, 107, 0.2);
-  border-top-color: #2d7a6b;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.loading-text {
-  color: #2d7a6b;
-  font-size: 1rem;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-.no-more {
-  text-align: center;
-  padding: 40px 20px;
-  color: #5a4a3a;
-  font-size: 0.95rem;
-  opacity: 0.7;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
 </style>
-

@@ -401,7 +401,7 @@ onMounted(() => {
 
 <style scoped>
 .blog-manage-view {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -417,10 +417,7 @@ onMounted(() => {
   font-size: 2.5rem;
   font-weight: 800;
   margin: 0;
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1e5a4a;
 }
 
 .back-button {
@@ -515,7 +512,7 @@ onMounted(() => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.25rem;
-  background: linear-gradient(135deg, #2d7a6b 0%, #1e5a4a 100%);
+  background: var(--c-primary);
   color: white;
   border: none;
   border-radius: 50px;

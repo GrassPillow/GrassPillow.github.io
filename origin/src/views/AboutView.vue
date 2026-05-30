@@ -246,7 +246,7 @@ const features = ref([
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -254,7 +254,7 @@ const features = ref([
 /* Hero Section */
 .hero-section {
   position: relative;
-  background: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 40%, #8b6f47 100%);
+  background: var(--c-primary-dark);
   padding: 100px 24px 80px;
   overflow: hidden;
 }
@@ -313,7 +313,7 @@ const features = ref([
 
 .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-base);
   text-align: center;
   max-width: 600px;
   margin: 0 auto;
@@ -330,7 +330,7 @@ const features = ref([
   position: absolute;
   inset: -8px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.5) 100%);
+  background: rgba(255, 255, 255, 0.7);
   animation: rotate 8s linear infinite;
 }
 
@@ -406,7 +406,7 @@ const features = ref([
 .section-badge {
   display: inline-block;
   padding: 6px 16px;
-  background: linear-gradient(135deg, rgba(45, 122, 107, 0.1) 0%, rgba(139, 111, 71, 0.1) 100%);
+  background: rgba(45, 122, 107, 0.1);
   color: #2d7a6b;
   font-size: 0.85rem;
   font-weight: 600;
@@ -440,11 +440,11 @@ const features = ref([
 }
 
 .intro-card {
-  background: linear-gradient(145deg, #f8f9fa 0%, #fff 100%);
+  background: var(--c-bg-card);
   border-radius: 20px;
   padding: 36px 28px;
   border: 1px solid rgba(45, 122, 107, 0.1);
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
 }
 
 .intro-card:hover {
@@ -475,7 +475,7 @@ const features = ref([
 /* Skills Section */
 .skills-section {
   padding: 80px 0;
-  background: linear-gradient(180deg, #f8f9fa 0%, #f0f4f2 100%);
+  background: var(--c-bg-page);
 }
 
 .skills-grid {
@@ -489,7 +489,7 @@ const features = ref([
   border-radius: 16px;
   padding: 28px;
   border: 1px solid rgba(45, 122, 107, 0.08);
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
 }
 
 .skill-category:hover {
@@ -518,16 +518,16 @@ const features = ref([
 
 .skill-tag {
   padding: 8px 16px;
-  background: linear-gradient(135deg, rgba(45, 122, 107, 0.08) 0%, rgba(139, 111, 71, 0.08) 100%);
+  background: rgba(45, 122, 107, 0.08);
   color: #2d7a6b;
   font-size: 0.9rem;
   font-weight: 500;
   border-radius: 10px;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .skill-tag:hover {
-  background: linear-gradient(135deg, rgba(45, 122, 107, 0.15) 0%, rgba(139, 111, 71, 0.15) 100%);
+  background: rgba(45, 122, 107, 0.15);
   transform: translateY(-2px);
 }
 
@@ -544,12 +544,12 @@ const features = ref([
 }
 
 .feature-card {
-  background: linear-gradient(145deg, #f8f9fa 0%, #fff 100%);
+  background: var(--c-bg-card);
   border-radius: 20px;
   padding: 32px 24px;
   text-align: center;
   border: 1px solid rgba(45, 122, 107, 0.08);
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
 }
 
 .feature-card:hover {
@@ -580,11 +580,11 @@ const features = ref([
 /* Contact Section */
 .contact-section {
   padding: 80px 0;
-  background: linear-gradient(180deg, #f8f9fa 0%, #f0f4f2 100%);
+  background: var(--c-bg-page);
 }
 
 .contact-card {
-  background: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 50%, #8b6f47 100%);
+  background: var(--c-primary-dark);
   border-radius: 24px;
   padding: 60px 40px;
   text-align: center;
@@ -620,7 +620,7 @@ const features = ref([
   color: #fff;
   text-decoration: none;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 

@@ -91,15 +91,17 @@ export default defineComponent({
     }
 
     function renderCell(col, record) {
-      const val = record[col.dataIndex]
-      if (col.customRender) {
-        const result = col.customRender({ text: val, record })
-        if (typeof result === 'object' && result !== null) {
-          return () => result
+      return () => {
+        const val = record[col.dataIndex]
+        if (col.customRender) {
+          const result = col.customRender({ text: val, record })
+          if (typeof result === 'object' && result !== null) {
+            return result
+          }
+          return result
         }
-        return result
+        return val ?? ''
       }
-      return val ?? ''
     }
 
     return {
@@ -172,9 +174,9 @@ export default defineComponent({
               }"
             >
               <span v-if="col.ellipsis" class="dt-ellipsis-text">
-                <component :is="() => renderCell(col, record)" />
+                <component :is="renderCell(col, record)" />
               </span>
-              <component v-else :is="() => renderCell(col, record)" />
+              <component v-else :is="renderCell(col, record)" />
             </td>
           </tr>
         </tbody>

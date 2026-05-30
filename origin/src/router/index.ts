@@ -51,6 +51,7 @@ const routes = [
     meta: { title: '阅读清单 - GrassPillow' }
   },
   {
+  {
     path: '/gallery',
     component: () => import('../views/GalleryView.vue'),
     meta: { title: '相册作品 - GrassPillow' }
@@ -69,6 +70,12 @@ const routes = [
     path: '/music',
     component: () => import('../views/MusicView.vue'),
     meta: { title: '音乐空间 - GrassPillow' }
+  },
+  {
+    path: '/book/detail',
+    component: () => import('../views/BookDetailView.vue'),
+    meta: { title: '图书详情 - GrassPillow' }
+  },
   },
 ]
 

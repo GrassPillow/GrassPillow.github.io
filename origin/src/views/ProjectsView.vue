@@ -150,7 +150,7 @@ const filteredProjects = computed(() => {
 }
 
 .page-header {
-  background: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 40%, #8b6f47 100%);
+  background: var(--c-primary-dark);
   padding: 80px 24px;
   text-align: center;
 }
@@ -174,7 +174,7 @@ const filteredProjects = computed(() => {
 }
 
 .main-content {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 40px 24px 80px;
 }
@@ -204,7 +204,7 @@ const filteredProjects = computed(() => {
 }
 
 .filter-btn.active {
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
+  background: var(--c-primary);
   color: #fff;
   border-color: transparent;
 }
@@ -294,7 +294,7 @@ const filteredProjects = computed(() => {
 .project-category {
   display: inline-block;
   padding: 4px 12px;
-  background: linear-gradient(135deg, rgba(45, 122, 107, 0.1) 0%, rgba(139, 111, 71, 0.1) 100%);
+  background: rgba(45, 122, 107, 0.1);
   color: #2d7a6b;
   font-size: 0.75rem;
   font-weight: 600;

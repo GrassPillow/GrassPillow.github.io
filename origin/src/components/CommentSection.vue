@@ -163,7 +163,7 @@ export default {
 
 .submit-comment {
   padding: 0.5rem 1.25rem;
-  background: linear-gradient(135deg, #2d7a6b 0%, #1e5a4a 100%);
+  background: var(--c-primary);
   color: white;
   border: none;
   border-radius: 50px;

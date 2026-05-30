@@ -136,7 +136,7 @@ const projects = ref([
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -148,7 +148,7 @@ const projects = ref([
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 40%, #8b6f47 100%);
+  background: var(--c-primary-dark);
   overflow: hidden;
   padding: 60px 24px;
 }
@@ -198,7 +198,7 @@ const projects = ref([
 
 .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-base);
   text-align: center;
   max-width: 700px;
 }
@@ -257,7 +257,7 @@ const projects = ref([
   font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
 }
 
 .btn-primary {
@@ -301,7 +301,7 @@ const projects = ref([
   background: rgba(255, 255, 255, 0.15);
   border-radius: 50%;
   color: #fff;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
 }
 
 .social-link:hover {
@@ -331,12 +331,12 @@ const projects = ref([
 }
 
 .skill-card {
-  background: linear-gradient(145deg, #f8f9fa 0%, #fff 100%);
+  background: var(--c-bg-card);
   border-radius: 16px;
   padding: 32px 24px;
   text-align: center;
   border: 1px solid rgba(45, 122, 107, 0.1);
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
 }
 
 .skill-card:hover {
@@ -367,7 +367,7 @@ const projects = ref([
 /* Projects Section */
 .projects-section {
   padding: 80px 0;
-  background: linear-gradient(180deg, #f8f9fa 0%, #f0f4f2 100%);
+  background: var(--c-bg-page);
 }
 
 .projects-grid {
@@ -381,7 +381,7 @@ const projects = ref([
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid rgba(45, 122, 107, 0.1);
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
 }
 
 .project-card:hover {
@@ -398,7 +398,7 @@ const projects = ref([
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.15s ease;
 }
 
 .project-card:hover .project-image img {
@@ -432,7 +432,7 @@ const projects = ref([
 
 .tag {
   padding: 4px 12px;
-  background: linear-gradient(135deg, rgba(45, 122, 107, 0.1) 0%, rgba(139, 111, 71, 0.1) 100%);
+  background: rgba(45, 122, 107, 0.1);
   color: #2d7a6b;
   font-size: 0.8rem;
   font-weight: 500;
@@ -446,13 +446,13 @@ const projects = ref([
 
 .project-link {
   padding: 8px 16px;
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
+  background: var(--c-primary);
   color: #fff;
   text-decoration: none;
   font-size: 0.85rem;
   font-weight: 500;
   border-radius: 8px;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
 }
 
 .project-link:hover {
@@ -467,7 +467,7 @@ const projects = ref([
 }
 
 .contact-card {
-  background: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 50%, #8b6f47 100%);
+  background: var(--c-primary-dark);
   border-radius: 24px;
   padding: 60px 40px;
   text-align: center;

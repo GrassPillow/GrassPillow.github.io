@@ -66,11 +66,11 @@ export default {
 <style scoped>
 .earthquake-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: var(--c-bg-page);
 }
 
 .page-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #667eea;
   color: white;
   text-align: center;
   padding: 3rem 1rem;
@@ -94,7 +94,7 @@ export default {
 }
 
 .main-content {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 1rem;
 }

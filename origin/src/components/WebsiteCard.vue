@@ -29,7 +29,7 @@ export default {
 
 <style scoped>
 .website-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.95) 100%);
+  background: var(--c-bg-card);
   backdrop-filter: blur(10px);
   padding: 2rem;
   border-radius: 20px;
@@ -46,7 +46,7 @@ export default {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #2d7a6b 0%, #8b6f47 100%);
+  background: var(--c-primary);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.4s ease;
@@ -62,7 +62,7 @@ export default {
               0 8px 20px rgba(139, 111, 71, 0.2),
               inset 0 1px 0 rgba(255, 255, 255, 0.9);
   border-color: #2d7a6b;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.98) 100%);
+  background: var(--c-bg-card);
 }
 
 .website-header {
@@ -75,10 +75,7 @@ export default {
 .website-name {
   font-size: 1.4rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #2d5a4f 0%, #2d7a6b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1e5a4a;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   letter-spacing: -0.01em;
@@ -109,7 +106,7 @@ export default {
 .website-link {
   display: inline-block;
   padding: 0.7rem 1.4rem;
-  background: linear-gradient(135deg, #2d7a6b 0%, #3a8a7a 50%, #8b6f47 100%);
+  background: var(--c-primary);
   color: white;
   text-decoration: none;
   border-radius: 12px;
@@ -149,7 +146,7 @@ export default {
 .website-category-badge {
   font-size: 0.75rem;
   padding: 0.4rem 1rem;
-  background: linear-gradient(135deg, rgba(45, 122, 107, 0.15) 0%, rgba(139, 111, 71, 0.15) 100%);
+  background: rgba(45, 122, 107, 0.1);
   color: #2d7a6b;
   border-radius: 14px;
   font-weight: 700;
@@ -159,7 +156,7 @@ export default {
 }
 
 .website-card:hover .website-category-badge {
-  background: linear-gradient(135deg, rgba(45, 122, 107, 0.25) 0%, rgba(139, 111, 71, 0.25) 100%);
+  background: rgba(45, 122, 107, 0.2);
   transform: scale(1.05);
 }
 </style>

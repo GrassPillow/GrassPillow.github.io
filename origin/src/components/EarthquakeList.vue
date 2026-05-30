@@ -48,35 +48,36 @@ const getLatestTimestamp = () => {
 const formatMagnitude = (value) => {
   const magnitude = parseFloat(value);
   if (isNaN(magnitude)) return value;
-  
+
   let color = '#1890ff';
   let bgColor = '#e6f7ff';
-  let label = '微小';
-  
+
   if (magnitude >= 7) {
-    color = '#ff4d4f';
+    color = '#cf1322';
     bgColor = '#fff1f0';
-    label = '重大';
   } else if (magnitude >= 5) {
-    color = '#faad14';
+    color = '#d48806';
     bgColor = '#fffbe6';
-    label = '中等';
   } else if (magnitude >= 3) {
-    color = '#52c41a';
+    color = '#389e0d';
     bgColor = '#f6ffed';
-    label = '轻微';
   }
-  
+
   return h('span', {
     style: {
-      display: 'inline-block',
-      padding: '2px 8px',
-      borderRadius: '4px',
-      fontWeight: 'bold',
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minWidth: '44px',
+      padding: '2px 10px',
+      borderRadius: '10px',
+      fontWeight: '700',
+      fontSize: '0.95rem',
       color: color,
-      backgroundColor: bgColor
+      backgroundColor: bgColor,
+      border: `1px solid ${color}20`
     }
-  }, `${magnitude} ${label}`);
+  }, magnitude.toFixed(1));
 };
 
 // 格式化时间显示
@@ -435,7 +436,7 @@ onBeforeUnmount(() => {
             <span class="mag-count">{{ magnitudeStats.high }}</span>
           </div>
           <div class="mag-stat-item medium">
-            <span class="mag-label">中等 (5.0-7.0)</span>
+            <span class="mag-label">中等 (5.0-6.9)</span>
             <span class="mag-count">{{ magnitudeStats.medium }}</span>
           </div>
           <div class="mag-stat-item low">
@@ -518,7 +519,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .earthquake-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 1rem;
 }
@@ -543,7 +544,7 @@ onBeforeUnmount(() => {
 }
 
 .stats-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--c-primary-dark, #1e5a4a);
   color: white;
   border-radius: 12px;
   padding: 1.5rem;
@@ -568,8 +569,8 @@ onBeforeUnmount(() => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 6px;
   color: white;
   cursor: pointer;
@@ -719,8 +720,8 @@ onBeforeUnmount(() => {
 .filter-select:focus,
 .filter-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+  border-color: var(--c-primary, #2d7a6b);
+  box-shadow: 0 0 0 2px rgba(45, 122, 107, 0.12);
 }
 
 .filter-input {

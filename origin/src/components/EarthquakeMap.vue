@@ -553,7 +553,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: var(--c-bg-card);
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);

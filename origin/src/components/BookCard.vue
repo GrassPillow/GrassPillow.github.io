@@ -52,14 +52,12 @@ function goToDetail() {
 
 <style scoped>
 .book-card {
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.95) 0%, 
-    rgba(255, 255, 255, 0.9) 100%);
+  background: var(--c-bg-card);
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1),
               0 2px 8px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.15s cubic-bezier(0.25, 0.8, 0.25, 1);
   display: flex;
   flex-direction: column;
   backdrop-filter: blur(10px);
@@ -80,11 +78,7 @@ function goToDetail() {
 .book-cover {
   width: 100%;
   height: 200px;
-  background: linear-gradient(135deg, 
-    var(--cover-color) 0%, 
-    var(--cover-color) 50%,
-    rgba(139, 111, 71, 0.8) 50%,
-    rgba(139, 111, 71, 0.8) 100%);
+  background: var(--cover-color);
   position: relative;
   display: flex;
   align-items: center;
@@ -93,35 +87,12 @@ function goToDetail() {
 }
 
 .cover-pattern {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-  opacity: 0.6;
-}
-
-.cover-pattern::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 10px,
-      rgba(255, 255, 255, 0.05) 10px,
-      rgba(255, 255, 255, 0.05) 20px
-    );
+  display: none;
 }
 
 .cover-title {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-base);
   color: white;
   font-size: 1.8rem;
   font-weight: 700;
@@ -142,9 +113,7 @@ function goToDetail() {
 .book-category {
   display: inline-block;
   padding: 4px 12px;
-  background: linear-gradient(135deg, 
-    rgba(45, 122, 107, 0.15) 0%, 
-    rgba(139, 111, 71, 0.15) 100%);
+  background: rgba(45, 122, 107, 0.1);
   color: #2d7a6b;
   border-radius: 12px;
   font-size: 0.75rem;

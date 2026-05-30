@@ -106,7 +106,7 @@
       </div>
     </div>
 
-    <div v-else class="loading-state">
+    <div v-if="isLoading" class="loading-state">
       <div class="loading-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"/>
@@ -116,7 +116,7 @@
       <p>正在加载...</p>
     </div>
 
-    <div v-if="bookNotFound" class="loading-state">
+    <div v-else-if="bookNotFound" class="loading-state">
       <div class="not-found-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"/>
@@ -124,14 +124,14 @@
           <line x1="12" y1="16" x2="12.01" y2="16"/>
         </svg>
       </div>
-      <p>图书不存在</p>
+      <p>图书未找到</p>
       <button class="back-btn" @click="goBack">返回图书列表</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
 
@@ -140,6 +140,7 @@ const route = useRoute()
 const book = ref(null)
 const allBooks = ref([])
 const bookNotFound = ref(false)
+const isLoading = ref(true)
 
 const relatedBooks = computed(() => {
   if (!book.value || !allBooks.value.length) return []
@@ -157,18 +158,18 @@ function goToDetail(title) {
     path: '/book/detail',
     query: { title: encodeURIComponent(title) }
   })
-  window.location.reload()
 }
 
-onMounted(async () => {
-  const bookTitle = route.query.title
-  if (!bookTitle) {
-    return
-  }
+async function loadBook(bookTitle) {
+  bookNotFound.value = false
+  isLoading.value = true
+  book.value = null
 
   try {
-    const response = await axios.get('/books.csv')
-    allBooks.value = parseCSV(response.data)
+    if (!allBooks.value.length) {
+      const response = await axios.get('/books.csv')
+      allBooks.value = parseCSV(response.data)
+    }
     book.value = allBooks.value.find(b => b.title === decodeURIComponent(bookTitle))
 
     if (!book.value) {
@@ -177,6 +178,26 @@ onMounted(async () => {
   } catch (error) {
     console.error('Failed to load book:', error)
     bookNotFound.value = true
+  } finally {
+    isLoading.value = false
+  }
+}
+
+watch(
+  () => route.query.title,
+  (newTitle) => {
+    if (newTitle) {
+      loadBook(newTitle)
+    }
+  }
+)
+
+onMounted(() => {
+  const bookTitle = route.query.title
+  if (bookTitle) {
+    loadBook(bookTitle)
+  } else {
+    isLoading.value = false
   }
 })
 
@@ -233,10 +254,7 @@ function parseCSV(csvText) {
 <style scoped>
 .book-detail-view {
   min-height: calc(100vh - 60px);
-  background: linear-gradient(180deg,
-    #f5f5f7 0%,
-    rgba(45, 122, 107, 0.05) 50%,
-    rgba(139, 111, 71, 0.05) 100%);
+  background: var(--c-bg-page);
   padding: 0;
 }
 
@@ -255,7 +273,7 @@ function parseCSV(csvText) {
   color: #2d5a4f;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -273,7 +291,7 @@ function parseCSV(csvText) {
 .book-detail-content {
   display: flex;
   gap: 80px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 60px 40px;
 }
@@ -290,11 +308,7 @@ function parseCSV(csvText) {
 .detail-cover {
   width: 320px;
   height: 450px;
-  background: linear-gradient(135deg,
-    var(--cover-color) 0%,
-    var(--cover-color) 50%,
-    rgba(139, 111, 71, 0.8) 50%,
-    rgba(139, 111, 71, 0.8) 100%);
+  background: var(--cover-color);
   border-radius: 20px;
   position: relative;
   display: flex;
@@ -302,7 +316,7 @@ function parseCSV(csvText) {
   justify-content: center;
   overflow: hidden;
   box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
-  transition: transform 0.4s ease;
+  transition: transform 0.2s ease;
 }
 
 .detail-cover:hover {
@@ -310,35 +324,12 @@ function parseCSV(csvText) {
 }
 
 .cover-pattern {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-  opacity: 0.6;
-}
-
-.cover-pattern::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 10px,
-      rgba(255, 255, 255, 0.05) 10px,
-      rgba(255, 255, 255, 0.05) 20px
-    );
+  display: none;
 }
 
 .cover-title {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-base);
   color: white;
   font-size: 2.2rem;
   font-weight: 700;
@@ -359,7 +350,7 @@ function parseCSV(csvText) {
   left: 20px;
   right: 20px;
   height: 40px;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.15) 0%, transparent 70%);
+  background: rgba(0, 0, 0, 0.08);
   filter: blur(20px);
 }
 
@@ -380,7 +371,7 @@ function parseCSV(csvText) {
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -390,7 +381,7 @@ function parseCSV(csvText) {
 }
 
 .action-btn.primary {
-  background: linear-gradient(135deg, #2d7a6b 0%, #1e5a4a 100%);
+  background: var(--c-primary);
   border: none;
   color: white;
   box-shadow: 0 8px 24px rgba(45, 122, 107, 0.35);
@@ -421,9 +412,7 @@ function parseCSV(csvText) {
   display: inline-flex;
   align-items: center;
   padding: 8px 18px;
-  background: linear-gradient(135deg,
-    rgba(45, 122, 107, 0.15) 0%,
-    rgba(139, 111, 71, 0.15) 100%);
+  background: rgba(45, 122, 107, 0.1);
   color: #2d7a6b;
   border-radius: 20px;
   font-size: 0.9rem;
@@ -532,7 +521,7 @@ function parseCSV(csvText) {
   background: rgba(255, 255, 255, 0.8);
   border-radius: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
   border: 1px solid rgba(45, 122, 107, 0.1);
 }
 
@@ -545,11 +534,7 @@ function parseCSV(csvText) {
 .related-cover {
   width: 70px;
   height: 90px;
-  background: linear-gradient(135deg,
-    var(--cover-color) 0%,
-    var(--cover-color) 50%,
-    rgba(139, 111, 71, 0.6) 50%,
-    rgba(139, 111, 71, 0.6) 100%);
+  background: var(--cover-color);
   border-radius: 10px;
   flex-shrink: 0;
   display: flex;

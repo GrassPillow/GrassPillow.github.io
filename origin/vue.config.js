@@ -29,6 +29,7 @@ module.exports = defineConfig({
   },
   // 配置webpack-dev-server，忽略ResizeObserver错误
   devServer: {
+    historyApiFallback: true,
     client: {
       overlay: {
         errors: true,

@@ -355,7 +355,7 @@ onMounted(() => {
 
 <style scoped>
 .blog-view {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -369,10 +369,7 @@ onMounted(() => {
   font-size: 3rem;
   font-weight: 800;
   margin: 0 0 1rem 0;
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1e5a4a;
 }
 
 .blog-subtitle {
@@ -420,7 +417,7 @@ onMounted(() => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #2d7a6b 0%, #1e5a4a 100%);
+  background: var(--c-primary);
   color: white;
   border-radius: 50px;
   text-decoration: none;
@@ -669,7 +666,7 @@ onMounted(() => {
 }
 
 .pagination-number.active {
-  background: linear-gradient(135deg, #2d7a6b 0%, #1e5a4a 100%);
+  background: var(--c-primary);
   color: white;
   border-color: transparent;
 }

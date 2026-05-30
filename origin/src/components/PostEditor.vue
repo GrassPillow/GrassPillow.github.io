@@ -271,7 +271,7 @@ export default {
 }
 
 .save-button {
-  background: linear-gradient(135deg, #8b6f47 0%, #6b5537 100%);
+  background: #8b6f47;
   color: white;
 }
 
@@ -281,7 +281,7 @@ export default {
 }
 
 .publish-button {
-  background: linear-gradient(135deg, #2d7a6b 0%, #1e5a4a 100%);
+  background: var(--c-primary);
   color: white;
 }
 

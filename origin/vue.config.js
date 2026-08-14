@@ -23,6 +23,17 @@ module.exports = defineConfig({
       })
       return definitions
     })
+
+    // 生成 404.html（GitHub Pages SPA 深链接兜底）：
+    // 直接访问 /books 等深链接时 GitHub Pages 返回 404 页面，但内容为完整应用，
+    // Vue Router 接管后按当前路径渲染对应页面，URL 保持不变
+    const htmlArgs = config.plugin('html').get('args')
+    config
+      .plugin('html-404')
+      .use(require('html-webpack-plugin'), [{
+        ...htmlArgs[0],
+        filename: '404.html'
+      }])
     
     // 禁用 TypeScript 类型检查（解决 @types/node 兼容性问题）
     if (process.env.NODE_ENV === 'production') {

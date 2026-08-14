@@ -50,7 +50,7 @@
                 <span class="tag" v-for="tag in event.tags" :key="tag">{{ tag }}</span>
               </div>
               <div class="event-links" v-if="event.link">
-                <a :href="event.link" target="_blank" class="event-link">查看详情 →</a>
+                <a :href="event.link" target="_blank" rel="noopener noreferrer" class="event-link">查看详情 →</a>
               </div>
             </div>
           </div>
@@ -234,7 +234,7 @@ const timelineEvents = ref([
   top: 0;
   bottom: 0;
   width: 3px;
-  background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+  background: var(--primary-color);
   transform: translateX(-50%);
   border-radius: 2px;
 }

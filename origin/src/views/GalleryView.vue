@@ -173,14 +173,18 @@ const filteredGallery = computed(() => {
   return galleryItems.value.filter(item => item.category === activeCategory.value)
 })
 
-const currentItem = computed(() => galleryItems.value[currentIndex.value])
+const currentItem = computed(() => {
+  const list = filteredGallery.value
+  return list[currentIndex.value] || null
+})
 
 const filterGallery = (category) => {
   activeCategory.value = category
 }
 
 const openLightbox = (item) => {
-  currentIndex.value = galleryItems.value.findIndex(i => i.id === item.id)
+  // 在过滤后的列表中定位，保证筛选态翻页不越界
+  currentIndex.value = filteredGallery.value.findIndex(i => i.id === item.id)
   lightboxOpen.value = true
   document.body.style.overflow = 'hidden'
 }
@@ -191,13 +195,15 @@ const closeLightbox = () => {
 }
 
 const prevImage = () => {
+  const list = filteredGallery.value
   currentIndex.value = currentIndex.value > 0
     ? currentIndex.value - 1
-    : galleryItems.value.length - 1
+    : list.length - 1
 }
 
 const nextImage = () => {
-  currentIndex.value = currentIndex.value < galleryItems.value.length - 1
+  const list = filteredGallery.value
+  currentIndex.value = currentIndex.value < list.length - 1
     ? currentIndex.value + 1
     : 0
 }
@@ -216,6 +222,8 @@ if (typeof window !== 'undefined') {
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
+  // 还原 body 滚动，防止 lightbox 打开时离开页面导致滚动永久锁死
+  document.body.style.overflow = ''
 })
 </script>
 

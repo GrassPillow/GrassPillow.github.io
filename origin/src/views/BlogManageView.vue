@@ -127,8 +127,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import PostEditor from '@/components/PostEditor.vue'
+
+// 文章数据持久化键（localStorage）
+const STORAGE_KEY = 'grasspillow-blog-manage-posts'
 
 // 响应式数据
 const activeTab = ref('list')
@@ -374,29 +377,37 @@ const publishPost = () => {
 }
 
 const previewPost = () => {
-  // 在新窗口中预览文章
-  const previewData = {
-    ...postForm.value,
-    tags: postForm.value.tagIds.map(tagId => ({
-      id: tagId,
-      name: getTagName(tagId),
-      color: getTagColor(tagId)
-    })),
-    category: {
-      id: postForm.value.categoryId,
-      name: getCategoryName(postForm.value.categoryId)
-    }
-  }
-  
-  // 这里可以实现预览功能，例如打开一个新窗口显示文章预览
-  console.log('预览文章:', previewData)
+  // 预览功能待实现
   alert('预览功能开发中...')
 }
 
 // 生命周期
 onMounted(() => {
-  // 可以在这里从API获取数据
+  // 从 localStorage 恢复文章（编辑不丢失）
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (saved) {
+      const parsed = JSON.parse(saved)
+      if (Array.isArray(parsed)) {
+        posts.value = parsed.map(p => ({
+          ...p,
+          createdAt: p.createdAt ? new Date(p.createdAt) : new Date()
+        }))
+      }
+    }
+  } catch (e) {
+    console.warn('Failed to restore blog posts from localStorage:', e)
+  }
 })
+
+// 文章变更时持久化
+watch(posts, (newPosts) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newPosts))
+  } catch (e) {
+    console.warn('Failed to save blog posts to localStorage:', e)
+  }
+}, { deep: true })
 </script>
 
 <style scoped>

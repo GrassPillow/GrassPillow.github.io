@@ -1,6 +1,6 @@
 <template>
   <div class="post-detail-view">
-    <div class="post-container">
+    <div class="post-container" v-if="post">
       <div class="post-header">
         <div class="post-meta">
           <span class="post-category">{{ getCategoryName(post.categoryId) }}</span>
@@ -103,9 +103,17 @@
       </div>
     </div>
 
+    <!-- 文章不存在时的空态（防崩溃兜底） -->
+    <div class="post-not-found" v-else>
+      <p class="not-found-icon">📭</p>
+      <h2>文章不存在</h2>
+      <p>该文章可能已被删除，或链接有误。</p>
+      <router-link to="/blog" class="back-link">← 返回博客列表</router-link>
+    </div>
+
     <CommentSection
       :comments="comments"
-      :totalComments="post.comments"
+      :totalComments="post ? comments.length : 0"
       @submit-comment="submitComment"
       @like-comment="likeComment"
       @reply-comment="replyToComment"
@@ -354,7 +362,7 @@ const tags = ref([
 
 // 计算属性
 const post = computed(() => {
-  return posts.value.find(p => p.id === postId.value) || {}
+  return posts.value.find(p => p.id === postId.value) || null
 })
 
 const prevPost = computed(() => {
@@ -384,6 +392,7 @@ const getTagColor = (tagId) => {
 }
 
 const formatDate = (date) => {
+  if (!date) return ''
   const options = { year: 'numeric', month: 'long', day: 'numeric' }
   return date.toLocaleDateString('zh-CN', options)
 }
@@ -440,14 +449,12 @@ const likeComment = (commentId) => {
   }
 }
 
-const replyToComment = (commentId) => {
+const replyToComment = () => {
   // 实现回复功能
-  console.log('回复评论:', commentId)
 }
 
-const likeReply = (replyId) => {
+const likeReply = () => {
   // 实现回复点赞功能
-  console.log('点赞回复:', replyId)
 }
 
 // 生命周期
@@ -815,5 +822,34 @@ onUnmounted(() => {
     grid-template-columns: 1fr;
   }
   
+}
+
+/* 文章不存在空态 */
+.post-not-found {
+  text-align: center;
+  padding: 6rem 1.5rem;
+  color: var(--c-text-secondary, #6b7a6d);
+}
+
+.post-not-found .not-found-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.post-not-found h2 {
+  margin-bottom: 0.5rem;
+  color: var(--c-text, #2c3e2d);
+}
+
+.post-not-found .back-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: var(--c-primary, #2d7a6b);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.post-not-found .back-link:hover {
+  text-decoration: underline;
 }
 </style>

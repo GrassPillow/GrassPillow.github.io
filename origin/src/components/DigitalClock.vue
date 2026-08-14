@@ -16,9 +16,7 @@
     
       const updateTime = () => {  
         currentTime.value = new Date();  
-        console.log('Current time:', currentTime.value);  
         formattedTime.value = currentTime.value.toLocaleTimeString();  
-        console.log('Formatted time:', formattedTime.value);  
       };  
     
       const timerId = setInterval(updateTime, 1000);  

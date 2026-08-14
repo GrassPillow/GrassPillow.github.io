@@ -128,7 +128,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -346,11 +346,6 @@ const formatDate = (date) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' }
   return date.toLocaleDateString('zh-CN', options)
 }
-
-// 生命周期
-onMounted(() => {
-  // 可以在这里从API获取数据
-})
 </script>
 
 <style scoped>

@@ -27,6 +27,11 @@ const routes = [
     meta: { title: '文章详情 - GrassPillow' }
   },
   {
+    path: '/blog/manage',
+    component: () => import('../views/BlogManageView.vue'),
+    meta: { title: '博客管理 - GrassPillow' }
+  },
+  {
     path: '/tools',
     redirect: '/tools/ai'
   },

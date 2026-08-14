@@ -100,45 +100,7 @@
 <script>
 import axios from 'axios'
 import WebsiteCard from '@/components/WebsiteCard.vue'
-
-// 解析CSV数据
-function parseCSV(csvText) {
-  const lines = csvText.trim().split('\n')
-  const headers = lines[0].split(',')
-  const data = []
-  
-  for (let i = 1; i < lines.length; i++) {
-    if (!lines[i].trim()) continue // 跳过空行
-    
-    const values = []
-    let currentValue = ''
-    let inQuotes = false
-    
-    for (let j = 0; j < lines[i].length; j++) {
-      const char = lines[i][j]
-      
-      if (char === '"') {
-        inQuotes = !inQuotes
-      } else if (char === ',' && !inQuotes) {
-        values.push(currentValue.trim())
-        currentValue = ''
-      } else {
-        currentValue += char
-      }
-    }
-    values.push(currentValue.trim())
-    
-    if (values.length === headers.length) {
-      const site = {}
-      headers.forEach((header, index) => {
-        site[header] = values[index]
-      })
-      data.push(site)
-    }
-  }
-  
-  return data
-}
+import { parseCSV } from '../utils/csv.js'
 
 export default {
   name: 'AIView',
@@ -250,9 +212,11 @@ export default {
     }
   },
   async mounted() {
+    this._isUnmounted = false
     try {
       // 从CSV文件加载数据
       const response = await axios.get('/ai-websites.csv')
+      if (this._isUnmounted) return // 组件已卸载，放弃后续状态写入
       const csvData = parseCSV(response.data)
       this.aiWebsites = csvData
       
@@ -278,10 +242,11 @@ export default {
         }
       }
       
-      if (this.aiWebsites.length > 0) {
+      if (this.aiWebsites.length > 0 && !this._isUnmounted) {
         this.showToastMessage(`成功加载 ${this.aiWebsites.length} 个AI网站`, 'success')
       }
     } catch (error) {
+      if (this._isUnmounted) return
       console.error('Failed to load AI websites from CSV:', error)
       this.showToastMessage('加载AI网站数据失败，已使用默认数据', 'error')
       // 如果加载失败，使用默认数据
@@ -297,9 +262,13 @@ export default {
         { name: 'Jasper', url: 'https://www.jasper.ai', description: 'AI内容创作平台', category: 'writing' },
         { name: 'Runway', url: 'https://runwayml.com', description: 'AI视频生成工具', category: 'video' },
         { name: 'Figma AI', url: 'https://www.figma.com', description: 'AI设计工具', category: 'design' },
-        { name: 'Perplexity', url: 'https://www.perplexity.ai', description: 'AI搜索引擎', category: 'other' }
+        { name: 'Perplexity', url: 'https://www.perplexity.ai', description: 'AI搜索引擎', category: 'search' }
       ]
     }
+  },
+  beforeUnmount() {
+    // 标记组件已卸载，mounted 中的异步回调据此放弃写入
+    this._isUnmounted = true
   }
 }
 </script>

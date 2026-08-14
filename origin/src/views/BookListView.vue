@@ -9,7 +9,6 @@
           type="text"
           class="search-input"
           placeholder="搜索书名、作者、分类..."
-          @input="handleSearch"
         />
         <div v-if="searchQuery" class="search-results-info">
           找到 {{ filteredBooks.length }} 本相关图书
@@ -104,17 +103,20 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import BookCard from '../components/BookCard.vue'
 import { useToast } from '../composables/useToast.js'
+import { parseCSV } from '../utils/csv.js'
 
 const router = useRouter()
 const toast = useToast()
 
 const books = ref([])
 const isLoading = ref(false)
+// 卸载标志：异步请求返回后不再写入组件状态或弹 Toast
+let cancelled = false
 const searchQuery = ref('')
 const selectedCategory = ref('全部')
 const viewMode = ref('grid')
@@ -160,77 +162,22 @@ const filteredBooks = computed(() => {
   return result
 })
 
-function handleSearch() {
-  // 输入搜索词后自动由 computed 更新 filteredBooks
-}
-
-function parseCSV(csvText) {
-  if (!csvText || !csvText.trim()) {
-    console.warn('CSV text is empty')
-    return []
-  }
-
-  const lines = csvText.trim().split('\n').filter(line => line.trim())
-  if (lines.length < 2) {
-    console.warn('CSV file has no data rows')
-    return []
-  }
-
-  const headers = lines[0].split(',').map(h => h.trim())
-  const data = []
-
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i].trim()
-    if (!line) continue
-
-    const values = []
-    let currentValue = ''
-    let inQuotes = false
-
-    for (let j = 0; j < line.length; j++) {
-      const char = line[j]
-
-      if (char === '"') {
-        inQuotes = !inQuotes
-      } else if (char === ',' && !inQuotes) {
-        values.push(currentValue.trim())
-        currentValue = ''
-      } else {
-        currentValue += char
-      }
-    }
-    values.push(currentValue.trim())
-
-    if (values.length === headers.length) {
-      const book = {}
-      headers.forEach((header, index) => {
-        book[header] = values[index] || ''
-      })
-      if (book.title && book.author) {
-        data.push(book)
-      }
-    } else {
-      console.warn(`Row ${i} has ${values.length} values, expected ${headers.length}:`, values)
-    }
-  }
-
-  console.log(`Parsed ${data.length} books from CSV`)
-  return data
-}
-
 async function fetchBooks() {
+  cancelled = false
   try {
     isLoading.value = true
     const response = await axios.get('/books.csv')
+    if (cancelled) return // 组件已卸载，放弃后续写入
     const csvData = parseCSV(response.data)
     books.value = csvData
 
-    if (books.value.length > 0) {
+    if (books.value.length > 0 && !cancelled) {
       toast.success(`成功加载 ${books.value.length} 本图书`)
-    } else {
+    } else if (!cancelled) {
       toast.warning('未找到图书数据')
     }
   } catch (error) {
+    if (cancelled) return
     console.error('Failed to load books from CSV:', error)
     toast.error('加载图书数据失败，已使用默认数据')
     books.value = [
@@ -297,6 +244,10 @@ async function fetchBooks() {
 }
 
 onMounted(fetchBooks)
+
+onUnmounted(() => {
+  cancelled = true
+})
 </script>
 
 <style scoped>

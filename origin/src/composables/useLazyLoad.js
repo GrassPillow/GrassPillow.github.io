@@ -1,59 +1,3 @@
-import { ref, onMounted, onUnmounted } from 'vue'
-
-/**
- * Intersection Observer based lazy loading composable
- * 用于检测元素是否进入视口
- */
-export function useLazyLoad(options = {}) {
-  const elementRef = ref(null)
-  const isVisible = ref(false)
-  const hasLoaded = ref(false)
-  let observer = null
-
-  const defaultOptions = {
-    root: null,
-    rootMargin: '100px',
-    threshold: 0.1,
-    ...options
-  }
-
-  const onIntersect = (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        isVisible.value = true
-        hasLoaded.value = true
-        // 一旦加载就停止观察
-        if (observer && elementRef.value) {
-          observer.unobserve(elementRef.value)
-        }
-      }
-    })
-  }
-
-  onMounted(() => {
-    if (typeof IntersectionObserver !== 'undefined' && elementRef.value) {
-      observer = new IntersectionObserver(onIntersect, defaultOptions)
-      observer.observe(elementRef.value)
-    } else {
-      // 降级处理：如果浏览器不支持 IntersectionObserver，直接显示
-      isVisible.value = true
-      hasLoaded.value = true
-    }
-  })
-
-  onUnmounted(() => {
-    if (observer) {
-      observer.disconnect()
-    }
-  })
-
-  return {
-    elementRef,
-    isVisible,
-    hasLoaded
-  }
-}
-
 /**
  * 图片懒加载指令
  * 使用方法：v-lazy-img="imageUrl"
@@ -77,6 +21,12 @@ export const lazyImgDirective = {
               el.style.opacity = '1'
               observer.unobserve(el)
             }
+            img.onerror = () => {
+              // 加载失败时显示一个中性的失败占位，不再停留在半透明状态
+              el.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"%3E%3Crect fill="%23e0e0e0" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" fill="%23999" font-size="20" text-anchor="middle" dominant-baseline="middle"%3E图片加载失败%3C/text%3E%3C/svg%3E'
+              el.style.opacity = '1'
+              observer.unobserve(el)
+            }
             img.src = value
           }
         })
@@ -84,6 +34,15 @@ export const lazyImgDirective = {
       { rootMargin: '100px' }
     )
 
+    // 挂载到元素上，供 unmounted 清理
+    el._lazyObserver = observer
     observer.observe(el)
+  },
+  unmounted(el) {
+    // 路由离开时断开观察器，避免泄漏
+    if (el._lazyObserver) {
+      el._lazyObserver.disconnect()
+      el._lazyObserver = null
+    }
   }
 }

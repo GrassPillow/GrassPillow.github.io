@@ -35,6 +35,7 @@
                 v-if="project.demo"
                 :href="project.demo"
                 target="_blank"
+                rel="noopener noreferrer"
                 class="overlay-btn"
               >
                 查看演示
@@ -43,6 +44,7 @@
                 v-if="project.github"
                 :href="project.github"
                 target="_blank"
+                rel="noopener noreferrer"
                 class="overlay-btn overlay-btn-secondary"
               >
                 GitHub
@@ -89,7 +91,7 @@ const projects = ref([
     image: 'https://picsum.photos/seed/blog-system/600/400.jpg',
     category: 'web',
     tags: ['Vue 3', 'TypeScript', 'Vue Router', 'CSS3'],
-    demo: '/',
+    demo: '/blog',
     github: 'https://github.com/GrassPillow'
   },
   {

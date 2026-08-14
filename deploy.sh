@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+# 任何一步失败立即退出，避免"构建失败仍继续复制/误删"的脏部署
+set -e
+
 # 开始时间
 start_time=$(date "+%Y-%m-%d %H:%M:%S")
 

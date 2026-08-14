@@ -171,14 +171,14 @@
               <span class="link-icon">📧</span>
               <span class="link-text">发送邮件</span>
             </a>
-            <a href="https://github.com/GrassPillow" target="_blank" class="contact-link">
+            <a href="https://github.com/GrassPillow" target="_blank" rel="noopener noreferrer" class="contact-link">
               <span class="link-icon">💻</span>
               <span class="link-text">GitHub</span>
             </a>
-            <a href="#" class="contact-link">
+            <router-link to="/blog" class="contact-link">
               <span class="link-icon">📝</span>
               <span class="link-text">技术博客</span>
-            </a>
+            </router-link>
           </div>
           
           <div class="tech-stack">

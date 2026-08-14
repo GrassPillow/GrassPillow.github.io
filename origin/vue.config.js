@@ -2,6 +2,8 @@ const { defineConfig } = require('@vue/cli-service')
 
 module.exports = defineConfig({
   transpileDependencies: true,
+  // 生产构建不生成 source map，避免完整源码随站点公开
+  productionSourceMap: false,
   configureWebpack: {
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.vue', '.json']

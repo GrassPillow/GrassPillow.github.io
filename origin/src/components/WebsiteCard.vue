@@ -6,7 +6,7 @@
     <p v-if="site.description" class="website-desc">{{ site.description }}</p>
     <div class="website-footer">
       <a
-        :href="site.url"
+        :href="safeUrl"
         target="_blank"
         rel="noopener noreferrer"
         class="website-link"
@@ -23,6 +23,16 @@ export default {
   props: {
     site: { type: Object, required: true },
     categoryName: { type: String, default: '' }
+  },
+  computed: {
+    // 仅允许 http/https 协议，防止 localStorage 注入 javascript: 等协议（自 XSS 防御）
+    safeUrl() {
+      const url = this.site && this.site.url
+      if (typeof url === 'string' && /^https?:\/\//i.test(url)) {
+        return url
+      }
+      return '#'
+    }
   }
 }
 </script>

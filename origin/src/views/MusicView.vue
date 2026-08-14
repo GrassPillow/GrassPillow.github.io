@@ -89,22 +89,29 @@
 
       <div class="playlist-container">
         <div
-          v-for="(track, index) in playlist"
+          v-for="track in visiblePlaylist"
           :key="track.id"
           class="playlist-item"
-          :class="{ active: currentTrackIndex === index }"
-          @click="playTrack(index)"
+          :class="{ active: currentTrack && currentTrack.id === track.id }"
+          @click="playTrack(track.id)"
         >
           <div class="item-cover">
             <img :src="track.cover" :alt="track.title" />
             <div class="play-overlay">
-              <span>{{ currentTrackIndex === index && isPlaying ? '⏸️' : '▶️' }}</span>
+              <span>{{ currentTrack && currentTrack.id === track.id && isPlaying ? '⏸️' : '▶️' }}</span>
             </div>
           </div>
           <div class="item-info">
             <h4 class="item-title">{{ track.title }}</h4>
             <p class="item-artist">{{ track.artist }}</p>
           </div>
+          <button
+            class="item-favorite"
+            :class="{ favorited: track.favorite }"
+            :title="track.favorite ? '取消收藏' : '收藏'"
+            :aria-label="track.favorite ? '取消收藏' : '收藏'"
+            @click.stop="toggleFavorite(track)"
+          >♥</button>
           <span class="item-duration">{{ track.duration }}</span>
         </div>
       </div>
@@ -118,7 +125,7 @@
           :key="n"
           class="visualizer-bar"
           :style="{
-            height: Math.random() * 60 + 20 + '%',
+            height: barHeights[n - 1] + '%',
             animationDelay: n * 0.05 + 's'
           }"
         ></div>
@@ -198,6 +205,30 @@ const volume = ref(70)
 const isMuted = ref(false)
 const currentTime = ref(0)
 const duration = ref(0)
+
+// 最近播放记录（最新在前）
+const recentPlayIds = ref([])
+
+// 播放列表按 tab 过滤：全部 / 收藏 / 最近播放
+const visiblePlaylist = computed(() => {
+  if (activeTab.value === 'favorite') {
+    return playlist.value.filter(t => t.favorite)
+  }
+  if (activeTab.value === 'recent') {
+    return recentPlayIds.value
+      .map(id => playlist.value.find(t => t.id === id))
+      .filter(Boolean)
+  }
+  return playlist.value
+})
+
+// 切换收藏状态
+const toggleFavorite = (track) => {
+  track.favorite = !track.favorite
+}
+
+// 稳定的可视化柱高（由序号派生，避免每次渲染随机跳动）
+const barHeights = Array.from({ length: 20 }, (_, i) => 20 + Math.abs(Math.sin(i * 1.7)) * 60)
 
 // Audio instance
 let audio = null
@@ -308,8 +339,12 @@ const nextTrack = () => {
   }
 }
 
-const playTrack = (index) => {
+const playTrack = (id) => {
+  const index = playlist.value.findIndex(t => t.id === id)
+  if (index === -1) return
   currentTrackIndex.value = index
+  // 记录最近播放（最新在前，去重）
+  recentPlayIds.value = [id, ...recentPlayIds.value.filter(i => i !== id)]
   if (audio && audio.src) {
     audio.play().catch(() => {})
   }
@@ -691,6 +726,25 @@ onUnmounted(() => {
 .item-duration {
   font-size: 0.85rem;
   color: var(--text-muted);
+}
+
+.item-favorite {
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.item-favorite:hover {
+  transform: scale(1.2);
+}
+
+.item-favorite.favorited {
+  color: #e25555;
 }
 
 /* Visualizer */

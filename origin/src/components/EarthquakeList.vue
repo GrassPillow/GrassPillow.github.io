@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios';
-import { ref, onMounted, onBeforeUnmount, computed, h } from 'vue';
+import { ref, onMounted, computed, h } from 'vue';
 import EarthquakeMap from './EarthquakeMap.vue';
 import DataTable from './DataTable.vue'
 
@@ -159,7 +159,6 @@ async function loadData() {
   try {
     const response = await axios.get('https://api.wolfx.jp/cenc_eqlist.json');
     
-    console.log('API Response:', response.data);
     
     if (response.data) {
       let rawData = [];
@@ -171,8 +170,6 @@ async function loadData() {
       }
       
       if (rawData.length > 0) {
-        console.log('Raw Data Sample:', rawData[0]);
-        console.log('Data Structure Keys:', Object.keys(rawData[0]));
         
         // 处理中文字段和英文字段的映射
         const processedData = rawData.map(item => {
@@ -337,7 +334,6 @@ async function loadData() {
         // 应用初始筛选
         applyFilters();
         
-        console.log('Processed dataSource length:', dataSource.value.length);
       }
     }
   } catch (error) {
@@ -347,57 +343,9 @@ async function loadData() {
   }
 }
 
-// 定义清理函数变量
-let cleanupErrorHandler = null;
-
-// 处理ResizeObserver循环错误的增强方法
-const handleResizeObserverError = () => {
-  // 创建一个ResizeObserver错误处理器
-  const resizeObserverErrHandler = (e) => {
-    // 检查是否是ResizeObserver loop错误
-    const isResizeObserverError = 
-      e.type === 'error' && 
-      e.message && 
-      (e.message.includes('ResizeObserver loop') || 
-       e.message.includes('ResizeObserver loop completed with undelivered notifications'));
-    
-    if (isResizeObserverError) {
-      // 这是一个已知的浏览器错误，我们可以安全地忽略它
-      console.warn('ResizeObserver loop error caught and handled');
-      // 防止错误冒泡到控制台
-      if (e.preventDefault) {
-        e.preventDefault();
-      }
-      return true;
-    }
-    return false;
-  };
-
-  // 添加错误事件监听器
-  window.addEventListener('error', resizeObserverErrHandler, { capture: true });
-  
-  // 返回清理函数
-  return () => {
-    // 确保移除监听器
-    window.removeEventListener('error', resizeObserverErrHandler, { capture: true });
-  };
-};
-
 onMounted(() => {
-  // 处理ResizeObserver错误
-  cleanupErrorHandler = handleResizeObserverError();
-  
-  // 加载数据
+  // 加载数据（ResizeObserver 错误已由 main.ts 全局抑制，无需在此重复处理）
   loadData();
-});
-
-// 确保onBeforeUnmount在顶层，而不是嵌套在onMounted中
-onBeforeUnmount(() => {
-  // 确保清理错误处理器
-  if (typeof cleanupErrorHandler === 'function') {
-    cleanupErrorHandler();
-    cleanupErrorHandler = null;
-  }
 });
 </script>
 

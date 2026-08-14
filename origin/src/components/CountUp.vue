@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useCountUp } from '../composables/useAnimation.js'
 
 const props = defineProps({
@@ -47,6 +47,13 @@ onMounted(() => {
   } else {
     started.value = true
     start()
+  }
+})
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect()
+    observer = null
   }
 })
 </script>

@@ -33,13 +33,6 @@ const toggleTheme = () => {
   applyTheme()
 }
 
-// Set specific theme
-const setTheme = (dark) => {
-  isDark.value = dark
-  localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light')
-  applyTheme()
-}
-
 // Watch for system preference changes
 if (typeof window !== 'undefined') {
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
@@ -54,7 +47,6 @@ export function useTheme() {
   return {
     isDark: readonly(isDark),
     toggleTheme,
-    setTheme,
     initTheme
   }
 }

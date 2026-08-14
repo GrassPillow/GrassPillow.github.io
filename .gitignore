@@ -1,3 +1,7 @@
 origin/node_modules/
 /origin/dist/
 /.idea/material_theme_project_new.xml
+origin/.env.local
+origin/.env.*.local
+*.js.map
+*.css.map

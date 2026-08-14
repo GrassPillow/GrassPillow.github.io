@@ -131,9 +131,10 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
+import { parseCSV } from '../utils/csv.js'
 
 const router = useRouter()
 const route = useRoute()
@@ -160,7 +161,12 @@ function goToDetail(title) {
   })
 }
 
+// 请求序号：防止快速切换时旧响应覆盖新响应
+let loadSeq = 0
+let isUnmounted = false
+
 async function loadBook(bookTitle) {
+  const seq = ++loadSeq
   bookNotFound.value = false
   isLoading.value = true
   book.value = null
@@ -168,18 +174,23 @@ async function loadBook(bookTitle) {
   try {
     if (!allBooks.value.length) {
       const response = await axios.get('/books.csv')
+      if (seq !== loadSeq || isUnmounted) return // 已有更新的请求或组件已卸载
       allBooks.value = parseCSV(response.data)
     }
+    if (seq !== loadSeq || isUnmounted) return
     book.value = allBooks.value.find(b => b.title === decodeURIComponent(bookTitle))
 
     if (!book.value) {
       bookNotFound.value = true
     }
   } catch (error) {
+    if (seq !== loadSeq || isUnmounted) return
     console.error('Failed to load book:', error)
     bookNotFound.value = true
   } finally {
-    isLoading.value = false
+    if (seq === loadSeq && !isUnmounted) {
+      isLoading.value = false
+    }
   }
 }
 
@@ -201,54 +212,10 @@ onMounted(() => {
   }
 })
 
-function parseCSV(csvText) {
-  if (!csvText || !csvText.trim()) {
-    return []
-  }
+onUnmounted(() => {
+  isUnmounted = true
+})
 
-  const lines = csvText.trim().split('\n').filter(line => line.trim())
-  if (lines.length < 2) {
-    return []
-  }
-
-  const headers = lines[0].split(',').map(h => h.trim())
-  const data = []
-
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i].trim()
-    if (!line) continue
-
-    const values = []
-    let currentValue = ''
-    let inQuotes = false
-
-    for (let j = 0; j < line.length; j++) {
-      const char = line[j]
-
-      if (char === '"') {
-        inQuotes = !inQuotes
-      } else if (char === ',' && !inQuotes) {
-        values.push(currentValue.trim())
-        currentValue = ''
-      } else {
-        currentValue += char
-      }
-    }
-    values.push(currentValue.trim())
-
-    if (values.length === headers.length) {
-      const book = {}
-      headers.forEach((header, index) => {
-        book[header] = values[index] || ''
-      })
-      if (book.title && book.author) {
-        data.push(book)
-      }
-    }
-  }
-
-  return data
-}
 </script>
 
 <style scoped>

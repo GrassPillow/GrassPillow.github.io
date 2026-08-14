@@ -179,10 +179,16 @@ const editText = ref('')
 onMounted(() => {
   const saved = localStorage.getItem(STORAGE_KEY)
   if (saved) {
-    todos.value = JSON.parse(saved).map((t) => ({
-      ...t,
-      createdAt: new Date(t.createdAt)
-    }))
+    try {
+      todos.value = JSON.parse(saved).map((t) => ({
+        ...t,
+        createdAt: new Date(t.createdAt)
+      }))
+    } catch (e) {
+      // localStorage 数据损坏时降级为空列表，避免整个组件崩溃
+      console.warn('Failed to parse saved todos, starting fresh:', e)
+      todos.value = []
+    }
   }
 })
 
@@ -192,7 +198,8 @@ watch(todos, (newTodos) => {
 }, { deep: true })
 
 const filteredTodos = computed(() => {
-  let result = todos.value
+  // 先拷贝，避免 sort 原地变异源数组（否则用户增删顺序会被永久打乱并写回 localStorage）
+  let result = todos.value.slice()
 
   // Filter by status
   if (activeFilter.value === 'active') {

@@ -30,13 +30,14 @@ const props = defineProps({
   }
 });
 
-console.log('EarthquakeMap component mounted');
 
 const mapContainer = ref(null);
 let map = null;
 let markers = [];
 let AMap = null; // 存储AMap实例
 let animationTimer = null;
+let infoWindowTimers = []; // 信息窗口相关计时器（延迟显示 + 自动关闭）
+let isUnmounted = false; // 组件卸载标志，防止异步回调操作已销毁实例
 let currentIndex = 0;
 const isAnimating = ref(false);
 const animationSpeed = ref(1000); // 默认1000ms (500-2000ms范围)
@@ -44,7 +45,6 @@ let sortedData = []; // 存储按时间排序后的数据
 
 // 显示信息窗口 - 确保在正确的作用域内
 const showInfoWindow = (marker, autoClose = true) => {
-  console.log('Showing info window');
   if (!map || !marker || !AMap) {
     console.warn('Cannot show info window: map, marker, or AMap is not available');
     return null;
@@ -172,10 +172,8 @@ const showInfoWindow = (marker, autoClose = true) => {
 
 // 获取经纬度数据，支持多种可能的字段名
 const getCoordinates = (item) => {
-  console.log('Checking coordinates for item keys:', Object.keys(item));
   // 尝试不同的经纬度字段名组合
   if (item.Longitude && item.Latitude) {
-    console.log('Found Longitude/Latitude:', item.Longitude, item.Latitude);
     return { lon: parseFloat(item.Longitude), lat: parseFloat(item.Latitude), type: 'Longitude/Latitude' };
   } else if (item.lng && item.lat) {
     return { lon: parseFloat(item.lng), lat: parseFloat(item.lat), type: 'lng/lat' };
@@ -196,7 +194,6 @@ const getCoordinates = (item) => {
           k.toLowerCase().includes('lat') && k !== key
         );
         if (latKey) {
-          console.log(`Found coordinates in ${key}/${latKey}:`, item[key], item[latKey]);
           return { 
             lon: parseFloat(item[key]), 
             lat: parseFloat(item[latKey]), 
@@ -207,7 +204,6 @@ const getCoordinates = (item) => {
     }
   }
   
-  console.log('No coordinates found for item');
   return null;
 };
 
@@ -334,7 +330,7 @@ const createMarker = (item, index) => {
       marker.setMap(map);
       
       // 在添加标记后自动显示信息窗口，并管理之前打开的窗口
-      setTimeout(() => {
+      const showTimer = setTimeout(() => {
         // 如果之前有打开的信息窗口，先关闭它
         if (lastOpenedInfoWindow && typeof lastOpenedInfoWindow.getMap === 'function' && lastOpenedInfoWindow.getMap()) {
           lastOpenedInfoWindow.close();
@@ -357,6 +353,7 @@ const createMarker = (item, index) => {
             infoWindow.close();
           }
         }, 3000);
+        infoWindowTimers.push(closeTimer);
         
         // 监听信息窗口的打开和关闭事件（需要检查方法是否存在）
         if (infoWindow && typeof infoWindow.on === 'function') {
@@ -369,13 +366,12 @@ const createMarker = (item, index) => {
           });
         }
       }, 500); // 延迟显示信息窗口，让标记动画先完成
+      infoWindowTimers.push(showTimer);
       
       // 调试信息
-      console.log(`Marker added: ${index + 1}/${sortedData.length}, Time: ${item.OriginTime || item.time || 'Unknown'}, Magnitude: ${magnitude}`);
       
       return true;
     } else {
-      console.log(`No coordinates found for item at index ${index}`);
       return false;
     }
   } catch (error) {
@@ -401,7 +397,6 @@ const addMarkersSequentially = () => {
     } else if (currentIndex >= sortedData.length) {
       // 动画完成
       isAnimating.value = false;
-      console.log('Animation completed, all markers added');
     }
   }
 };
@@ -414,7 +409,6 @@ const startAnimation = () => {
   }
   
   isAnimating.value = true;
-  console.log('Starting animation with speed:', animationSpeed.value, 'ms');
   addMarkersSequentially();
 };
 
@@ -425,12 +419,15 @@ const stopAnimation = () => {
     clearTimeout(animationTimer);
     animationTimer = null;
   }
-  console.log('Animation stopped at index:', currentIndex);
 };
 
 // 重置动画
 const resetAnimation = () => {
   stopAnimation();
+  
+  // 清理所有信息窗口相关计时器，防止旧标记的信息窗口"复活"
+  infoWindowTimers.forEach(t => clearTimeout(t));
+  infoWindowTimers = [];
   
   // 清除所有标记
   if (markers.length > 0) {
@@ -439,12 +436,10 @@ const resetAnimation = () => {
   }
   
   currentIndex = 0;
-  console.log('Animation reset');
 };
 
 // 更新动画速度
 const updateAnimationSpeed = () => {
-  console.log('Animation speed updated to:', animationSpeed.value, 'ms');
   
   // 如果动画正在运行，重新设置定时器
   if (isAnimating.value && animationTimer) {
@@ -455,7 +450,6 @@ const updateAnimationSpeed = () => {
 
 // 根据地震数据更新地图标记（修改为支持按时间顺序显示）
 const updateMarkers = (data) => {
-  console.log('Updating markers with data count:', data.length);
   
   if (!map || !AMap) {
     console.warn('Map or AMap instance not initialized');
@@ -467,16 +461,6 @@ const updateMarkers = (data) => {
   
   // 按时间排序数据
   sortedData = sortByTime(data);
-  console.log('Data sorted by time, count:', sortedData.length);
-  
-  // 显示前几个数据点的时间信息用于调试
-  if (sortedData.length > 0) {
-    const firstFew = sortedData.slice(0, Math.min(3, sortedData.length));
-    console.log('First few sorted items:', firstFew.map(item => ({
-      time: item.OriginTime || item.time || 'Unknown',
-      magnitude: getMagnitude(item)
-    })));
-  }
   
   // 默认不开启动画，用户需要手动点击"开始动画"按钮
   // startAnimation();
@@ -484,18 +468,21 @@ const updateMarkers = (data) => {
 
 // 初始化地图
 const initMap = () => {
-  console.log('Initializing map...');
+  // 高德 key 与安全密钥从构建期环境变量注入（origin/.env.local，不入库）
+  // 请在 https://console.amap.com 为 key 配置 referer 域名白名单：https://grasspillow.github.io 与本地开发地址
   window._AMapSecurityConfig = {
-    securityJsCode: "eb75f9c1522697027bc209a5118312bc",
+    securityJsCode: process.env.VUE_APP_AMAP_SECURITY_CODE,
   };
   
   AMapLoader.load({
-    key: "9771b6c463e702fa00e2602f11b2f7f8", // 申请好的Web端开发者Key
+    key: process.env.VUE_APP_AMAP_KEY, // 申请好的Web端开发者Key
     version: "2.0",
     plugins: ["AMap.Scale"],
   })
     .then((amapInstance) => {
-      console.log('Map loaded successfully');
+      // 组件已卸载则放弃初始化，避免在已销毁的 DOM 上创建地图实例
+      if (isUnmounted) return;
+      
       // 保存AMap实例
       AMap = amapInstance;
       
@@ -509,7 +496,6 @@ const initMap = () => {
       // 添加比例尺控件
       map.addControl(new AMap.Scale());
       
-      console.log('Map initialized with data count:', props.earthquakeData.length);
       // 如果已有数据，添加标记
       if (props.earthquakeData.length > 0) {
         updateMarkers(props.earthquakeData);
@@ -521,8 +507,7 @@ const initMap = () => {
 };
 
 // 监听数据变化
-watch(() => props.earthquakeData, (newData, oldData) => {
-  console.log(`Data changed: ${oldData?.length || 0} -> ${newData?.length || 0}`);
+watch(() => props.earthquakeData, (newData) => {
   if (newData && newData.length > 0) {
     updateMarkers(newData);
   }
@@ -530,13 +515,15 @@ watch(() => props.earthquakeData, (newData, oldData) => {
 
 // 组件挂载时初始化地图
 onMounted(() => {
-  console.log('Component mounted, initializing map...');
   initMap();
 });
 
 // 组件销毁时清理地图实例
 onUnmounted(() => {
+  isUnmounted = true;
   stopAnimation();
+  infoWindowTimers.forEach(t => clearTimeout(t));
+  infoWindowTimers = [];
   if (map) {
     map.destroy();
     map = null;

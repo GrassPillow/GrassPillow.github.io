@@ -153,6 +153,42 @@ onUnmounted(() => {
   --z-overlay: 300;
   --z-modal: 400;
   --z-toast: 500;
+
+  /* 兼容旧变量名：历史视图引用的非 --c-* 变量，统一映射到 --c-* 体系 */
+  --primary-color: var(--c-primary);
+  --primary-light: var(--c-primary-light);
+  --primary-dark: var(--c-primary-dark);
+  --text-primary: var(--c-text);
+  --text-secondary: var(--c-text-secondary);
+  --text-muted: var(--c-text-muted);
+  --bg-primary: var(--c-bg-card);
+  --bg-secondary: var(--c-bg-warm);
+  --bg-tertiary: var(--c-bg-warm);
+  --card-bg: var(--c-bg-card);
+  --border-light: var(--c-border);
+  --border-color: var(--c-border);
+  --accent-color: #8b6f47;
+  /* 无渐变约定：渐变型变量退化为纯色 */
+  --gradient-hero: var(--c-primary-dark);
+  --gradient-primary: var(--c-primary);
+}
+
+/* 深色模式调色板（绿 + 暖灰体系反色） */
+[data-theme="dark"] {
+  --c-primary: #55b3a0;
+  --c-primary-light: #1c3530;
+  --c-primary-dark: #8fd4c6;
+  --c-bg-page: #101513;
+  --c-bg-card: #1b2421;
+  --c-bg-warm: #222c29;
+  --c-border: #33423c;
+  --c-text: #e2e8e6;
+  --c-text-secondary: #a3b3ad;
+  --c-text-muted: #6f8079;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.45);
 }
 
 /* Theme toggle container */

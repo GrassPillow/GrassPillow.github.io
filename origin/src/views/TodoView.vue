@@ -148,7 +148,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 const STORAGE_KEY = 'grasspillow-todos'
 
@@ -175,6 +175,11 @@ const searchQuery = ref('')
 const editingTodo = ref(null)
 const editText = ref('')
 
+// Persist todos to localStorage
+const saveTodos = () => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(todos.value))
+}
+
 // Load todos from localStorage
 onMounted(() => {
   const saved = localStorage.getItem(STORAGE_KEY)
@@ -185,11 +190,6 @@ onMounted(() => {
     }))
   }
 })
-
-// Save todos to localStorage
-watch(todos, (newTodos) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(newTodos))
-}, { deep: true })
 
 const filteredTodos = computed(() => {
   let result = todos.value
@@ -256,12 +256,14 @@ const addTodo = () => {
   })
 
   newTodo.value = ''
+  saveTodos()
 }
 
 const toggleTodo = (id) => {
   const todo = todos.value.find(t => t.id === id)
   if (todo) {
     todo.completed = !todo.completed
+    saveTodos()
   }
 }
 
@@ -269,6 +271,7 @@ const deleteTodo = (id) => {
   const index = todos.value.findIndex(t => t.id === id)
   if (index > -1) {
     todos.value.splice(index, 1)
+    saveTodos()
   }
 }
 
@@ -281,6 +284,7 @@ const saveEdit = () => {
   if (editingTodo.value && editText.value.trim()) {
     editingTodo.value.text = editText.value.trim()
     editingTodo.value = null
+    saveTodos()
   }
 }
 

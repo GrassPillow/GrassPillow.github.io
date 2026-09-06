@@ -1,3 +1,114 @@
+<template>
+  <div class="dt-root">
+    <!-- Loading overlay -->
+    <div class="dt-loading-overlay" v-if="loading">
+      <div class="dt-spinner"></div>
+    </div>
+
+    <!-- Table wrapper for scroll -->
+    <div
+      class="dt-scroll-wrapper"
+      :style="{
+        maxHeight: scroll.y ? (typeof scroll.y === 'number' ? scroll.y + 'px' : scroll.y) : undefined,
+        overflowX: scroll.x ? 'auto' : undefined
+      }"
+    >
+      <table class="dt-table" :style="{ minWidth: scroll.x || undefined }">
+        <thead class="dt-thead">
+          <tr>
+            <th
+              v-for="col in columns"
+              :key="col.dataIndex || col.key"
+              :class="[
+                'dt-th',
+                fixedClass(col),
+                { 'dt-th-sortable': col.sorter }
+              ]"
+              :style="{
+                width: col.width ? col.width + 'px' : undefined,
+                minWidth: col.minWidth ? col.minWidth + 'px' : col.width ? col.width + 'px' : undefined
+              }"
+              @click="handleSort(col)"
+            >
+              <span>{{ col.title }}</span>
+              <span v-if="col.sorter" class="dt-sort-icon">{{ getSortIcon(col) }}</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="dt-tbody">
+          <tr v-if="pagedData.length === 0 && !loading">
+            <td :colspan="columns.length" class="dt-empty">暂无数据</td>
+          </tr>
+          <tr
+            v-for="(record, idx) in pagedData"
+            :key="record[rowKey] || idx"
+            class="dt-row"
+          >
+            <td
+              v-for="col in columns"
+              :key="col.dataIndex || col.key"
+              :class="[
+                'dt-td',
+                fixedClass(col),
+                { 'dt-td-ellipsis': col.ellipsis }
+              ]"
+              :style="{
+                width: col.width ? col.width + 'px' : undefined,
+                minWidth: col.minWidth ? col.minWidth + 'px' : col.width ? col.width + 'px' : undefined
+              }"
+            >
+              <span v-if="col.ellipsis" class="dt-ellipsis-text">
+                <component :is="() => renderCell(col, record)" />
+              </span>
+              <component v-else :is="() => renderCell(col, record)" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="dt-pagination" v-if="showPagination">
+      <span class="dt-pagination-total" v-if="pagination?.showTotal">
+        {{ pagination.showTotal(processedData.length) }}
+      </span>
+      <div class="dt-pagination-controls">
+        <button :disabled="currentPage === 1" @click="goToPage(1)">&laquo;</button>
+        <button :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">&lsaquo;</button>
+        <template v-for="p in totalPages" :key="p">
+          <button
+            v-if="p === 1 || p === totalPages || (p >= currentPage - 2 && p <= currentPage + 2)"
+            :class="{ 'dt-page-active': p === currentPage }"
+            @click="goToPage(p)"
+          >{{ p }}</button>
+          <span v-else-if="p === currentPage - 3 || p === currentPage + 3" class="dt-page-ellipsis">...</span>
+        </template>
+        <button :disabled="currentPage === totalPages" @click="goToPage(currentPage + 1)">&rsaquo;</button>
+        <button :disabled="currentPage === totalPages" @click="goToPage(totalPages)">&raquo;</button>
+      </div>
+      <div class="dt-pagination-extra">
+        <select
+          v-if="pagination?.showSizeChanger !== false"
+          :value="pageSize"
+          @change="e => { pageSize = Number(e.target.value); currentPage = 1 }"
+          class="dt-page-size-select"
+        >
+          <option v-for="opt in pageSizeOptions" :key="opt" :value="opt">{{ opt }} 条/页</option>
+        </select>
+        <template v-if="pagination?.showQuickJumper">
+          <span class="dt-jump-label">跳至</span>
+          <input
+            v-model="jumpPage"
+            class="dt-jump-input"
+            @keyup.enter="doJump"
+          />
+          <span>页</span>
+        </template>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script>
 import { ref, computed, watch, defineComponent } from 'vue'
 
@@ -111,117 +222,6 @@ export default defineComponent({
   }
 })
 </script>
-
-<template>
-  <div class="dt-root">
-    <!-- Loading overlay -->
-    <div class="dt-loading-overlay" v-if="loading">
-      <div class="dt-spinner"></div>
-    </div>
-
-    <!-- Table wrapper for scroll -->
-    <div
-      class="dt-scroll-wrapper"
-      :style="{
-        maxHeight: scroll.y ? (typeof scroll.y === 'number' ? scroll.y + 'px' : scroll.y) : undefined,
-        overflowX: scroll.x ? 'auto' : undefined
-      }"
-    >
-      <table class="dt-table" :style="{ minWidth: scroll.x || undefined }">
-        <thead class="dt-thead">
-          <tr>
-            <th
-              v-for="col in columns"
-              :key="col.dataIndex || col.key"
-              :class="[
-                'dt-th',
-                fixedClass(col),
-                { 'dt-th-sortable': col.sorter }
-              ]"
-              :style="{
-                width: col.width ? col.width + 'px' : undefined,
-                minWidth: col.minWidth ? col.minWidth + 'px' : col.width ? col.width + 'px' : undefined
-              }"
-              @click="handleSort(col)"
-            >
-              <span>{{ col.title }}</span>
-              <span v-if="col.sorter" class="dt-sort-icon">{{ getSortIcon(col) }}</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody class="dt-tbody">
-          <tr v-if="pagedData.length === 0 && !loading">
-            <td :colspan="columns.length" class="dt-empty">暂无数据</td>
-          </tr>
-          <tr
-            v-for="(record, idx) in pagedData"
-            :key="record[rowKey] || idx"
-            class="dt-row"
-          >
-            <td
-              v-for="col in columns"
-              :key="col.dataIndex || col.key"
-              :class="[
-                'dt-td',
-                fixedClass(col),
-                { 'dt-td-ellipsis': col.ellipsis }
-              ]"
-              :style="{
-                width: col.width ? col.width + 'px' : undefined,
-                minWidth: col.minWidth ? col.minWidth + 'px' : col.width ? col.width + 'px' : undefined
-              }"
-            >
-              <span v-if="col.ellipsis" class="dt-ellipsis-text">
-                <component :is="() => renderCell(col, record)" />
-              </span>
-              <component v-else :is="() => renderCell(col, record)" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Pagination -->
-    <div class="dt-pagination" v-if="showPagination">
-      <span class="dt-pagination-total" v-if="pagination?.showTotal">
-        {{ pagination.showTotal(processedData.length) }}
-      </span>
-      <div class="dt-pagination-controls">
-        <button :disabled="currentPage === 1" @click="goToPage(1)">&laquo;</button>
-        <button :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">&lsaquo;</button>
-        <template v-for="p in totalPages" :key="p">
-          <button
-            v-if="p === 1 || p === totalPages || (p >= currentPage - 2 && p <= currentPage + 2)"
-            :class="{ 'dt-page-active': p === currentPage }"
-            @click="goToPage(p)"
-          >{{ p }}</button>
-          <span v-else-if="p === currentPage - 3 || p === currentPage + 3" class="dt-page-ellipsis">...</span>
-        </template>
-        <button :disabled="currentPage === totalPages" @click="goToPage(currentPage + 1)">&rsaquo;</button>
-        <button :disabled="currentPage === totalPages" @click="goToPage(totalPages)">&raquo;</button>
-      </div>
-      <div class="dt-pagination-extra">
-        <select
-          v-if="pagination?.showSizeChanger !== false"
-          :value="pageSize"
-          @change="e => { pageSize = Number(e.target.value); currentPage = 1 }"
-          class="dt-page-size-select"
-        >
-          <option v-for="opt in pageSizeOptions" :key="opt" :value="opt">{{ opt }} 条/页</option>
-        </select>
-        <template v-if="pagination?.showQuickJumper">
-          <span class="dt-jump-label">跳至</span>
-          <input
-            v-model="jumpPage"
-            class="dt-jump-input"
-            @keyup.enter="doJump"
-          />
-          <span>页</span>
-        </template>
-      </div>
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .dt-root {

@@ -1,6 +1,6 @@
 <template>
   <div class="clock-view">
-    <digital-clock></digital-clock>
+    <DigitalClock />
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="earthquake-map">
+  <div class="earthquake-map" :class="{ 'map-fullscreen': isFullscreen }">
     <div class="map-header">
       <h3>地震分布地图 - 按时间顺序展示</h3>
       <div class="legend">
@@ -28,6 +28,10 @@
       <button class="control-btn reset-btn" @click="resetAnimation">
         <i class="control-icon">⟳</i> 重置
       </button>
+      <button class="control-btn fullscreen-btn" @click="toggleFullscreen" :aria-pressed="isFullscreen">
+        <i class="control-icon">{{ isFullscreen ? '✕' : '⛶' }}</i>
+        {{ isFullscreen ? '退出全屏' : '全屏' }}
+      </button>
       <div class="speed-control">
         <label for="animation-speed">动画速度:</label>
         <input id="animation-speed" type="range" v-model.number="animationSpeed" min="500" max="2000" step="100" 
@@ -43,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch, defineProps } from 'vue';
+import { ref, onMounted, onUnmounted, watch, defineProps, nextTick } from 'vue';
 import AMapLoader from '@amap/amap-jsapi-loader';
 
 // 接收地震数据作为props
@@ -506,6 +510,38 @@ const updateMarkers = (data) => {
   // startAnimation();
 };
 
+// ─── 全屏支持 ────────────────────────────────────────────────────────────────
+
+const isFullscreen = ref(false);
+
+const destroyMap = () => {
+  stopAnimation();
+  if (map) {
+    map.destroy();
+    map = null;
+  }
+  markers = [];
+};
+
+const reinitMap = () => {
+  if (!mapContainer.value) return;
+  destroyMap();
+  initMap();
+};
+
+const toggleFullscreen = () => {
+  isFullscreen.value = !isFullscreen.value;
+  document.body.style.overflow = isFullscreen.value ? 'hidden' : '';
+  // 容器尺寸变化后重建地图实例，避免画布拉伸
+  nextTick(reinitMap);
+};
+
+const onKeydown = (e) => {
+  if (e.key === 'Escape' && isFullscreen.value) {
+    toggleFullscreen();
+  }
+};
+
 // 初始化地图
 const initMap = () => {
   console.log('Initializing map...');
@@ -555,17 +591,15 @@ watch(() => props.earthquakeData, (newData, oldData) => {
 // 组件挂载时初始化地图
 onMounted(() => {
   console.log('Component mounted, initializing map...');
+  window.addEventListener('keydown', onKeydown);
   initMap();
 });
 
 // 组件销毁时清理地图实例
 onUnmounted(() => {
-  stopAnimation();
-  if (map) {
-    map.destroy();
-    map = null;
-  }
-  markers = [];
+  window.removeEventListener('keydown', onKeydown);
+  destroyMap();
+  document.body.style.overflow = '';
   sortedData = [];
 });
 </script>
@@ -573,14 +607,34 @@ onUnmounted(() => {
 <style scoped>
 .earthquake-map {
   width: 100%;
-  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-light);
   border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+/* 全屏模式：覆盖整个视口 */
+.earthquake-map.map-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  margin: 0;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 0;
+  background: var(--bg-tertiary);
+  box-shadow: none;
+}
+
+.map-fullscreen #map-container {
+  flex: 1;
+  width: 100%;
+  height: auto;
+  min-height: 0;
 }
 
 /* 地图头部样式 */
@@ -589,16 +643,21 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .map-header h3 {
   margin: 0;
-  color: #2c3e50;
-  font-size: 24px;
+  color: var(--text-primary);
+  font-size: 20px;
   font-weight: 600;
+}
+
+/* 全屏时图例自动隐藏小屏提示 */
+.map-fullscreen .legend {
+  font-size: 13px;
 }
 
 /* 图例样式 */
@@ -613,7 +672,7 @@ onUnmounted(() => {
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #555;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
@@ -640,25 +699,39 @@ onUnmounted(() => {
 #map-container {
   width: 100%;
   height: 500px;
-  border: 2px solid #e0e0e0;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 /* 控件样式 */
 .controls {
-  margin-top: 20px;
+  margin-top: 16px;
   display: flex;
-  gap: 15px;
+  gap: 12px;
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
-  background: white;
-  padding: 15px 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  padding: 12px 16px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  color: var(--text-primary);
+}
+
+/* 全屏切换按钮 */
+.fullscreen-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.fullscreen-btn:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 /* 按钮样式 */

@@ -4,18 +4,7 @@ const THEME_KEY = 'grasspillow-theme'
 
 // Theme state
 const isDark = ref(false)
-
-// Initialize theme from localStorage or system preference
-const initTheme = () => {
-  const savedTheme = localStorage.getItem(THEME_KEY)
-  if (savedTheme) {
-    isDark.value = savedTheme === 'dark'
-  } else {
-    // Check system preference
-    isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
-  }
-  applyTheme()
-}
+let systemPreferenceListener = null
 
 // Apply theme to document
 const applyTheme = () => {
@@ -23,6 +12,44 @@ const applyTheme = () => {
     document.documentElement.setAttribute('data-theme', 'dark')
   } else {
     document.documentElement.removeAttribute('data-theme')
+  }
+}
+
+// Handle system preference change
+const onSystemPreferenceChange = (e) => {
+  // Only follow system preference when user hasn't explicitly set a theme
+  if (!localStorage.getItem(THEME_KEY)) {
+    isDark.value = e.matches
+    applyTheme()
+  }
+}
+
+// Initialize theme from localStorage or system preference
+const initTheme = () => {
+  const savedTheme = localStorage.getItem(THEME_KEY)
+  if (savedTheme) {
+    isDark.value = savedTheme === 'dark'
+  } else {
+    isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+  }
+  applyTheme()
+
+  // Register system preference listener only during init, not at module load time
+  if (!systemPreferenceListener) {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    mediaQuery.addEventListener('change', onSystemPreferenceChange)
+    systemPreferenceListener = { mediaQuery, handler: onSystemPreferenceChange }
+  }
+}
+
+// Clean up listener when no longer needed
+const destroyTheme = () => {
+  if (systemPreferenceListener) {
+    systemPreferenceListener.mediaQuery.removeEventListener(
+      'change',
+      systemPreferenceListener.handler
+    )
+    systemPreferenceListener = null
   }
 }
 
@@ -40,21 +67,12 @@ const setTheme = (dark) => {
   applyTheme()
 }
 
-// Watch for system preference changes
-if (typeof window !== 'undefined') {
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    if (!localStorage.getItem(THEME_KEY)) {
-      isDark.value = e.matches
-      applyTheme()
-    }
-  })
-}
-
 export function useTheme() {
   return {
     isDark: readonly(isDark),
     toggleTheme,
     setTheme,
-    initTheme
+    initTheme,
+    destroyTheme
   }
 }

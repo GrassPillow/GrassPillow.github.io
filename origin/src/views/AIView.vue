@@ -103,34 +103,29 @@
       </div>
     </main>
 
-    <!-- Toast 提示 -->
-    <transition name="toast">
-      <div v-if="showToast" class="toast" :class="toastType">
-        {{ toastMessage }}
-      </div>
-    </transition>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, reactive, onMounted } from 'vue'
 import axios from 'axios'
 
-// 解析CSV数据
+// ─── CSV Parser ─────────────────────────────────────────────────────────────
+
 function parseCSV(csvText) {
   const lines = csvText.trim().split('\n')
   const headers = lines[0].split(',')
   const data = []
-  
+
   for (let i = 1; i < lines.length; i++) {
-    if (!lines[i].trim()) continue // 跳过空行
-    
+    if (!lines[i].trim()) continue
+
     const values = []
     let currentValue = ''
     let inQuotes = false
-    
+
     for (let j = 0; j < lines[i].length; j++) {
       const char = lines[i][j]
-      
       if (char === '"') {
         inQuotes = !inQuotes
       } else if (char === ',' && !inQuotes) {
@@ -141,180 +136,155 @@ function parseCSV(csvText) {
       }
     }
     values.push(currentValue.trim())
-    
+
     if (values.length === headers.length) {
       const site = {}
-      headers.forEach((header, index) => {
-        site[header] = values[index]
-      })
+      headers.forEach((header, index) => { site[header] = values[index] })
       data.push(site)
     }
   }
-  
+
   return data
 }
 
-export default {
-  name: 'AIView',
-  data() {
-    return {
-      aiWebsites: [],
-      searchQuery: '',
-      selectedCategory: '',
-      categories: [
-        { value: 'all', label: '全部' },
-        { value: 'chat', label: '💬 对话AI' },
-        { value: 'image', label: '🎨 图像生成' },
-        { value: 'code', label: '💻 代码助手' },
-        { value: 'writing', label: '✍️ 写作助手' },
-        { value: 'video', label: '🎬 视频生成' },
-        { value: 'design', label: '🎨 设计工具' },
-        { value: 'search', label: '🔍 搜索引擎' },
-        { value: 'audio', label: '🎵 音频工具' },
-        { value: 'navigation', label: '🗺️ 导航集合' }
-      ],
-      toastMessage: '',
-      showToast: false,
-      toastType: 'success',
-      collapsedCategories: {} // 跟踪每个分类的折叠状态
+// ─── Category name mapping ──────────────────────────────────────────────────
+
+const CATEGORY_NAMES = {
+  chat: '💬 对话AI',
+  image: '🎨 图像生成',
+  code: '💻 代码助手',
+  writing: '✍️ 写作助手',
+  video: '🎬 视频生成',
+  design: '🎨 设计工具',
+  search: '🔍 搜索引擎',
+  audio: '🎵 音频工具',
+  navigation: '🗺️ 导航集合',
+}
+
+const FALLBACK_SITES = [
+  { name: 'ChatGPT', url: 'https://chat.openai.com', description: 'OpenAI开发的对话AI助手', category: 'chat' },
+  { name: 'Claude', url: 'https://claude.ai', description: 'Anthropic开发的AI助手', category: 'chat' },
+  { name: 'Midjourney', url: 'https://www.midjourney.com', description: 'AI图像生成工具', category: 'image' },
+  { name: 'DALL-E', url: 'https://openai.com/dall-e-2', description: 'OpenAI的图像生成AI', category: 'image' },
+  { name: 'Stable Diffusion', url: 'https://stability.ai', description: '开源的图像生成模型', category: 'image' },
+  { name: 'GitHub Copilot', url: 'https://github.com/features/copilot', description: 'AI代码助手', category: 'code' },
+  { name: 'Cursor', url: 'https://cursor.sh', description: 'AI驱动的代码编辑器', category: 'code' },
+  { name: 'Notion AI', url: 'https://www.notion.so/product/ai', description: 'AI写作助手', category: 'writing' },
+  { name: 'Jasper', url: 'https://www.jasper.ai', description: 'AI内容创作平台', category: 'writing' },
+  { name: 'Runway', url: 'https://runwayml.com', description: 'AI视频生成工具', category: 'video' },
+  { name: 'Figma AI', url: 'https://www.figma.com', description: 'AI设计工具', category: 'design' },
+  { name: 'Perplexity', url: 'https://www.perplexity.ai', description: 'AI搜索引擎', category: 'other' },
+]
+
+// ─── State ──────────────────────────────────────────────────────────────────
+
+const aiWebsites = ref([])
+const searchQuery = ref('')
+const selectedCategory = ref('')
+const collapsedCategories = reactive({})
+
+const categories = [
+  { value: 'all', label: '全部' },
+  { value: 'chat', label: '💬 对话AI' },
+  { value: 'image', label: '🎨 图像生成' },
+  { value: 'code', label: '💻 代码助手' },
+  { value: 'writing', label: '✍️ 写作助手' },
+  { value: 'video', label: '🎬 视频生成' },
+  { value: 'design', label: '🎨 设计工具' },
+  { value: 'search', label: '🔍 搜索引擎' },
+  { value: 'audio', label: '🎵 音频工具' },
+  { value: 'navigation', label: '🗺️ 导航集合' },
+]
+
+// ─── Computed ───────────────────────────────────────────────────────────────
+
+const filteredWebsites = computed(() => {
+  if (!aiWebsites.value?.length) return []
+
+  let filtered = aiWebsites.value
+
+  if (selectedCategory.value) {
+    filtered = filtered.filter(site => site.category === selectedCategory.value)
+  }
+
+  if (searchQuery.value?.trim()) {
+    const query = searchQuery.value.toLowerCase().trim()
+    filtered = filtered.filter(site =>
+      site.name.toLowerCase().includes(query) ||
+      site.description?.toLowerCase().includes(query) ||
+      site.url.toLowerCase().includes(query)
+    )
+  }
+
+  return filtered
+})
+
+const filteredCategorizedWebsites = computed(() => {
+  const groups = {}
+  filteredWebsites.value.forEach(site => {
+    if (site?.category) {
+      if (!groups[site.category]) groups[site.category] = []
+      groups[site.category].push(site)
     }
-  },
-  computed: {
-    filteredWebsites() {
-      if (!this.aiWebsites || !Array.isArray(this.aiWebsites)) {
-        return []
-      }
-      let filtered = this.aiWebsites
-      
-      // 分类筛选
-      if (this.selectedCategory) {
-        filtered = filtered.filter(site => site.category === this.selectedCategory)
-      }
-      
-      // 搜索筛选
-      if (this.searchQuery && this.searchQuery.trim()) {
-        const query = this.searchQuery.toLowerCase().trim()
-        filtered = filtered.filter(site => 
-          site.name.toLowerCase().includes(query) ||
-          (site.description && site.description.toLowerCase().includes(query)) ||
-          site.url.toLowerCase().includes(query)
-        )
-      }
-      
-      return filtered
-    },
-    filteredCategorizedWebsites() {
-      if (!this.filteredWebsites || !Array.isArray(this.filteredWebsites)) {
-        return {}
-      }
-      const categories = {}
-      this.filteredWebsites.forEach(site => {
-        if (site && site.category) {
-          if (!categories[site.category]) {
-            categories[site.category] = []
-          }
-          categories[site.category].push(site)
-        }
-      })
-      return categories
-    },
-    filteredWebsitesCount() {
-      return this.filteredWebsites ? this.filteredWebsites.length : 0
-    },
-    filteredCategoriesCount() {
-      if (!this.filteredCategorizedWebsites || typeof this.filteredCategorizedWebsites !== 'object') {
-        return 0
-      }
-      return Object.keys(this.filteredCategorizedWebsites).length
-    }
-  },
-  methods: {
-    getCategoryName(category) {
-      const names = {
-        chat: '💬 对话AI',
-        image: '🎨 图像生成',
-        code: '💻 代码助手',
-        writing: '✍️ 写作助手',
-        video: '🎬 视频生成',
-        design: '🎨 设计工具',
-        search: '🔍 搜索引擎',
-        audio: '🎵 音频工具',
-        navigation: '🗺️ 导航集合'
-      }
-      return names[category] || category
-    },
-    toggleCategory(category) {
-      // Vue 3 中可以直接设置对象属性，不需要 $set
-      this.collapsedCategories[category] = !this.collapsedCategories[category]
-    },
-    showToastMessage(message, type = 'success') {
-      // 使用全局 Toast
-      if (window.$toast) {
-        window.$toast[type](message)
-      } else {
-        // 降级到本地 Toast
-        this.toastMessage = message
-        this.toastType = type
-        this.showToast = true
-        setTimeout(() => {
-          this.showToast = false
-        }, 3000)
-      }
-    }
-  },
-  async mounted() {
-    try {
-      // 从CSV文件加载数据
-      const response = await axios.get('/ai-websites.csv')
-      const csvData = parseCSV(response.data)
-      this.aiWebsites = csvData
-      
-      // 从本地存储加载用户添加的网站（合并到CSV数据）
-      const saved = localStorage.getItem('aiWebsites')
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved)
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            // 合并本地存储的网站（避免重复）
-            parsed.forEach(savedSite => {
-              const exists = this.aiWebsites.some(site => 
-                site.url === savedSite.url || site.name === savedSite.name
-              )
-              if (!exists) {
-                this.aiWebsites.push(savedSite)
-              }
-            })
-          }
-        } catch (e) {
-          console.error('Failed to load saved websites from localStorage:', e)
-          this.showToastMessage('加载本地保存的网站失败', 'warning')
-        }
-      }
-      
-      if (this.aiWebsites.length > 0) {
-        this.showToastMessage(`成功加载 ${this.aiWebsites.length} 个AI网站`, 'success')
-      }
-    } catch (error) {
-      console.error('Failed to load AI websites from CSV:', error)
-      this.showToastMessage('加载AI网站数据失败，已使用默认数据', 'error')
-      // 如果加载失败，使用默认数据
-      this.aiWebsites = [
-        { name: 'ChatGPT', url: 'https://chat.openai.com', description: 'OpenAI开发的对话AI助手', category: 'chat' },
-        { name: 'Claude', url: 'https://claude.ai', description: 'Anthropic开发的AI助手', category: 'chat' },
-        { name: 'Midjourney', url: 'https://www.midjourney.com', description: 'AI图像生成工具', category: 'image' },
-        { name: 'DALL-E', url: 'https://openai.com/dall-e-2', description: 'OpenAI的图像生成AI', category: 'image' },
-        { name: 'Stable Diffusion', url: 'https://stability.ai', description: '开源的图像生成模型', category: 'image' },
-        { name: 'GitHub Copilot', url: 'https://github.com/features/copilot', description: 'AI代码助手', category: 'code' },
-        { name: 'Cursor', url: 'https://cursor.sh', description: 'AI驱动的代码编辑器', category: 'code' },
-        { name: 'Notion AI', url: 'https://www.notion.so/product/ai', description: 'AI写作助手', category: 'writing' },
-        { name: 'Jasper', url: 'https://www.jasper.ai', description: 'AI内容创作平台', category: 'writing' },
-        { name: 'Runway', url: 'https://runwayml.com', description: 'AI视频生成工具', category: 'video' },
-        { name: 'Figma AI', url: 'https://www.figma.com', description: 'AI设计工具', category: 'design' },
-        { name: 'Perplexity', url: 'https://www.perplexity.ai', description: 'AI搜索引擎', category: 'other' }
-      ]
-    }
+  })
+  return groups
+})
+
+const filteredWebsitesCount = computed(() => filteredWebsites.value.length)
+
+const filteredCategoriesCount = computed(() =>
+  Object.keys(filteredCategorizedWebsites.value).length
+)
+
+// ─── Methods ────────────────────────────────────────────────────────────────
+
+const getCategoryName = (category) => CATEGORY_NAMES[category] || category
+
+const toggleCategory = (category) => {
+  collapsedCategories[category] = !collapsedCategories[category]
+}
+
+const showToast = (message, type = 'success') => {
+  if (window.$toast?.[type]) {
+    window.$toast[type](message)
   }
 }
+
+// ─── Data Loading ───────────────────────────────────────────────────────────
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('/ai-websites.csv')
+    const csvData = parseCSV(response.data)
+    aiWebsites.value = csvData
+
+    // Merge user-added sites from localStorage
+    const saved = localStorage.getItem('aiWebsites')
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved)
+        if (Array.isArray(parsed)?.length) {
+          parsed.forEach(savedSite => {
+            const exists = aiWebsites.value.some(site =>
+              site.url === savedSite.url || site.name === savedSite.name
+            )
+            if (!exists) aiWebsites.value.push(savedSite)
+          })
+        }
+      } catch {
+        showToast('加载本地保存的网站失败', 'warning')
+      }
+    }
+
+    if (aiWebsites.value.length > 0) {
+      showToast(`成功加载 ${aiWebsites.value.length} 个AI网站`)
+    }
+  } catch (error) {
+    console.error('Failed to load AI websites from CSV:', error)
+    showToast('加载AI网站数据失败，已使用默认数据', 'error')
+    aiWebsites.value = FALLBACK_SITES
+  }
+})
 </script>
 
 <style scoped>
@@ -966,51 +936,6 @@ export default {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* Toast 提示 */
-.toast {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  padding: 1.2rem 1.8rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%);
-  backdrop-filter: blur(12px);
-  border-radius: 16px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25),
-              0 4px 16px rgba(45, 122, 107, 0.2),
-              inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  font-size: 1rem;
-  font-weight: 700;
-  z-index: 10000;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  border-left: 5px solid #2d7a6b;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-}
-
-.toast.success {
-  border-left-color: #2d7a6b;
-  color: #2d5a4f;
-  box-shadow: 0 12px 32px rgba(45, 122, 107, 0.3),
-              0 4px 16px rgba(45, 122, 107, 0.2);
-}
-
-.toast.error {
-  border-left-color: #c33;
-  color: #c33;
-  box-shadow: 0 12px 32px rgba(204, 51, 51, 0.3),
-              0 4px 16px rgba(204, 51, 51, 0.2);
-}
-
-.toast-enter-active,
-.toast-leave-active {
-  transition: all 0.3s ease;
-}
-
-.toast-enter-from,
-.toast-leave-to {
-  opacity: 0;
-  transform: translateX(100px);
-}
-
 /* 响应式设计 */
 @media (max-width: 1024px) {
   .websites-grid {
@@ -1080,16 +1005,5 @@ export default {
     padding: 1.5rem;
   }
 
-  .toast {
-    bottom: 1rem;
-    right: 1rem;
-    left: 1rem;
-    transform: none;
-  }
-
-  .toast-enter-from,
-  .toast-leave-to {
-    transform: translateY(100px);
-  }
 }
 </style>

@@ -80,7 +80,6 @@
           :key="`${book.title || 'book'}-${index}`"
           class="book-list-item"
           :style="{ '--cover-color': book.coverColor }"
-          @click="goToDetail(book.title)"
         >
           <div class="list-book-cover">
             <div class="list-cover-pattern"></div>
@@ -112,12 +111,10 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
 import axios from 'axios'
 import BookCard from '../components/BookCard.vue'
 import { useToast } from '../composables/useToast.js'
 
-const router = useRouter()
 const toast = useToast()
 
 const books = ref([])
@@ -138,14 +135,6 @@ const categories = ['全部', '科幻', '文学', '悬疑', '网文', '历史', 
 // 切换视图模式
 function toggleViewMode(mode) {
   viewMode.value = mode
-}
-
-// 跳转到图书详情
-function goToDetail(title) {
-  router.push({
-    path: '/book/detail',
-    query: { title: encodeURIComponent(title) }
-  })
 }
 
 // 过滤后的图书列表
@@ -645,11 +634,6 @@ onUnmounted(() => {
   transform: translateX(8px);
   box-shadow: 0 8px 24px rgba(45, 122, 107, 0.15),
               0 2px 8px rgba(139, 111, 71, 0.1);
-  cursor: pointer;
-}
-
-.book-list-item:active {
-  transform: translateX(4px);
 }
 
 .list-book-cover {

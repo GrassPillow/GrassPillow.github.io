@@ -1,5 +1,5 @@
 <template>
-  <div class="book-card" :style="{ '--cover-color': coverColor }" @click="goToDetail">
+  <div class="book-card" :style="{ '--cover-color': coverColor }">
     <div class="book-cover">
       <div class="cover-pattern"></div>
       <div class="cover-title">{{ title }}</div>
@@ -14,12 +14,7 @@
 </template>
 
 <script setup>
-/* eslint-disable no-undef */
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-const props = defineProps({
+defineProps({
   title: {
     type: String,
     required: true
@@ -41,13 +36,6 @@ const props = defineProps({
     required: true
   }
 })
-
-function goToDetail() {
-  router.push({
-    path: '/book/detail',
-    query: { title: encodeURIComponent(props.title) }
-  })
-}
 </script>
 
 <style scoped>
@@ -70,11 +58,6 @@ function goToDetail() {
   transform: translateY(-8px);
   box-shadow: 0 12px 32px rgba(45, 122, 107, 0.2),
               0 4px 12px rgba(139, 111, 71, 0.15);
-  cursor: pointer;
-}
-
-.book-card:active {
-  transform: translateY(-4px);
 }
 
 .book-cover {

@@ -45,7 +45,7 @@ origin/src/
 
 **静态数据：** `books.csv`（阅读清单，含书名/作者/分类）、`ai-websites.csv`（AI工具导航）。由组件在构建时解析使用，不走 API。
 
-**核心依赖：** Vue 3、Vue Router 4、Ant Design Vue、Mapbox GL、高德地图 JSAPI Loader、Axios。
+**核心依赖：** Vue 3、Vue Router 4、高德地图 JSAPI Loader、Axios、@giscus/vue。
 
 **全局模式：**
 - Toast 通知通过 `window.$toast`（由 `Toast.vue` 暴露）和 `useToast()` composable 使用

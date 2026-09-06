@@ -121,7 +121,7 @@ const projects = ref([
     name: '地震监测系统',
     description: '实时展示全球地震数据，支持地图可视化和历史数据查询分析。',
     image: 'https://picsum.photos/seed/earthquake/400/250.jpg',
-    tags: ['Mapbox', '数据可视化', 'API'],
+    tags: ['高德地图', '数据可视化', 'API'],
     demo: '/tools/earthquake',
     github: null
   },

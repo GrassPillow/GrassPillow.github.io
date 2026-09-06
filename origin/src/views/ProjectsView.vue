@@ -108,7 +108,7 @@ const projects = ref([
     description: '实时展示全球地震数据的专业平台，支持地图可视化、历史数据查询和数据分析功能。',
     image: 'https://picsum.photos/seed/earthquake/600/400.jpg',
     category: 'tool',
-    tags: ['Mapbox', '数据可视化', 'REST API'],
+    tags: ['高德地图', '数据可视化', 'REST API'],
     demo: '/tools/earthquake',
     github: null
   },

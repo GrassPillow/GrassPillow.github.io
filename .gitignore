@@ -1,3 +1,10 @@
-origin/node_modules/
+/origin/node_modules/
 /origin/dist/
 /.idea/material_theme_project_new.xml
+
+# AI 工具配置目录
+.agents/
+.claude/
+.playwright-mcp/
+.superpowers/
+.workbuddy/

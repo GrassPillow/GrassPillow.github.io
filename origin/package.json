@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
@@ -37,16 +38,56 @@
       "eslint:recommended"
     ],
     "parserOptions": {
-      "parser": "@babel/eslint-parser",
-      "requireConfigFile": false
+      "parser": "@babel/eslint-parser"
     },
     "globals": {
       "defineProps": "readonly",
-      "defineEmits": "readonly"
+      "defineEmits": "readonly",
+      "defineExpose": "readonly"
     },
     "rules": {
-      "vue/multi-word-component-names": "off"
-    }
+      "vue/multi-word-component-names": "off",
+      "no-console": [
+        "warn",
+        {
+          "allow": [
+            "warn",
+            "error"
+          ]
+        }
+      ],
+      "no-unused-vars": [
+        "warn",
+        {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_"
+        }
+      ],
+      "vue/component-name-in-template-casing": [
+        "error",
+        "PascalCase"
+      ],
+      "vue/component-tags-order": [
+        "error",
+        {
+          "order": [
+            "template",
+            "script",
+            "style"
+          ]
+        }
+      ]
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/*.d.ts"
+        ],
+        "rules": {
+          "no-undef": "off"
+        }
+      }
+    ]
   },
   "browserslist": [
     "> 1%",

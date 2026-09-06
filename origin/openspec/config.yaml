@@ -1,0 +1,28 @@
+schema: spec-driven
+
+# Project context
+# Shown to AI when creating artifacts.
+context: |
+  GrassPillow 个人网站（Vue 3 + TypeScript 单页应用，托管于 GitHub Pages）。
+  - 技术栈：Vue 3（<script setup> + Composition API）、Vue Router 4（懒加载路由）、
+    Vue CLI 5（webpack）、高德地图 JSAPI Loader（@amap/amap-jsapi-loader）、
+    axios（加载 books.csv / ai-websites.csv 静态数据）、@giscus/vue（博客评论）
+  - 源码位于 origin/（Vue CLI 项目），仓库根目录是构建产物区：
+    由 deploy.sh 执行 npm run build 后将 origin/dist 复制到根目录，
+    部署时根目录非白名单内容会被删除 —— 不要把任何源文件/文档放在仓库根目录
+  - 常用命令（在 origin/ 下执行）：npm run serve / build / lint
+  - 约定：页面在 src/views，复用组件在 src/components，
+    composables 在 src/composables（useTheme、useToast 等，Toast 通过 window.$toast 调用）；
+    <router-view> 使用 PageTransition 做页面过渡动画
+  - OpenSpec 工作区位于 origin/openspec（CLI 需在 origin/ 目录下运行）
+
+# Per-artifact rules
+rules:
+  proposal:
+    - 用中文撰写
+    - 说明动机、目标与范围，必要时列出非目标（Non-goals）
+  specs:
+    - 仅描述可验证的能力/行为变更，尽量给出验收标准
+  tasks:
+    - 拆分为可在一次会话内完成的小任务
+    - 每个任务后注明如何验证（lint / build / 手动检查）

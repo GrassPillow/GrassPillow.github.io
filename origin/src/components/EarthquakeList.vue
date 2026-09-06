@@ -1,5 +1,13 @@
 <template>
-  <div class="earthquake-container">
+  <div class="earthquake-view">
+    <header class="earthquake-header">
+      <div class="header-content">
+        <h1 class="page-title">🌐 地震监测</h1>
+        <p class="page-subtitle">多源实时地震数据可视化，追踪全球动态</p>
+      </div>
+    </header>
+
+    <div class="earthquake-container">
     <!-- 在表格上方集成地图组件 -->
     <div class="map-section">
       <EarthquakeMap :earthquake-data="dataSource" />
@@ -136,6 +144,7 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script setup>
@@ -165,6 +174,29 @@ const getLatestTimestamp = () => lastUpdated.value.toLocaleString('zh-CN')
 </script>
 
 <style scoped>
+.earthquake-view {
+  background: var(--bg-primary);
+  min-height: 100vh;
+  padding-bottom: 3rem;
+}
+
+/* 页面头部 */
+.earthquake-header {
+  position: relative;
+  background: var(--gradient-hero);
+  padding: 72px 20px 96px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.earthquake-header .page-title {
+  font-size: 3rem;
+}
+
+.earthquake-header .page-subtitle {
+  font-size: 1.15rem;
+}
+
 .earthquake-container {
   width: 100%;
   max-width: 1200px;
@@ -175,15 +207,16 @@ const getLatestTimestamp = () => lastUpdated.value.toLocaleString('zh-CN')
 /* 地图区域样式 */
 .map-section {
   margin-bottom: 2rem;
-  background: white;
-  border-radius: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-sm);
   transition: all 0.3s ease;
 }
 
 .map-section:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-md);
 }
 
 /* 错误提示横幅 */
@@ -231,11 +264,11 @@ const getLatestTimestamp = () => lastUpdated.value.toLocaleString('zh-CN')
 }
 
 .stats-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-radius: 12px;
+  background: var(--gradient-primary);
+  color: #fff;
+  border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .stats-header {
@@ -373,10 +406,11 @@ const getLatestTimestamp = () => lastUpdated.value.toLocaleString('zh-CN')
 /* 筛选工具栏 */
 .filter-section {
   margin-bottom: 1.5rem;
-  background: white;
-  border-radius: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-sm);
 }
 
 .filter-toolbar {
@@ -394,24 +428,26 @@ const getLatestTimestamp = () => lastUpdated.value.toLocaleString('zh-CN')
 
 .filter-group label {
   font-weight: 500;
-  color: #333;
+  color: var(--text-primary);
   white-space: nowrap;
 }
 
 .filter-select,
 .filter-input {
   padding: 0.5rem 0.75rem;
-  border: 1px solid #d9d9d9;
-  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
   font-size: 0.9rem;
+  color: var(--text-primary);
+  background: var(--card-bg);
   transition: all 0.3s ease;
 }
 
 .filter-select:focus,
 .filter-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--border-color);
 }
 
 .filter-input {
@@ -420,48 +456,48 @@ const getLatestTimestamp = () => lastUpdated.value.toLocaleString('zh-CN')
 
 .clear-btn {
   padding: 0.5rem 1rem;
-  background: #f5f5f5;
-  border: 1px solid #d9d9d9;
-  border-radius: 6px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-secondary);
   transition: all 0.3s ease;
   margin-left: auto;
 }
 
 .clear-btn:hover {
-  background: #e6e6e6;
-  border-color: #999;
-  color: #333;
+  background: var(--bg-secondary);
+  border-color: var(--text-muted);
+  color: var(--text-primary);
 }
 
 /* 表格区域样式 */
 .table-section {
-  background: white;
-  border-radius: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-sm);
   margin-bottom: 2rem;
 }
 
 .table-header {
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .table-header h2 {
   margin: 0;
-  color: #333;
+  color: var(--text-primary);
   font-size: 1.6rem;
   font-weight: 600;
 }
 
 .table-wrapper {
-  overflow-x: auto;
-  border-radius: 8px;
-  border: 1px solid #f0f0f0;
+  overflow: hidden;
+  border-radius: 12px;
 }
 
 .earthquake-table {
@@ -470,6 +506,18 @@ const getLatestTimestamp = () => lastUpdated.value.toLocaleString('zh-CN')
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .earthquake-header {
+    padding: 56px 16px 72px;
+  }
+
+  .earthquake-header .page-title {
+    font-size: 2.2rem;
+  }
+
+  .earthquake-header .page-subtitle {
+    font-size: 1rem;
+  }
+
   .earthquake-container {
     padding: 0 0.5rem;
   }

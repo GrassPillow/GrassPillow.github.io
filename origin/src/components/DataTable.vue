@@ -231,17 +231,19 @@ export default defineComponent({
   position: absolute;
   inset: 0;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(127, 127, 127, 0.14);
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 200px;
+  border-radius: 12px;
+  backdrop-filter: blur(1px);
 }
 .dt-spinner {
   width: 36px;
   height: 36px;
-  border: 3px solid #e8e8e8;
-  border-top-color: #667eea;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--primary-color);
   border-radius: 50%;
   animation: dt-spin 0.8s linear infinite;
 }
@@ -252,8 +254,9 @@ export default defineComponent({
 /* Scroll wrapper */
 .dt-scroll-wrapper {
   overflow: auto;
-  border: 1px solid #f0f0f0;
-  border-radius: 8px;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  background: var(--card-bg);
 }
 
 /* Table */
@@ -262,6 +265,7 @@ export default defineComponent({
   border-collapse: separate;
   border-spacing: 0;
   font-size: 14px;
+  color: var(--text-primary);
 }
 
 .dt-thead {
@@ -271,35 +275,25 @@ export default defineComponent({
 }
 
 .dt-th {
-  background: #fafafa;
+  background: var(--bg-tertiary);
   padding: 12px 16px;
   text-align: left;
   font-weight: 600;
-  color: #333;
-  border-bottom: 1px solid #f0f0f0;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
   white-space: nowrap;
   user-select: none;
   transition: background 0.2s;
-}
-.dt-th::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1px;
-  height: 60%;
-  background: #f0f0f0;
 }
 
 .dt-th-sortable {
   cursor: pointer;
 }
 .dt-th-sortable:hover {
-  background: #f0f0f0;
+  background: var(--bg-secondary);
 }
 .dt-sort-icon {
-  color: #999;
+  color: var(--text-muted);
   font-size: 12px;
 }
 
@@ -307,14 +301,15 @@ export default defineComponent({
   transition: background 0.2s;
 }
 .dt-row:hover {
-  background: #f0f7ff;
+  background: var(--bg-tertiary);
 }
 
 .dt-td {
   padding: 12px 16px;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid var(--border-light);
   vertical-align: middle;
   position: relative;
+  color: var(--text-primary);
 }
 
 .dt-td-ellipsis {
@@ -332,20 +327,20 @@ export default defineComponent({
   position: sticky;
   left: 0;
   z-index: 1;
-  background: #fff;
+  background: var(--card-bg);
 }
 .dt-row:hover .dt-cell-fixed-left {
-  background: #f0f7ff;
+  background: var(--bg-tertiary);
 }
 .dt-thead .dt-cell-fixed-left {
   z-index: 3;
-  background: #fafafa;
+  background: var(--bg-tertiary);
 }
 
 .dt-empty {
   text-align: center;
   padding: 60px 16px;
-  color: #999;
+  color: var(--text-muted);
   font-size: 14px;
 }
 
@@ -359,7 +354,7 @@ export default defineComponent({
   flex-wrap: wrap;
 }
 .dt-pagination-total {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 14px;
   margin-right: auto;
 }
@@ -372,53 +367,62 @@ export default defineComponent({
   min-width: 32px;
   height: 32px;
   padding: 0 6px;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--card-bg);
   cursor: pointer;
   font-size: 13px;
-  color: #333;
+  color: var(--text-primary);
   transition: all 0.2s;
 }
 .dt-pagination-controls button:hover:not(:disabled) {
-  border-color: #667eea;
-  color: #667eea;
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+.dt-pagination-controls button:focus-visible,
+.dt-page-size-select:focus-visible,
+.dt-jump-input:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 1px;
 }
 .dt-pagination-controls button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 .dt-page-active {
-  border-color: #667eea !important;
-  background: #667eea !important;
+  border-color: var(--primary-color) !important;
+  background: var(--primary-color) !important;
   color: #fff !important;
 }
 .dt-page-ellipsis {
   padding: 0 2px;
-  color: #999;
+  color: var(--text-muted);
 }
 .dt-pagination-extra {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #666;
+  color: var(--text-secondary);
 }
 .dt-page-size-select {
   padding: 4px 8px;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
   font-size: 13px;
-  background: #fff;
+  background: var(--card-bg);
+  color: var(--text-primary);
   cursor: pointer;
 }
 .dt-jump-input {
   width: 48px;
   padding: 4px 8px;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
   font-size: 13px;
   text-align: center;
+  background: var(--card-bg);
+  color: var(--text-primary);
 }
 
 /* Responsive */

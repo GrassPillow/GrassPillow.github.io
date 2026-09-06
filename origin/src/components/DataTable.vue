@@ -204,11 +204,9 @@ export default defineComponent({
     function renderCell(col, record) {
       const val = record[col.dataIndex]
       if (col.customRender) {
-        const result = col.customRender({ text: val, record })
-        if (typeof result === 'object' && result !== null) {
-          return () => result
-        }
-        return result
+        // 模板通过 <component :is="() => renderCell(...)"> 包裹渲染，
+        // 这里直接返回原始结果（字符串或 VNode），不要二次包成函数
+        return col.customRender({ text: val, record })
       }
       return val ?? ''
     }

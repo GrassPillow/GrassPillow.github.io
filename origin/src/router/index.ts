@@ -56,24 +56,9 @@ const routes = [
     meta: { title: '阅读清单 - GrassPillow' }
   },
   {
-    path: '/gallery',
-    component: () => import('../views/GalleryView.vue'),
-    meta: { title: '相册作品 - GrassPillow' }
-  },
-  {
     path: '/timeline',
     component: () => import('../views/TimelineView.vue'),
     meta: { title: '成长轨迹 - GrassPillow' }
-  },
-  {
-    path: '/todo',
-    component: () => import('../views/TodoView.vue'),
-    meta: { title: '待办清单 - GrassPillow' }
-  },
-  {
-    path: '/music',
-    component: () => import('../views/MusicView.vue'),
-    meta: { title: '音乐空间 - GrassPillow' }
   },
   {
     path: '/:pathMatch(.*)*',

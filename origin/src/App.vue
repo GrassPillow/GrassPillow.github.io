@@ -38,21 +38,9 @@
           <span class="nav-icon">📝</span>
           <span class="nav-label">博客</span>
         </router-link>
-        <router-link to="/gallery" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">🖼️</span>
-          <span class="nav-label">相册</span>
-        </router-link>
         <router-link to="/timeline" class="nav-item" @click="handleNavClick">
           <span class="nav-icon">📅</span>
           <span class="nav-label">时间线</span>
-        </router-link>
-        <router-link to="/todo" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">✅</span>
-          <span class="nav-label">待办</span>
-        </router-link>
-        <router-link to="/music" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">🎵</span>
-          <span class="nav-label">音乐</span>
         </router-link>
         <router-link to="/tools" class="nav-item" @click="handleNavClick">
           <span class="nav-icon">🛠️</span>

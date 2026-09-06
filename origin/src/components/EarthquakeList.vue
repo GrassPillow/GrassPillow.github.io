@@ -1,405 +1,3 @@
-<script setup>
-import axios from 'axios';
-import { ref, onMounted, onBeforeUnmount, computed, h } from 'vue';
-import EarthquakeMap from './EarthquakeMap.vue';
-import DataTable from './DataTable.vue'
-
-const columns = ref([]);
-const dataSource = ref([]);
-const filteredDataSource = ref([]);
-const loading = ref(true);
-const lastUpdated = ref(new Date());
-const magnitudeFilter = ref(null);
-const locationFilter = ref('');
-const sortOrder = ref(null);
-
-// 计算震级统计
-const magnitudeStats = computed(() => {
-  const stats = {
-    high: 0, // >= 7
-    medium: 0, // 5-7
-    low: 0, // 3-5
-    veryLow: 0 // < 3
-  };
-  
-  filteredDataSource.value.forEach(item => {
-    const mag = getMagnitudeValue(item);
-    if (mag >= 7) stats.high++;
-    else if (mag >= 5) stats.medium++;
-    else if (mag >= 3) stats.low++;
-    else stats.veryLow++;
-  });
-  
-  return stats;
-});
-
-// 获取震级数值
-const getMagnitudeValue = (item) => {
-  const mag = item.Magnitude || item.magnitude || item.M || item.leve;
-  return parseFloat(mag) || 0;
-};
-
-// 获取最新时间戳显示
-const getLatestTimestamp = () => {
-  return lastUpdated.value.toLocaleString('zh-CN');
-};
-
-// 格式化震级显示（返回VNode）
-const formatMagnitude = (value) => {
-  const magnitude = parseFloat(value);
-  if (isNaN(magnitude)) return value;
-  
-  let color = '#1890ff';
-  let bgColor = '#e6f7ff';
-  let label = '微小';
-  
-  if (magnitude >= 7) {
-    color = '#ff4d4f';
-    bgColor = '#fff1f0';
-    label = '重大';
-  } else if (magnitude >= 5) {
-    color = '#faad14';
-    bgColor = '#fffbe6';
-    label = '中等';
-  } else if (magnitude >= 3) {
-    color = '#52c41a';
-    bgColor = '#f6ffed';
-    label = '轻微';
-  }
-  
-  return h('span', {
-    style: {
-      display: 'inline-block',
-      padding: '2px 8px',
-      borderRadius: '4px',
-      fontWeight: 'bold',
-      color: color,
-      backgroundColor: bgColor
-    }
-  }, `${magnitude} ${label}`);
-};
-
-// 格式化时间显示
-const formatTime = (timeStr) => {
-  if (!timeStr) return '-';
-  try {
-    const date = new Date(timeStr);
-    if (isNaN(date.getTime())) return timeStr;
-    return date.toLocaleString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  } catch {
-    return timeStr;
-  }
-};
-
-// 刷新数据
-const refreshData = () => {
-  loadData();
-};
-
-// 应用筛选和排序
-const applyFilters = () => {
-  let filtered = [...dataSource.value];
-  
-  // 震级筛选
-  if (magnitudeFilter.value !== null) {
-    filtered = filtered.filter(item => {
-      const mag = getMagnitudeValue(item);
-      if (magnitudeFilter.value === 'high') return mag >= 7;
-      if (magnitudeFilter.value === 'medium') return mag >= 5 && mag < 7;
-      if (magnitudeFilter.value === 'low') return mag >= 3 && mag < 5;
-      if (magnitudeFilter.value === 'veryLow') return mag < 3;
-      return true;
-    });
-  }
-  
-  // 位置筛选
-  if (locationFilter.value && locationFilter.value.trim()) {
-    const query = locationFilter.value.toLowerCase().trim();
-    filtered = filtered.filter(item => {
-      const location = item.Location || item.weizhi || '';
-      return location.toLowerCase().includes(query);
-    });
-  }
-  
-  // 排序
-  if (sortOrder.value) {
-    filtered.sort((a, b) => {
-      if (sortOrder.value === 'magnitude') {
-        return getMagnitudeValue(b) - getMagnitudeValue(a);
-      } else if (sortOrder.value === 'time') {
-        const timeA = a.OriginTime || a.time || a.addtime || '';
-        const timeB = b.OriginTime || b.time || b.addtime || '';
-        return new Date(timeB) - new Date(timeA);
-      }
-      return 0;
-    });
-  }
-  
-  filteredDataSource.value = filtered;
-};
-
-// 清除所有筛选
-const clearFilters = () => {
-  magnitudeFilter.value = null;
-  locationFilter.value = '';
-  sortOrder.value = null;
-  applyFilters();
-};
-
-// 数据加载函数
-async function loadData() {
-  loading.value = true;
-  try {
-    const response = await axios.get('https://api.wolfx.jp/cenc_eqlist.json');
-    
-    console.log('API Response:', response.data);
-    
-    if (response.data) {
-      let rawData = [];
-      
-      if (typeof response.data === 'object' && !Array.isArray(response.data)) {
-        rawData = Object.values(response.data);
-      } else if (Array.isArray(response.data)) {
-        rawData = response.data;
-      }
-      
-      if (rawData.length > 0) {
-        console.log('Raw Data Sample:', rawData[0]);
-        console.log('Data Structure Keys:', Object.keys(rawData[0]));
-        
-        // 处理中文字段和英文字段的映射
-        const processedData = rawData.map(item => {
-          const processedItem = { ...item };
-          
-          // 添加key字段
-          processedItem.key = item.EventID || item.ID || Math.random().toString(36).substr(2, 9);
-          
-          return processedItem;
-        });
-        
-        // 根据数据结构动态生成列配置，但使用更友好的标题
-        const firstItem = processedData[0];
-        const allFields = Object.keys(firstItem).filter(key => key !== 'key');
-        
-        // 定义需要隐藏的字段（不重要的技术字段）
-        const hiddenFields = [
-          'type', 'intensity', 'automatic', 'tourl', 'ID',
-          'EventID', // 隐藏事件ID列
-          'location', // 隐藏小写的location字段（保留大写的Location作为位置显示）
-          // 如果 Location 存在，隐藏 placeName（重复信息）
-          // 如果 OriginTime 存在，隐藏 ReportTime（优先显示发生时间）
-        ];
-        
-        // 定义字段映射关系（如果存在主要字段，隐藏次要字段）
-        const fieldMapping = {
-          // 位置字段：优先显示 Location/weizhi，隐藏 placeName
-          'placeName': ['Location', 'weizhi'],
-          // 时间字段：优先显示 OriginTime/time/addtime，隐藏 ReportTime
-          'ReportTime': ['OriginTime', 'time', 'addtime']
-        };
-        
-        // 过滤字段：移除隐藏字段和重复字段
-        let filteredFields = allFields.filter(key => {
-          // 移除隐藏字段
-          if (hiddenFields.includes(key)) return false;
-          
-          // 检查是否有主要字段存在，如果有则隐藏次要字段
-          if (fieldMapping[key]) {
-            const hasMainField = fieldMapping[key].some(mainKey => allFields.includes(mainKey));
-            if (hasMainField) return false;
-          }
-          
-          return true;
-        });
-        
-        // 定义列优先级顺序（重要列优先）
-        const columnPriority = {
-          'Magnitude': 1, 'magnitude': 1, 'M': 1, 'leve': 1,
-          'OriginTime': 2, 'time': 2, 'addtime': 2,
-          'Location': 3, 'weizhi': 3, 'placeName': 3,
-          'Depth': 4, 'shendu': 4,
-          'Latitude': 5, 'weidu': 5,
-          'Longitude': 6, 'jingdu': 6,
-          'EventID': 7,
-          'ReportTime': 8
-        };
-        
-        // 定义友好的中文标题映射
-        const titleMap = {
-          'Magnitude': '震级',
-          'magnitude': '震级',
-          'M': '震级',
-          'EventID': '事件ID',
-          'OriginTime': '发生时间',
-          'time': '发生时间',
-          'Location': '位置',
-          'placeName': '位置',
-          'Depth': '震源深度(km)',
-          'Latitude': '纬度',
-          'Longitude': '经度',
-          'leve': '震级',
-          'addtime': '发生时间',
-          'weidu': '纬度',
-          'jingdu': '经度',
-          'shendu': '震源深度(km)',
-          'weizhi': '位置',
-          'ReportTime': '报告时间'
-        };
-        
-        // 按优先级排序字段
-        const sortedFields = filteredFields.sort((a, b) => {
-          const priorityA = columnPriority[a] || 999;
-          const priorityB = columnPriority[b] || 999;
-          return priorityA - priorityB;
-        });
-        
-        const generatedColumns = sortedFields.map(key => {
-          const columnConfig = {
-            title: titleMap[key] || key,
-            dataIndex: key,
-            key: key,
-            width: 150,
-            ellipsis: true
-          };
-          
-          // 为震级字段添加自定义渲染和固定列
-          if (['Magnitude', 'magnitude', 'M', 'leve'].includes(key)) {
-            columnConfig.customRender = ({ text }) => formatMagnitude(text);
-            columnConfig.width = 120;
-            columnConfig.fixed = 'left';
-            columnConfig.sorter = (a, b) => getMagnitudeValue(a) - getMagnitudeValue(b);
-          }
-          
-          // 为时间字段添加格式化
-          if (['OriginTime', 'time', 'addtime', 'ReportTime'].includes(key)) {
-            columnConfig.customRender = ({ text }) => formatTime(text);
-            columnConfig.width = 180;
-            columnConfig.sorter = (a, b) => {
-              const timeA = a[key] || '';
-              const timeB = b[key] || '';
-              return new Date(timeB) - new Date(timeA);
-            };
-          }
-          
-          // 为位置字段调整宽度
-          if (['Location', 'weizhi', 'placeName'].includes(key)) {
-            columnConfig.width = 280;
-          }
-          
-          // 为深度字段添加单位，自适应宽度
-          if (['Depth', 'shendu', 'depth'].includes(key)) {
-            columnConfig.customRender = ({ text }) => {
-              const depth = parseFloat(text);
-              return isNaN(depth) ? text : `${depth} km`;
-            };
-            // 移除固定宽度，让列自适应内容
-            delete columnConfig.width;
-            columnConfig.minWidth = 90;
-          }
-          
-          // 为经纬度字段格式化，自适应宽度
-          if (['Latitude', 'weidu', 'latitude'].includes(key)) {
-            columnConfig.customRender = ({ text }) => {
-              const lat = parseFloat(text);
-              return isNaN(lat) ? text : `${lat.toFixed(2)}°`;
-            };
-            // 移除固定宽度，让列自适应内容
-            delete columnConfig.width;
-            columnConfig.minWidth = 80;
-          }
-          
-          if (['Longitude', 'jingdu', 'longitude'].includes(key)) {
-            columnConfig.customRender = ({ text }) => {
-              const lng = parseFloat(text);
-              return isNaN(lng) ? text : `${lng.toFixed(2)}°`;
-            };
-            // 移除固定宽度，让列自适应内容
-            delete columnConfig.width;
-            columnConfig.minWidth = 80;
-          }
-          
-          return columnConfig;
-        });
-        
-        // 一次性设置列配置和数据源
-        columns.value = generatedColumns;
-        dataSource.value = processedData;
-        filteredDataSource.value = processedData;
-        lastUpdated.value = new Date();
-        
-        // 应用初始筛选
-        applyFilters();
-        
-        console.log('Processed dataSource length:', dataSource.value.length);
-      }
-    }
-  } catch (error) {
-    console.error('Failed to fetch data:', error);
-  } finally {
-    loading.value = false;
-  }
-}
-
-// 定义清理函数变量
-let cleanupErrorHandler = null;
-
-// 处理ResizeObserver循环错误的增强方法
-const handleResizeObserverError = () => {
-  // 创建一个ResizeObserver错误处理器
-  const resizeObserverErrHandler = (e) => {
-    // 检查是否是ResizeObserver loop错误
-    const isResizeObserverError = 
-      e.type === 'error' && 
-      e.message && 
-      (e.message.includes('ResizeObserver loop') || 
-       e.message.includes('ResizeObserver loop completed with undelivered notifications'));
-    
-    if (isResizeObserverError) {
-      // 这是一个已知的浏览器错误，我们可以安全地忽略它
-      console.warn('ResizeObserver loop error caught and handled');
-      // 防止错误冒泡到控制台
-      if (e.preventDefault) {
-        e.preventDefault();
-      }
-      return true;
-    }
-    return false;
-  };
-
-  // 添加错误事件监听器
-  window.addEventListener('error', resizeObserverErrHandler, { capture: true });
-  
-  // 返回清理函数
-  return () => {
-    // 确保移除监听器
-    window.removeEventListener('error', resizeObserverErrHandler, { capture: true });
-  };
-};
-
-onMounted(() => {
-  // 处理ResizeObserver错误
-  cleanupErrorHandler = handleResizeObserverError();
-  
-  // 加载数据
-  loadData();
-});
-
-// 确保onBeforeUnmount在顶层，而不是嵌套在onMounted中
-onBeforeUnmount(() => {
-  // 确保清理错误处理器
-  if (typeof cleanupErrorHandler === 'function') {
-    cleanupErrorHandler();
-    cleanupErrorHandler = null;
-  }
-});
-</script>
-
 <template>
   <div class="earthquake-container">
     <!-- 在表格上方集成地图组件 -->
@@ -412,7 +10,7 @@ onBeforeUnmount(() => {
       <div class="stats-card">
         <div class="stats-header">
           <h3>数据概览</h3>
-          <button class="refresh-btn" @click="refreshData" :disabled="loading">
+          <button class="refresh-btn" @click="loadData" :disabled="loading">
             <span class="refresh-icon">🔄</span>
             {{ loading ? '加载中...' : '刷新数据' }}
           </button>
@@ -514,6 +112,29 @@ onBeforeUnmount(() => {
     </div>
   </div>
 </template>
+
+<script setup>
+import EarthquakeMap from './EarthquakeMap.vue'
+import DataTable from './DataTable.vue'
+import { useEarthquakeData } from '../composables/useEarthquakeData.js'
+
+const {
+  columns,
+  dataSource,
+  filteredDataSource,
+  loading,
+  lastUpdated,
+  magnitudeFilter,
+  locationFilter,
+  sortOrder,
+  magnitudeStats,
+  applyFilters,
+  clearFilters,
+  loadData,
+} = useEarthquakeData()
+
+const getLatestTimestamp = () => lastUpdated.value.toLocaleString('zh-CN')
+</script>
 
 <style scoped>
 .earthquake-container {
@@ -837,13 +458,5 @@ onBeforeUnmount(() => {
     width: 100%;
   }
   
-  .clear-btn {
-    margin-left: 0;
-    width: 100%;
-  }
-  
-  .table-header h2 {
-    font-size: 1.3rem;
-  }
 }
 </style>

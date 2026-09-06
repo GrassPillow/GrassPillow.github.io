@@ -27,6 +27,11 @@ const routes = [
     meta: { title: '文章详情 - GrassPillow' }
   },
   {
+    path: '/blog/manage',
+    component: () => import('../views/BlogManageView.vue'),
+    meta: { title: '博客管理 - GrassPillow' }
+  },
+  {
     path: '/tools',
     redirect: '/tools/ai'
   },
@@ -69,6 +74,11 @@ const routes = [
     path: '/music',
     component: () => import('../views/MusicView.vue'),
     meta: { title: '音乐空间 - GrassPillow' }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    component: () => import('../views/NotFoundView.vue'),
+    meta: { title: '404 页面未找到 - GrassPillow' }
   },
 ]
 

@@ -283,18 +283,25 @@ body {
   transition: width 0.6s ease, height 0.6s ease;
 }
 
-.ball-button:hover::before {
-  width: 100px;
-  height: 100px;
+.ball-button:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 3px;
 }
 
-.ball-button:hover {
-  transform: scale(1.15);
-  box-shadow: 0 16px 40px rgba(45, 122, 107, 0.6),
-              0 8px 20px rgba(139, 111, 71, 0.5),
-              inset 0 2px 4px rgba(255, 255, 255, 0.4),
-              inset 0 -2px 4px rgba(0, 0, 0, 0.2);
-  border-color: rgba(255, 255, 255, 0.6);
+@media (hover: hover) {
+  .ball-button:hover::before {
+    width: 100px;
+    height: 100px;
+  }
+
+  .ball-button:hover {
+    transform: scale(1.15);
+    box-shadow: 0 16px 40px rgba(45, 122, 107, 0.6),
+                0 8px 20px rgba(139, 111, 71, 0.5),
+                inset 0 2px 4px rgba(255, 255, 255, 0.4),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.6);
+  }
 }
 
 .ball-button.active {

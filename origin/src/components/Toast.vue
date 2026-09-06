@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <teleport to="body">
     <transition-group name="toast" tag="div" class="toast-container">
@@ -18,8 +17,6 @@
 </template>
 
 <script setup>
-/* eslint-disable vue/multi-word-component-names */
-/* eslint-disable no-undef */
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const toasts = ref([])
@@ -62,10 +59,12 @@ defineExpose({
   removeToast
 })
 
-// 全局方法
+// Track whether this Toast instance owns the global $toast
+let ownsGlobalToast = false
+
 onMounted(() => {
-  // 确保 window.$toast 存在
   if (!window.$toast) {
+    ownsGlobalToast = true
     window.$toast = {
       success: (message, duration) => addToast(message, 'success', duration),
       error: (message, duration) => addToast(message, 'error', duration),
@@ -73,12 +72,14 @@ onMounted(() => {
       info: (message, duration) => addToast(message, 'info', duration)
     }
   }
+  // Signal to useToast composable that Toast is ready
+  window.dispatchEvent(new Event('toast:ready'))
 })
 
 onUnmounted(() => {
-  // 只在没有其他 Toast 实例时删除
-  if (window.$toast) {
+  if (ownsGlobalToast) {
     delete window.$toast
+    ownsGlobalToast = false
   }
 })
 </script>

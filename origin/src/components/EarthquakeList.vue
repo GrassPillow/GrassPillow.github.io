@@ -4,6 +4,14 @@
     <div class="map-section">
       <EarthquakeMap :earthquake-data="dataSource" />
     </div>
+
+    <!-- 数据加载失败/刷新失败提示 -->
+    <div v-if="errorMessage" class="error-banner" role="alert">
+      <span class="error-text">⚠️ {{ errorMessage }}</span>
+      <button class="error-retry" @click="loadData" :disabled="loading">
+        {{ loading ? '重试中...' : '重试' }}
+      </button>
+    </div>
     
     <!-- 数据统计卡片 -->
     <div class="stats-section">
@@ -11,7 +19,7 @@
         <div class="stats-header">
           <h3>数据概览</h3>
           <button class="refresh-btn" @click="loadData" :disabled="loading">
-            <span class="refresh-icon">🔄</span>
+            <span class="refresh-icon" :class="{ spinning: loading }">🔄</span>
             {{ loading ? '加载中...' : '刷新数据' }}
           </button>
         </div>
@@ -62,6 +70,15 @@
           </select>
         </div>
         <div class="filter-group">
+          <label>时间范围：</label>
+          <select v-model="timeRangeFilter" @change="applyFilters" class="filter-select">
+            <option value="all">全部</option>
+            <option value="24h">近 24 小时</option>
+            <option value="7d">近 7 天</option>
+            <option value="30d">近 30 天</option>
+          </select>
+        </div>
+        <div class="filter-group">
           <label>位置搜索：</label>
           <input 
             v-model="locationFilter" 
@@ -79,7 +96,7 @@
             <option value="time">按时间降序</option>
           </select>
         </div>
-        <button v-if="magnitudeFilter || locationFilter || sortOrder" @click="clearFilters" class="clear-btn">
+        <button v-if="magnitudeFilter || locationFilter || sortOrder || timeRangeFilter !== 'all'" @click="clearFilters" class="clear-btn">
           清除筛选
         </button>
       </div>
@@ -123,10 +140,12 @@ const {
   dataSource,
   filteredDataSource,
   loading,
+  errorMessage,
   lastUpdated,
   magnitudeFilter,
   locationFilter,
   sortOrder,
+  timeRangeFilter,
   magnitudeStats,
   applyFilters,
   clearFilters,
@@ -156,6 +175,45 @@ const getLatestTimestamp = () => lastUpdated.value.toLocaleString('zh-CN')
 
 .map-section:hover {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* 错误提示横幅 */
+.error-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: #fff1f0;
+  border: 1px solid #ffccc7;
+  border-radius: 12px;
+  padding: 0.9rem 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.error-text {
+  color: #cf1322;
+  font-size: 0.95rem;
+}
+
+.error-retry {
+  padding: 0.4rem 1rem;
+  background: #cf1322;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.error-retry:hover:not(:disabled) {
+  background: #a8071a;
+}
+
+.error-retry:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* 数据统计卡片样式 */
@@ -210,7 +268,10 @@ const getLatestTimestamp = () => lastUpdated.value.toLocaleString('zh-CN')
 
 .refresh-icon {
   display: inline-block;
-  animation: spin 2s linear infinite;
+}
+
+.refresh-icon.spinning {
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
@@ -457,6 +518,15 @@ const getLatestTimestamp = () => lastUpdated.value.toLocaleString('zh-CN')
     min-width: auto;
     width: 100%;
   }
-  
+
+  .error-banner {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .error-retry {
+    width: 100%;
+  }
 }
 </style>

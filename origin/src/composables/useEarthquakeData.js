@@ -41,11 +41,30 @@ export function formatTime(timeStr) {
     if (isNaN(date.getTime())) return timeStr
     return date.toLocaleString('zh-CN', {
       year: 'numeric', month: '2-digit', day: '2-digit',
-      hour: '2-digit', minute: '2-digit'
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      hour12: false,
     })
   } catch {
     return timeStr
   }
+}
+
+// ─── Field Helpers ──────────────────────────────────────────────────────────
+
+// 兼容中英文字段命名，取首个非空值
+export function getLocationText(item) {
+  return item.Location || item.weizhi || item.location || item.placeName || ''
+}
+
+export function getEventTimeText(item) {
+  return item.OriginTime || item.time || item.addtime || item.ReportTime || ''
+}
+
+export function getEventTimeValue(item) {
+  const value = getEventTimeText(item)
+  if (!value) return 0
+  const time = new Date(value).getTime()
+  return isNaN(time) ? 0 : time
 }
 
 // ─── Column Config Generation ───────────────────────────────────────────────
@@ -79,13 +98,21 @@ const TITLE_MAP = {
 }
 
 function generateColumns(processedData) {
-  const firstItem = processedData[0]
-  const allFields = Object.keys(firstItem).filter(k => k !== 'key')
+  // 取所有记录并集字段（仅统计出现过非空值的字段），避免依赖第一条记录导致缺列
+  const fieldSet = new Set()
+  processedData.forEach(item => {
+    Object.keys(item).forEach(key => {
+      const value = item[key]
+      if (key !== 'key' && value !== '' && value !== null && value !== undefined) {
+        fieldSet.add(key)
+      }
+    })
+  })
 
-  let filteredFields = allFields.filter(key => {
+  let filteredFields = [...fieldSet].filter(key => {
     if (HIDDEN_FIELDS.includes(key)) return false
     if (FIELD_MAPPING[key]) {
-      return !FIELD_MAPPING[key].some(mainKey => allFields.includes(mainKey))
+      return !FIELD_MAPPING[key].some(mainKey => fieldSet.has(mainKey))
     }
     return true
   })
@@ -110,12 +137,8 @@ function generateColumns(processedData) {
 
     if (['OriginTime', 'time', 'addtime', 'ReportTime'].includes(key)) {
       col.customRender = ({ text }) => formatTime(text)
-      col.width = 180
-      col.sorter = (a, b) => {
-        const timeA = a[key] || ''
-        const timeB = b[key] || ''
-        return new Date(timeB) - new Date(timeA)
-      }
+      col.width = 190
+      col.sorter = (a, b) => getEventTimeValue(b) - getEventTimeValue(a)
     }
 
     if (['Location', 'weizhi', 'placeName'].includes(key)) {
@@ -160,10 +183,18 @@ export function useEarthquakeData() {
   const dataSource = ref([])
   const filteredDataSource = ref([])
   const loading = ref(true)
+  const errorMessage = ref('')
   const lastUpdated = ref(new Date())
   const magnitudeFilter = ref(null)
   const locationFilter = ref('')
   const sortOrder = ref(null)
+  const timeRangeFilter = ref('all') // all | 24h | 7d | 30d
+
+  const TIME_RANGE_MS = {
+    '24h': 24 * 60 * 60 * 1000,
+    '7d': 7 * 24 * 60 * 60 * 1000,
+    '30d': 30 * 24 * 60 * 60 * 1000,
+  }
 
   // Magnitude statistics
   const magnitudeStats = computed(() => {
@@ -189,12 +220,17 @@ export function useEarthquakeData() {
       })
     }
 
+    if (timeRangeFilter.value !== 'all') {
+      const threshold = TIME_RANGE_MS[timeRangeFilter.value]
+      if (threshold) {
+        const now = Date.now()
+        filtered = filtered.filter(item => now - getEventTimeValue(item) <= threshold)
+      }
+    }
+
     if (locationFilter.value?.trim()) {
       const query = locationFilter.value.toLowerCase().trim()
-      filtered = filtered.filter(item => {
-        const loc = item.Location || item.weizhi || ''
-        return loc.toLowerCase().includes(query)
-      })
+      filtered = filtered.filter(item => getLocationText(item).toLowerCase().includes(query))
     }
 
     if (sortOrder.value) {
@@ -203,9 +239,7 @@ export function useEarthquakeData() {
           return getMagnitudeValue(b) - getMagnitudeValue(a)
         }
         if (sortOrder.value === 'time') {
-          const timeA = a.OriginTime || a.time || a.addtime || ''
-          const timeB = b.OriginTime || b.time || b.addtime || ''
-          return new Date(timeB).getTime() - new Date(timeA).getTime()
+          return getEventTimeValue(b) - getEventTimeValue(a)
         }
         return 0
       })
@@ -218,14 +252,18 @@ export function useEarthquakeData() {
     magnitudeFilter.value = null
     locationFilter.value = ''
     sortOrder.value = null
+    timeRangeFilter.value = 'all'
     applyFilters()
   }
 
   async function loadData() {
     loading.value = true
+    errorMessage.value = ''
     try {
       const response = await axios.get(API_URL)
-      if (!response.data) return
+      if (!response.data) {
+        throw new Error('empty response')
+      }
 
       let rawData = []
       if (typeof response.data === 'object' && !Array.isArray(response.data)) {
@@ -234,20 +272,31 @@ export function useEarthquakeData() {
         rawData = response.data
       }
 
-      if (rawData.length > 0) {
-        const processedData = rawData.map(item => ({
-          ...item,
-          key: item.EventID || item.ID || Math.random().toString(36).substring(2, 11),
-        }))
+      // 数据对象中混入了 md5 等非记录字段，仅保留含震级/时间的记录
+      rawData = rawData.filter(item =>
+        item && typeof item === 'object' &&
+        (getMagnitudeValue(item) > 0 || getEventTimeText(item))
+      )
 
-        columns.value = generateColumns(processedData)
-        dataSource.value = processedData
-        filteredDataSource.value = processedData
-        lastUpdated.value = new Date()
-        applyFilters()
+      if (rawData.length === 0) {
+        throw new Error('no earthquake records')
       }
+
+      const processedData = rawData.map(item => ({
+        ...item,
+        key: item.EventID || item.ID || Math.random().toString(36).substring(2, 11),
+      }))
+
+      columns.value = generateColumns(processedData)
+      dataSource.value = processedData
+      filteredDataSource.value = processedData
+      lastUpdated.value = new Date()
+      applyFilters()
     } catch (error) {
       console.error('Failed to fetch earthquake data:', error)
+      errorMessage.value = dataSource.value.length
+        ? '刷新失败，当前展示上次加载的数据'
+        : '加载地震数据失败，请检查网络后重试'
     } finally {
       loading.value = false
     }
@@ -263,10 +312,12 @@ export function useEarthquakeData() {
     dataSource,
     filteredDataSource,
     loading,
+    errorMessage,
     lastUpdated,
     magnitudeFilter,
     locationFilter,
     sortOrder,
+    timeRangeFilter,
     magnitudeStats,
     applyFilters,
     clearFilters,

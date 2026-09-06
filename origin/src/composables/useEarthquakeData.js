@@ -1,7 +1,15 @@
 import { ref, computed, onMounted, h } from 'vue'
 import axios from 'axios'
 
-const API_URL = 'https://api.wolfx.jp/cenc_eqlist.json'
+// ─── Data Sources ────────────────────────────────────────────────────────────
+
+const CENC_API_URL = 'https://api.wolfx.jp/cenc_eqlist.json'
+const USGS_API_URL = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson'
+
+const SOURCE_CONFIGS = [
+  { id: 'cenc', label: 'CENC', url: CENC_API_URL },
+  { id: 'usgs', label: 'USGS', url: USGS_API_URL },
+]
 
 // ─── Formatters ─────────────────────────────────────────────────────────────
 
@@ -67,9 +75,66 @@ export function getEventTimeValue(item) {
   return isNaN(time) ? 0 : time
 }
 
+// ─── Source Adapters ────────────────────────────────────────────────────────
+
+function toKey(sourceId, fallback) {
+  return `${sourceId}-${fallback || Math.random().toString(36).substring(2, 11)}`
+}
+
+// wolfx CENC：对象键 No1..NoN，可能混入 md5 等非记录字段
+async function fetchCencRecords() {
+  const response = await axios.get(CENC_API_URL, { timeout: 15000 })
+  if (!response.data) return []
+
+  let rawData = []
+  if (typeof response.data === 'object' && !Array.isArray(response.data)) {
+    rawData = Object.values(response.data)
+  } else if (Array.isArray(response.data)) {
+    rawData = response.data
+  }
+
+  return rawData
+    .filter(item => item && typeof item === 'object' &&
+      (getMagnitudeValue(item) > 0 || getEventTimeText(item)))
+    .map(item => ({
+      ...item,
+      key: toKey('cenc', item.EventID || item.ID),
+      source: 'cenc',
+    }))
+}
+
+// USGS GeoJSON：properties + geometry.coordinates [lon, lat, depth]
+async function fetchUsgsRecords() {
+  const response = await axios.get(USGS_API_URL, { timeout: 15000 })
+  const features = response?.data?.features
+  if (!Array.isArray(features)) return []
+
+  return features
+    .filter(feature => feature?.geometry?.coordinates?.length >= 2)
+    .map(feature => {
+      const { properties: p, geometry: g, id } = feature
+      const [longitude, latitude, depth] = g.coordinates
+      return {
+        key: toKey('usgs', id || p.net + p.code),
+        time: p.time ? new Date(p.time).toISOString() : '',
+        location: p.place || '',
+        placeName: p.place || '',
+        magnitude: p.mag ?? '',
+        depth: depth != null ? depth : '',
+        latitude: latitude != null ? latitude : '',
+        longitude: longitude != null ? longitude : '',
+        source: 'usgs',
+        url: p.url || '',
+      }
+    })
+}
+
 // ─── Column Config Generation ───────────────────────────────────────────────
 
-const HIDDEN_FIELDS = ['type', 'intensity', 'automatic', 'tourl', 'ID', 'EventID', 'location']
+const HIDDEN_FIELDS = [
+  'type', 'intensity', 'automatic', 'tourl', 'ID', 'EventID', 'location',
+  'MagnitudeType', 'DepthType', 'Catalog', 'net', 'code', 'md5',
+]
 
 const FIELD_MAPPING = {
   placeName: ['Location', 'weizhi'],
@@ -83,7 +148,7 @@ const COLUMN_PRIORITY = {
   Depth: 4, shendu: 4,
   Latitude: 5, weidu: 5,
   Longitude: 6, jingdu: 6,
-  EventID: 7, ReportTime: 8,
+  EventID: 7, ReportTime: 8, source: 9, url: 10,
 }
 
 const TITLE_MAP = {
@@ -95,6 +160,8 @@ const TITLE_MAP = {
   Latitude: '纬度', weidu: '纬度',
   Longitude: '经度', jingdu: '经度',
   ReportTime: '报告时间',
+  source: '数据源',
+  url: '来源详情',
 }
 
 function generateColumns(processedData) {
@@ -172,6 +239,26 @@ function generateColumns(processedData) {
       col.minWidth = 80
     }
 
+    if (key === 'source') {
+      col.customRender = ({ text }) => (text ? text.toUpperCase() : '')
+      col.width = 80
+      col.filters = undefined
+    }
+
+    if (key === 'url') {
+      col.customRender = ({ text }) => {
+        if (!text) return ''
+        return h('a', {
+          href: text,
+          target: '_blank',
+          rel: 'noopener noreferrer',
+          style: 'color: #2d7a6b;',
+        }, '查看详情')
+      }
+      col.width = 90
+      col.ellipsis = false
+    }
+
     return col
   })
 }
@@ -189,6 +276,7 @@ export function useEarthquakeData() {
   const locationFilter = ref('')
   const sortOrder = ref(null)
   const timeRangeFilter = ref('all') // all | 24h | 7d | 30d
+  const sourceFilter = ref('all') // all | cenc | usgs
 
   const TIME_RANGE_MS = {
     '24h': 24 * 60 * 60 * 1000,
@@ -211,6 +299,10 @@ export function useEarthquakeData() {
 
   function applyFilters() {
     let filtered = [...dataSource.value]
+
+    if (sourceFilter.value !== 'all') {
+      filtered = filtered.filter(item => item.source === sourceFilter.value)
+    }
 
     if (magnitudeFilter.value !== null) {
       filtered = filtered.filter(item => {
@@ -253,53 +345,48 @@ export function useEarthquakeData() {
     locationFilter.value = ''
     sortOrder.value = null
     timeRangeFilter.value = 'all'
+    sourceFilter.value = 'all'
     applyFilters()
   }
 
   async function loadData() {
     loading.value = true
     errorMessage.value = ''
-    try {
-      const response = await axios.get(API_URL)
-      if (!response.data) {
-        throw new Error('empty response')
+    const failures = []
+
+    const results = await Promise.all(SOURCE_CONFIGS.map(async source => {
+      try {
+        if (source.id === 'cenc') return await fetchCencRecords()
+        return await fetchUsgsRecords()
+      } catch (error) {
+        failures.push(source.label)
+        console.error(`Failed to fetch earthquake data from ${source.label}:`, error)
+        return []
       }
+    }))
 
-      let rawData = []
-      if (typeof response.data === 'object' && !Array.isArray(response.data)) {
-        rawData = Object.values(response.data)
-      } else if (Array.isArray(response.data)) {
-        rawData = response.data
-      }
-
-      // 数据对象中混入了 md5 等非记录字段，仅保留含震级/时间的记录
-      rawData = rawData.filter(item =>
-        item && typeof item === 'object' &&
-        (getMagnitudeValue(item) > 0 || getEventTimeText(item))
-      )
-
-      if (rawData.length === 0) {
-        throw new Error('no earthquake records')
-      }
-
-      const processedData = rawData.map(item => ({
-        ...item,
-        key: item.EventID || item.ID || Math.random().toString(36).substring(2, 11),
-      }))
-
-      columns.value = generateColumns(processedData)
-      dataSource.value = processedData
-      filteredDataSource.value = processedData
-      lastUpdated.value = new Date()
-      applyFilters()
-    } catch (error) {
-      console.error('Failed to fetch earthquake data:', error)
-      errorMessage.value = dataSource.value.length
-        ? '刷新失败，当前展示上次加载的数据'
-        : '加载地震数据失败，请检查网络后重试'
-    } finally {
+    const allData = results.flat()
+    if (allData.length === 0) {
+      errorMessage.value = failures.length
+        ? `地震数据加载失败（${failures.join('、')}），请检查网络后重试`
+        : '未获取到地震数据'
       loading.value = false
+      return
     }
+
+    // 合并后按发生时间降序，保证跨源展示时间有序
+    allData.sort((a, b) => getEventTimeValue(b) - getEventTimeValue(a))
+
+    columns.value = generateColumns(allData)
+    dataSource.value = allData
+    filteredDataSource.value = allData
+    lastUpdated.value = new Date()
+    applyFilters()
+
+    if (failures.length) {
+      errorMessage.value = `部分数据源加载失败（${failures.join('、')}），当前展示其余数据源`
+    }
+    loading.value = false
   }
 
   // Load data on mount
@@ -318,6 +405,7 @@ export function useEarthquakeData() {
     locationFilter,
     sortOrder,
     timeRangeFilter,
+    sourceFilter,
     magnitudeStats,
     applyFilters,
     clearFilters,

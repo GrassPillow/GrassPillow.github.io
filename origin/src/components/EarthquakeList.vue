@@ -79,6 +79,14 @@
           </select>
         </div>
         <div class="filter-group">
+          <label>数据源：</label>
+          <select v-model="sourceFilter" @change="applyFilters" class="filter-select">
+            <option value="all">全部来源</option>
+            <option value="cenc">中国地震台网 (CENC)</option>
+            <option value="usgs">USGS</option>
+          </select>
+        </div>
+        <div class="filter-group">
           <label>位置搜索：</label>
           <input 
             v-model="locationFilter" 
@@ -96,7 +104,7 @@
             <option value="time">按时间降序</option>
           </select>
         </div>
-        <button v-if="magnitudeFilter || locationFilter || sortOrder || timeRangeFilter !== 'all'" @click="clearFilters" class="clear-btn">
+        <button v-if="magnitudeFilter || locationFilter || sortOrder || timeRangeFilter !== 'all' || sourceFilter !== 'all'" @click="clearFilters" class="clear-btn">
           清除筛选
         </button>
       </div>
@@ -146,6 +154,7 @@ const {
   locationFilter,
   sortOrder,
   timeRangeFilter,
+  sourceFilter,
   magnitudeStats,
   applyFilters,
   clearFilters,

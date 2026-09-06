@@ -16,7 +16,6 @@
             <div class="post-stats">
               <span class="post-views">👁 {{ post.views }} 阅读</span>
               <span class="post-likes">👍 {{ post.likes }} 赞</span>
-              <span class="post-comments">💬 {{ post.comments }} 评论</span>
             </div>
           </div>
         </div>
@@ -103,85 +102,14 @@
       </div>
     </div>
 
-    <div class="comments-section">
-      <h3 class="comments-title">评论 ({{ post.comments }})</h3>
-      
-      <div class="comment-form">
-        <div class="comment-avatar">
-          <img src="https://picsum.photos/seed/user/100/100.jpg" alt="用户头像" />
-        </div>
-        <div class="comment-input-area">
-          <textarea 
-            v-model="newComment"
-            placeholder="写下你的评论..."
-            class="comment-textarea"
-          ></textarea>
-          <div class="comment-actions">
-            <button class="submit-comment" @click="submitComment">发布评论</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="comments-list">
-        <div 
-          v-for="comment in comments" 
-          :key="comment.id"
-          class="comment-item"
-        >
-          <div class="comment-avatar">
-            <img :src="comment.avatar" :alt="comment.author" />
-          </div>
-          <div class="comment-content">
-            <div class="comment-header">
-              <span class="comment-author">{{ comment.author }}</span>
-              <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
-            </div>
-            <div class="comment-text">{{ comment.content }}</div>
-            <div class="comment-actions">
-              <button class="comment-action" @click="likeComment(comment.id)">
-                <span>{{ comment.isLiked ? '❤️' : '🤍' }}</span>
-                <span>{{ comment.likes }}</span>
-              </button>
-              <button class="comment-action" @click="replyToComment(comment.id)">
-                <span>💬</span>
-                <span>回复</span>
-              </button>
-            </div>
-            
-            <div v-if="comment.replies && comment.replies.length > 0" class="replies">
-              <div 
-                v-for="reply in comment.replies" 
-                :key="reply.id"
-                class="reply-item"
-              >
-                <div class="reply-avatar">
-                  <img :src="reply.avatar" :alt="reply.author" />
-                </div>
-                <div class="reply-content">
-                  <div class="reply-header">
-                    <span class="reply-author">{{ reply.author }}</span>
-                    <span class="reply-date">{{ formatDate(reply.createdAt) }}</span>
-                  </div>
-                  <div class="reply-text">{{ reply.content }}</div>
-                  <div class="reply-actions">
-                    <button class="comment-action" @click="likeReply(reply.id)">
-                      <span>{{ reply.isLiked ? '❤️' : '🤍' }}</span>
-                      <span>{{ reply.likes }}</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <CommentsSection />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
+import CommentsSection from '../components/CommentsSection.vue'
 
 const route = useRoute()
 
@@ -189,7 +117,6 @@ const route = useRoute()
 const postId = ref(parseInt(route.params.id))
 const isLiked = ref(false)
 const showShareMenu = ref(false)
-const newComment = ref('')
 const contentRef = ref(null)
 const tocItems = ref([])
 const activeTocId = ref('')
@@ -366,40 +293,6 @@ export default {
   }
 ])
 
-// 模拟评论数据
-const comments = ref([
-  {
-    id: 1,
-    author: '张三',
-    avatar: 'https://picsum.photos/seed/user1/100/100.jpg',
-    content: '非常详细的文章，对 Composition API 的解释很透彻！',
-    createdAt: new Date('2025-01-06'),
-    likes: 5,
-    isLiked: false,
-    replies: [
-      {
-        id: 11,
-        author: 'GrassPillow',
-        avatar: 'https://picsum.photos/seed/avatar/100/100.jpg',
-        content: '谢谢你的认可！很高兴这篇文章对你有帮助。',
-        createdAt: new Date('2025-01-06'),
-        likes: 2,
-        isLiked: false
-      }
-    ]
-  },
-  {
-    id: 2,
-    author: '李四',
-    avatar: 'https://picsum.photos/seed/user2/100/100.jpg',
-    content: '我在实际项目中使用了 Composition API，确实比 Options API 更灵活。但是学习成本有点高，特别是对于新手来说。',
-    createdAt: new Date('2025-01-07'),
-    likes: 3,
-    isLiked: false,
-    replies: []
-  }
-])
-
 // 分类和标签数据
 const categories = ref([
   { id: 1, name: '技术' },
@@ -473,47 +366,6 @@ const copyLink = () => {
   navigator.clipboard.writeText(window.location.href)
   alert('链接已复制到剪贴板')
   showShareMenu.value = false
-}
-
-const submitComment = () => {
-  if (!newComment.value.trim()) return
-  
-  const comment = {
-    id: comments.value.length + 1,
-    author: '当前用户',
-    avatar: 'https://picsum.photos/seed/currentuser/100/100.jpg',
-    content: newComment.value,
-    createdAt: new Date(),
-    likes: 0,
-    isLiked: false,
-    replies: []
-  }
-  
-  comments.value.unshift(comment)
-  post.value.comments++
-  newComment.value = ''
-}
-
-const likeComment = (commentId) => {
-  const comment = comments.value.find(c => c.id === commentId)
-  if (comment) {
-    comment.isLiked = !comment.isLiked
-    if (comment.isLiked) {
-      comment.likes++
-    } else {
-      comment.likes--
-    }
-  }
-}
-
-const replyToComment = (commentId) => {
-  // 实现回复功能
-  console.log('回复评论:', commentId)
-}
-
-const likeReply = (replyId) => {
-  // 实现回复点赞功能
-  console.log('点赞回复:', replyId)
 }
 
 // 生命周期
@@ -864,203 +716,12 @@ onUnmounted(() => {
   font-weight: 600;
 }
 
-.comments-section {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.comments-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0 0 1.5rem 0;
-  color: #333;
-}
-
-.comment-form {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.comment-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.comment-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.comment-input-area {
-  flex: 1;
-}
-
-.comment-textarea {
-  width: 100%;
-  min-height: 100px;
-  padding: 0.75rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  resize: vertical;
-  font-family: inherit;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.comment-textarea:focus {
-  outline: none;
-  border-color: #2d7a6b;
-}
-
-.comment-actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.submit-comment {
-  padding: 0.5rem 1.25rem;
-  background: linear-gradient(135deg, #2d7a6b 0%, #1e5a4a 100%);
-  color: white;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.submit-comment:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(45, 122, 107, 0.3);
-}
-
-.comments-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.comment-item {
-  display: flex;
-  gap: 1rem;
-}
-
-.comment-content {
-  flex: 1;
-}
-
-.comment-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-}
-
-.comment-author {
-  font-weight: 600;
-}
-
-.comment-date {
-  color: #999;
-  font-size: 0.875rem;
-}
-
-.comment-text {
-  margin-bottom: 0.75rem;
-  line-height: 1.6;
-}
-
-.comment-actions {
-  display: flex;
-  gap: 1rem;
-}
-
-.comment-action {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem 0.5rem;
-  border: none;
-  background: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  color: #666;
-  transition: background-color 0.3s;
-}
-
-.comment-action:hover {
-  background-color: #f5f5f5;
-}
-
-.replies {
-  margin-top: 1rem;
-  padding-left: 1rem;
-  border-left: 2px solid #f0f0f0;
-}
-
-.reply-item {
-  display: flex;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-}
-
-.reply-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.reply-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.reply-content {
-  flex: 1;
-}
-
-.reply-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.25rem;
-}
-
-.reply-author {
-  font-weight: 600;
-  font-size: 0.875rem;
-}
-
-.reply-date {
-  color: #999;
-  font-size: 0.75rem;
-}
-
-.reply-text {
-  font-size: 0.875rem;
-  margin-bottom: 0.5rem;
-  line-height: 1.5;
-}
-
-.reply-actions {
-  display: flex;
-  gap: 0.75rem;
-}
-
 @media (max-width: 768px) {
   .post-detail-view {
     padding: 1rem;
   }
   
-  .post-container, .comments-section {
+  .post-container {
     padding: 1.5rem;
   }
   
@@ -1070,10 +731,6 @@ onUnmounted(() => {
   
   .post-navigation {
     grid-template-columns: 1fr;
-  }
-  
-  .comment-form {
-    flex-direction: column;
   }
 }
 </style>

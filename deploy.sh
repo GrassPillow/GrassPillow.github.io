@@ -38,6 +38,8 @@ echo "构建完成 " $(date "+%Y-%m-%d %H:%M:%S")
 
 echo "开始复制 " $(date "+%Y-%m-%d %H:%M:%S")
 cd dist
+# 复制一份 index.html 为 404.html，作为 GitHub Pages 深链接（SPA 路由）兜底
+cp index.html 404.html
 # 复制dist文件夹下的所有文件和文件夹到上级的上级目录
 for item in * .*; do
   # 跳过 . 和 ..

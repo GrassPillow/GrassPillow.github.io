@@ -244,62 +244,39 @@ const tags = ref([
   { id: 7, name: '年度总结', color: '#FF6B6B' }
 ])
 
-// 计算属性
-const filteredPosts = computed(() => {
+// 计算属性 — 集中过滤后全量结果
+const filteredPostsAll = computed(() => {
   let result = [...posts.value]
-  
-  // 按搜索关键词过滤
+
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase()
-    result = result.filter(post => 
+    result = result.filter(post =>
       post.title.toLowerCase().includes(query) ||
       post.excerpt.toLowerCase().includes(query) ||
       post.content.toLowerCase().includes(query)
     )
   }
-  
-  // 按分类过滤
+
   if (selectedCategory.value) {
     result = result.filter(post => post.categoryId === selectedCategory.value)
   }
-  
-  // 按标签过滤
+
   if (selectedTags.value.length > 0) {
-    result = result.filter(post => 
+    result = result.filter(post =>
       selectedTags.value.some(tagId => post.tagIds.includes(tagId))
     )
   }
-  
-  // 分页
-  const startIndex = (currentPage.value - 1) * postsPerPage
-  const endIndex = startIndex + postsPerPage
-  return result.slice(startIndex, endIndex)
+
+  return result
 })
 
-const totalPages = computed(() => {
-  let result = [...posts.value]
-  
-  // 应用相同的过滤条件
-  if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase()
-    result = result.filter(post => 
-      post.title.toLowerCase().includes(query) ||
-      post.excerpt.toLowerCase().includes(query) ||
-      post.content.toLowerCase().includes(query)
-    )
-  }
-  
-  if (selectedCategory.value) {
-    result = result.filter(post => post.categoryId === selectedCategory.value)
-  }
-  
-  if (selectedTags.value.length > 0) {
-    result = result.filter(post => 
-      selectedTags.value.some(tagId => post.tagIds.includes(tagId))
-    )
-  }
-  
-  return Math.ceil(result.length / postsPerPage)
+const totalPages = computed(() =>
+  Math.ceil(filteredPostsAll.value.length / postsPerPage)
+)
+
+const filteredPosts = computed(() => {
+  const startIndex = (currentPage.value - 1) * postsPerPage
+  return filteredPostsAll.value.slice(startIndex, startIndex + postsPerPage)
 })
 
 // 方法

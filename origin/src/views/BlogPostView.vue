@@ -398,11 +398,11 @@ onUnmounted(() => {
 }
 
 .post-container {
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .post-header {
@@ -417,20 +417,21 @@ onUnmounted(() => {
 }
 
 .post-category {
-  color: #2d7a6b;
+  color: var(--primary-color);
   font-weight: 600;
 }
 
 .post-date {
-  color: #999;
+  color: var(--text-muted);
 }
 
 .post-title {
   font-size: 2.5rem;
-  font-weight: 800;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   margin: 0 0 1.5rem 0;
   line-height: 1.2;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .post-author-info {
@@ -466,7 +467,7 @@ onUnmounted(() => {
   display: flex;
   gap: 1rem;
   font-size: 0.875rem;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .post-tags {
@@ -498,7 +499,7 @@ onUnmounted(() => {
 .post-content {
   font-size: 1.1rem;
   line-height: 1.8;
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 2rem;
 }
 
@@ -506,14 +507,14 @@ onUnmounted(() => {
   font-size: 1.8rem;
   font-weight: 700;
   margin: 2rem 0 1rem 0;
-  color: #2d7a6b;
+  color: var(--primary-color);
 }
 
 .post-content h3 {
   font-size: 1.5rem;
   font-weight: 600;
   margin: 1.5rem 0 0.75rem 0;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .post-content p {
@@ -530,7 +531,8 @@ onUnmounted(() => {
 }
 
 .post-content pre {
-  background-color: #f5f5f5;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
   border-radius: 8px;
   padding: 1rem;
   overflow-x: auto;
@@ -543,10 +545,10 @@ onUnmounted(() => {
 }
 
 .post-content blockquote {
-  border-left: 4px solid #2d7a6b;
+  border-left: 4px solid var(--primary-color);
   padding-left: 1rem;
   margin: 1rem 0;
-  color: #666;
+  color: var(--text-secondary);
   font-style: italic;
 }
 
@@ -609,7 +611,7 @@ onUnmounted(() => {
 
 .toc-item.active {
   background: var(--primary-color);
-  color: #fff;
+  color: var(--text-on-accent);
 }
 
 @media (min-width: 1200px) {
@@ -635,15 +637,16 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.25rem;
-  border: 1px solid #e0e0e0;
-  background: white;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-primary);
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s;
 }
 
 .action-button:hover {
-  background-color: #f5f5f5;
+  background-color: var(--bg-secondary);
 }
 
 .like-button:hover {
@@ -655,9 +658,9 @@ onUnmounted(() => {
   position: absolute;
   top: 100%;
   left: 0;
-  background: white;
+  background: var(--card-bg);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   padding: 0.5rem;
   margin-top: 0.5rem;
   z-index: 10;
@@ -670,6 +673,7 @@ onUnmounted(() => {
   padding: 0.5rem 1rem;
   border: none;
   background: none;
+  color: var(--text-primary);
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -678,7 +682,7 @@ onUnmounted(() => {
 }
 
 .share-option:hover {
-  background-color: #f5f5f5;
+  background-color: var(--bg-secondary);
 }
 
 .post-navigation {
@@ -686,28 +690,28 @@ onUnmounted(() => {
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   padding-top: 2rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--border-color);
 }
 
 .nav-link {
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   text-decoration: none;
-  color: #333;
+  color: var(--text-primary);
   transition: all 0.3s;
 }
 
 .nav-link:hover {
-  background-color: #f5f5f5;
-  border-color: #2d7a6b;
+  background-color: var(--bg-secondary);
+  border-color: var(--primary-color);
 }
 
 .nav-direction {
   font-size: 0.875rem;
-  color: #2d7a6b;
+  color: var(--primary-color);
   font-weight: 600;
   margin-bottom: 0.5rem;
 }

@@ -52,7 +52,7 @@
   display: inline-block;
   padding: 14px 32px;
   background: var(--gradient-primary);
-  color: #fff;
+  color: var(--text-on-accent);
   border-radius: 12px;
   text-decoration: none;
   font-weight: 600;

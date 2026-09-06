@@ -344,17 +344,15 @@ onMounted(() => {
 
 .blog-title {
   font-size: 3rem;
-  font-weight: 800;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   margin: 0 0 1rem 0;
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--page-title-color);
 }
 
 .blog-subtitle {
   font-size: 1.25rem;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0 0 2rem 0;
 }
 
@@ -373,15 +371,17 @@ onMounted(() => {
 .search-input {
   width: 100%;
   padding: 0.75rem 2.5rem 0.75rem 1rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border-color);
   border-radius: 50px;
   font-size: 1rem;
   outline: none;
+  background: var(--card-bg);
+  color: var(--text-primary);
   transition: border-color 0.3s;
 }
 
 .search-input:focus {
-  border-color: #2d7a6b;
+  border-color: var(--primary-color);
 }
 
 .search-icon {
@@ -389,7 +389,7 @@ onMounted(() => {
   right: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #999;
+  color: var(--text-muted);
 }
 
 .write-button {
@@ -397,8 +397,8 @@ onMounted(() => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #2d7a6b 0%, #1e5a4a 100%);
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-on-accent);
   border-radius: 50px;
   text-decoration: none;
   font-weight: 600;
@@ -406,8 +406,8 @@ onMounted(() => {
 }
 
 .write-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(45, 122, 107, 0.3);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .blog-content {
@@ -423,18 +423,18 @@ onMounted(() => {
 }
 
 .sidebar-section {
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .sidebar-title {
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0 0 1rem 0;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .category-list {
@@ -453,17 +453,17 @@ onMounted(() => {
 }
 
 .category-item:hover {
-  background-color: #f5f5f5;
+  background-color: var(--bg-secondary);
 }
 
 .category-item.active {
-  background-color: rgba(45, 122, 107, 0.1);
-  color: #2d7a6b;
+  background-color: color-mix(in srgb, var(--primary-color) 10%, transparent);
+  color: var(--primary-color);
   font-weight: 600;
 }
 
 .category-count {
-  color: #999;
+  color: var(--text-muted);
   font-size: 0.875rem;
 }
 
@@ -504,17 +504,17 @@ onMounted(() => {
 }
 
 .post-card {
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
   transition: transform 0.3s, box-shadow 0.3s;
   cursor: pointer;
 }
 
 .post-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .post-image {
@@ -545,12 +545,12 @@ onMounted(() => {
 }
 
 .post-category {
-  color: #2d7a6b;
+  color: var(--primary-color);
   font-weight: 600;
 }
 
 .post-date {
-  color: #999;
+  color: var(--text-muted);
 }
 
 .post-title {
@@ -558,11 +558,11 @@ onMounted(() => {
   font-weight: 700;
   margin: 0 0 0.75rem 0;
   line-height: 1.3;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .post-excerpt {
-  color: #666;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin: 0 0 1rem 0;
   display: -webkit-box;
@@ -590,7 +590,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   font-size: 0.875rem;
-  color: #999;
+  color: var(--text-muted);
 }
 
 .post-stats {
@@ -607,15 +607,16 @@ onMounted(() => {
 
 .pagination-button {
   padding: 0.5rem 1rem;
-  border: 1px solid #e0e0e0;
-  background: white;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-primary);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s;
 }
 
 .pagination-button:hover:not(:disabled) {
-  background-color: #f5f5f5;
+  background-color: var(--bg-secondary);
 }
 
 .pagination-button:disabled {
@@ -631,8 +632,9 @@ onMounted(() => {
 .pagination-number {
   width: 40px;
   height: 40px;
-  border: 1px solid #e0e0e0;
-  background: white;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-primary);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -642,12 +644,12 @@ onMounted(() => {
 }
 
 .pagination-number:hover {
-  background-color: #f5f5f5;
+  background-color: var(--bg-secondary);
 }
 
 .pagination-number.active {
-  background: linear-gradient(135deg, #2d7a6b 0%, #1e5a4a 100%);
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-on-accent);
   border-color: transparent;
 }
 

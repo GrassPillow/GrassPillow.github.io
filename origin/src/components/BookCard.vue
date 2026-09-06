@@ -40,24 +40,19 @@ defineProps({
 
 <style scoped>
 .book-card {
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.95) 0%, 
-    rgba(255, 255, 255, 0.9) 100%);
+  background: var(--card-bg);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1),
-              0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(45, 122, 107, 0.1);
+  border: 1px solid var(--border-light);
 }
 
 .book-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(45, 122, 107, 0.2),
-              0 4px 12px rgba(139, 111, 71, 0.15);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
 }
 
 .book-cover {
@@ -128,7 +123,7 @@ defineProps({
   background: linear-gradient(135deg, 
     rgba(45, 122, 107, 0.15) 0%, 
     rgba(139, 111, 71, 0.15) 100%);
-  color: #2d7a6b;
+  color: var(--primary-color);
   border-radius: 12px;
   font-size: 0.75rem;
   font-weight: 600;
@@ -141,14 +136,14 @@ defineProps({
   font-size: 1.4rem;
   font-weight: 600;
   margin: 0 0 8px 0;
-  color: #1e5a4a;
+  color: var(--text-primary);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.3;
 }
 
 .book-author {
   font-size: 0.9rem;
-  color: #5a4a3a;
+  color: var(--text-secondary);
   margin: 0 0 12px 0;
   opacity: 0.8;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -157,7 +152,7 @@ defineProps({
 .book-desc {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #2d5a4f;
+  color: var(--text-secondary);
   margin: 0;
   opacity: 0.85;
   flex: 1;

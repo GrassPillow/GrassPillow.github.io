@@ -468,38 +468,28 @@ onUnmounted(() => {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
-  background: linear-gradient(180deg, 
-    #f5f5f7 0%, 
-    rgba(45, 122, 107, 0.05) 50%,
-    rgba(139, 111, 71, 0.05) 100%);
+  background: var(--bg-secondary);
   scroll-behavior: smooth;
 }
 
 .book-header {
   text-align: center;
   padding: 80px 20px 60px;
-  background: linear-gradient(135deg, 
-    rgba(45, 122, 107, 0.1) 0%, 
-    rgba(45, 122, 107, 0.05) 50%,
-    rgba(139, 111, 71, 0.05) 50%,
-    rgba(139, 111, 71, 0.1) 100%);
+  background: var(--page-header-bg);
 }
 
 .book-title {
   font-size: 3.5rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
   margin: 0 0 20px 0;
-  color: #1e5a4a;
+  color: var(--page-title-color);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .book-subtitle {
   font-size: 1.2rem;
-  color: #2d5a4f;
+  color: var(--page-subtitle-color);
   margin: 0 0 2rem 0;
   opacity: 0.8;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -515,30 +505,29 @@ onUnmounted(() => {
   width: 100%;
   padding: 1rem 1.5rem;
   font-size: 1rem;
-  border: 2px solid rgba(45, 122, 107, 0.2);
+  border: 2px solid var(--border-color);
   border-radius: 12px;
-  background: white;
-  color: #2d5a4f;
+  background: var(--card-bg);
+  color: var(--text-primary);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #2d7a6b;
-  box-shadow: 0 4px 12px rgba(45, 122, 107, 0.15);
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
 }
 
 .search-input::placeholder {
-  color: #999;
-  opacity: 0.7;
+  color: var(--text-muted);
 }
 
 .search-results-info {
   margin-top: 1rem;
   text-align: center;
-  color: #2d7a6b;
+  color: var(--primary-color);
   font-size: 0.9rem;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-weight: 500;
@@ -556,26 +545,26 @@ onUnmounted(() => {
 .category-btn {
   padding: 0.6rem 1.2rem;
   font-size: 0.95rem;
-  border: 2px solid rgba(45, 122, 107, 0.2);
+  border: 2px solid var(--border-color);
   border-radius: 25px;
-  background: white;
-  color: #2d5a4f;
+  background: var(--card-bg);
+  color: var(--text-primary);
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .category-btn:hover {
-  border-color: #2d7a6b;
-  background: rgba(45, 122, 107, 0.05);
+  border-color: var(--primary-color);
+  background: var(--bg-secondary);
   transform: translateY(-2px);
 }
 
 .category-btn.active {
-  background: #2d7a6b;
-  border-color: #2d7a6b;
-  color: white;
-  box-shadow: 0 4px 12px rgba(45, 122, 107, 0.3);
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--text-on-accent);
+  box-shadow: var(--shadow-sm);
 }
 
 .no-results {
@@ -587,7 +576,7 @@ onUnmounted(() => {
 
 .no-results-text {
   font-size: 1.25rem;
-  color: #5a4a3a;
+  color: var(--text-primary);
   margin: 0 0 0.5rem 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-weight: 600;
@@ -595,7 +584,7 @@ onUnmounted(() => {
 
 .no-results-hint {
   font-size: 0.95rem;
-  color: #999;
+  color: var(--text-muted);
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
@@ -618,22 +607,17 @@ onUnmounted(() => {
 /* 列表视图样式 */
 .book-list-item {
   display: flex;
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(255, 255, 255, 0.9) 100%);
+  background: var(--card-bg);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
-              0 1px 4px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-sm);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(45, 122, 107, 0.1);
+  border: 1px solid var(--border-light);
 }
 
 .book-list-item:hover {
-  transform: translateX(8px);
-  box-shadow: 0 8px 24px rgba(45, 122, 107, 0.15),
-              0 2px 8px rgba(139, 111, 71, 0.1);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
 }
 
 .list-book-cover {
@@ -716,7 +700,7 @@ onUnmounted(() => {
   font-size: 1.3rem;
   font-weight: 600;
   margin: 0;
-  color: #1e5a4a;
+  color: var(--text-primary);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -726,7 +710,7 @@ onUnmounted(() => {
   background: linear-gradient(135deg,
     rgba(45, 122, 107, 0.15) 0%,
     rgba(139, 111, 71, 0.15) 100%);
-  color: #2d7a6b;
+  color: var(--primary-color);
   border-radius: 10px;
   font-size: 0.7rem;
   font-weight: 600;
@@ -735,7 +719,7 @@ onUnmounted(() => {
 
 .list-book-author {
   font-size: 0.9rem;
-  color: #5a4a3a;
+  color: var(--text-secondary);
   margin: 0 0 10px 0;
   opacity: 0.8;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -744,7 +728,7 @@ onUnmounted(() => {
 .list-book-desc {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #2d5a4f;
+  color: var(--text-secondary);
   margin: 0;
   opacity: 0.85;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -765,9 +749,9 @@ onUnmounted(() => {
 .view-btn {
   width: 40px;
   height: 40px;
-  border: 2px solid rgba(45, 122, 107, 0.2);
+  border: 2px solid var(--border-color);
   border-radius: 10px;
-  background: white;
+  background: var(--card-bg);
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -778,21 +762,21 @@ onUnmounted(() => {
 .view-btn svg {
   width: 20px;
   height: 20px;
-  color: #2d5a4f;
+  color: var(--text-primary);
 }
 
 .view-btn:hover {
-  border-color: #2d7a6b;
-  background: rgba(45, 122, 107, 0.05);
+  border-color: var(--primary-color);
+  background: var(--bg-secondary);
 }
 
 .view-btn.active {
-  background: #2d7a6b;
-  border-color: #2d7a6b;
+  background: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .view-btn.active svg {
-  color: white;
+  color: var(--text-on-accent);
 }
 
 @media (max-width: 768px) {
@@ -853,8 +837,8 @@ onUnmounted(() => {
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid rgba(45, 122, 107, 0.2);
-  border-top-color: #2d7a6b;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--primary-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -866,7 +850,7 @@ onUnmounted(() => {
 }
 
 .loading-text {
-  color: #2d7a6b;
+  color: var(--text-secondary);
   font-size: 1rem;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -875,7 +859,7 @@ onUnmounted(() => {
 .no-more {
   text-align: center;
   padding: 40px 20px;
-  color: #5a4a3a;
+  color: var(--text-secondary);
   font-size: 0.95rem;
   opacity: 0.7;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;

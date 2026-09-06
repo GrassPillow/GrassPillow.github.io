@@ -148,11 +148,11 @@ const filteredProjects = computed(() => {
 .projects-view {
   width: 100%;
   min-height: 100vh;
-  background: #f8f9fa;
+  background: var(--bg-secondary);
 }
 
 .page-header {
-  background: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 40%, #8b6f47 100%);
+  background: var(--page-header-bg);
   padding: 80px 24px;
   text-align: center;
 }
@@ -164,14 +164,15 @@ const filteredProjects = computed(() => {
 
 .page-title {
   font-size: 2.8rem;
-  font-weight: 800;
-  color: #fff;
+  font-weight: 700;
+  color: var(--page-title-color);
   margin: 0 0 12px;
+  letter-spacing: -0.02em;
 }
 
 .page-subtitle {
   font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--page-subtitle-color);
   margin: 0;
 }
 
@@ -191,23 +192,23 @@ const filteredProjects = computed(() => {
 
 .filter-btn {
   padding: 10px 24px;
-  background: #fff;
-  border: 1px solid rgba(45, 122, 107, 0.2);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 24px;
   font-size: 0.95rem;
-  color: #2d5a4f;
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .filter-btn:hover {
-  border-color: #2d7a6b;
-  color: #2d7a6b;
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .filter-btn.active {
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
-  color: #fff;
+  background: var(--primary-color);
+  color: var(--text-on-accent);
   border-color: transparent;
 }
 
@@ -218,16 +219,17 @@ const filteredProjects = computed(() => {
 }
 
 .project-card {
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(45, 122, 107, 0.1);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
   transition: all 0.3s ease;
 }
 
 .project-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 40px rgba(45, 122, 107, 0.15);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
 }
 
 .project-image {
@@ -244,7 +246,7 @@ const filteredProjects = computed(() => {
 }
 
 .project-card:hover .project-image img {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .project-overlay {
@@ -296,24 +298,29 @@ const filteredProjects = computed(() => {
 .project-category {
   display: inline-block;
   padding: 4px 12px;
-  background: linear-gradient(135deg, rgba(45, 122, 107, 0.1) 0%, rgba(139, 111, 71, 0.1) 100%);
-  color: #2d7a6b;
+  background: rgba(45, 122, 107, 0.1);
+  color: var(--primary-color);
   font-size: 0.75rem;
   font-weight: 600;
   border-radius: 6px;
   margin-bottom: 12px;
 }
 
+[data-theme="dark"] .project-category {
+  background: rgba(58, 138, 122, 0.18);
+}
+
 .project-title {
   font-size: 1.3rem;
   font-weight: 700;
-  color: #1e5a4a;
+  color: var(--text-primary);
   margin: 0 0 12px;
+  letter-spacing: -0.02em;
 }
 
 .project-desc {
   font-size: 0.9rem;
-  color: #5a6a5f;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin: 0 0 16px;
 }
@@ -326,8 +333,8 @@ const filteredProjects = computed(() => {
 
 .tag {
   padding: 4px 10px;
-  background: #f0f4f2;
-  color: #2d7a6b;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
   font-size: 0.8rem;
   border-radius: 4px;
 }

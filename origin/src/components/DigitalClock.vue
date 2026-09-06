@@ -43,6 +43,6 @@
     text-align: center;  
     font-size: 36dvh;
     padding-top: 32dvh;
-    font-family: 'Arial', sans-serif;  
+    font-family: inherit;
   }  
   </style>

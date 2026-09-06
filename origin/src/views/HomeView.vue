@@ -132,7 +132,7 @@ const projects = ref([
 .home-view {
   width: 100%;
   min-height: 100vh;
-  background: #f8f9fa;
+  background: var(--bg-secondary);
 }
 
 .container {
@@ -148,7 +148,7 @@ const projects = ref([
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 40%, #8b6f47 100%);
+  background: var(--gradient-hero);
   overflow: hidden;
   padding: 60px 24px;
 }
@@ -162,8 +162,12 @@ const projects = ref([
 .floating-orb {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.04);
   animation: float 20s infinite ease-in-out;
+}
+
+[data-theme="dark"] .floating-orb {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .orb-1 {
@@ -209,8 +213,8 @@ const projects = ref([
   margin: 0 auto 24px;
   border-radius: 50%;
   overflow: hidden;
-  border: 4px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 3px solid var(--card-bg);
+  box-shadow: var(--shadow-md);
 }
 
 .hero-avatar img {
@@ -221,22 +225,22 @@ const projects = ref([
 
 .hero-name {
   font-size: 3rem;
-  font-weight: 800;
-  color: #fff;
+  font-weight: 700;
+  color: var(--text-primary);
   margin: 0 0 12px;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.02em;
 }
 
 .hero-title {
   font-size: 1.3rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
   margin: 0 0 20px;
   font-weight: 500;
 }
 
 .hero-description {
   font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--text-secondary);
   line-height: 1.7;
   margin: 0 0 32px;
 }
@@ -253,7 +257,7 @@ const projects = ref([
   align-items: center;
   gap: 8px;
   padding: 14px 28px;
-  border-radius: 12px;
+  border-radius: 980px;
   font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
@@ -261,24 +265,25 @@ const projects = ref([
 }
 
 .btn-primary {
-  background: #fff;
-  color: #1e5a4a;
+  background: var(--primary-color);
+  color: var(--text-on-accent);
 }
 
 .btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateY(-3px);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: translateY(-2px);
 }
 
 .btn-large {
@@ -298,15 +303,18 @@ const projects = ref([
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
   border-radius: 50%;
-  color: #fff;
+  color: var(--text-primary);
   transition: all 0.3s ease;
 }
 
 .social-link:hover {
-  background: rgba(255, 255, 255, 0.3);
+  color: var(--primary-color);
   transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
 }
 
 /* Section Styles */
@@ -315,13 +323,14 @@ const projects = ref([
   font-weight: 700;
   text-align: center;
   margin: 0 0 48px;
-  color: #1e5a4a;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
 /* Skills Section */
 .skills-section {
   padding: 80px 0;
-  background: #fff;
+  background: var(--bg-primary);
 }
 
 .skills-grid {
@@ -331,18 +340,19 @@ const projects = ref([
 }
 
 .skill-card {
-  background: linear-gradient(145deg, #f8f9fa 0%, #fff 100%);
-  border-radius: 16px;
+  background: var(--card-bg);
+  border-radius: 18px;
   padding: 32px 24px;
   text-align: center;
-  border: 1px solid rgba(45, 122, 107, 0.1);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
   transition: all 0.3s ease;
 }
 
 .skill-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 32px rgba(45, 122, 107, 0.12);
-  border-color: rgba(45, 122, 107, 0.2);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-color);
 }
 
 .skill-icon {
@@ -352,14 +362,14 @@ const projects = ref([
 
 .skill-name {
   font-size: 1.2rem;
-  color: #1e5a4a;
+  color: var(--text-primary);
   margin: 0 0 8px;
   font-weight: 600;
 }
 
 .skill-desc {
   font-size: 0.9rem;
-  color: #5a6a5f;
+  color: var(--text-secondary);
   margin: 0;
   line-height: 1.5;
 }
@@ -367,7 +377,7 @@ const projects = ref([
 /* Projects Section */
 .projects-section {
   padding: 80px 0;
-  background: linear-gradient(180deg, #f8f9fa 0%, #f0f4f2 100%);
+  background: var(--bg-secondary);
 }
 
 .projects-grid {
@@ -377,16 +387,17 @@ const projects = ref([
 }
 
 .project-card {
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid rgba(45, 122, 107, 0.1);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
   transition: all 0.3s ease;
 }
 
 .project-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(45, 122, 107, 0.15);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
 }
 
 .project-image {
@@ -411,14 +422,14 @@ const projects = ref([
 
 .project-name {
   font-size: 1.3rem;
-  color: #1e5a4a;
+  color: var(--text-primary);
   margin: 0 0 12px;
   font-weight: 600;
 }
 
 .project-desc {
   font-size: 0.95rem;
-  color: #5a6a5f;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin: 0 0 16px;
 }
@@ -432,8 +443,8 @@ const projects = ref([
 
 .tag {
   padding: 4px 12px;
-  background: linear-gradient(135deg, rgba(45, 122, 107, 0.1) 0%, rgba(139, 111, 71, 0.1) 100%);
-  color: #2d7a6b;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
   font-size: 0.8rem;
   font-weight: 500;
   border-radius: 6px;
@@ -446,8 +457,8 @@ const projects = ref([
 
 .project-link {
   padding: 8px 16px;
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
-  color: #fff;
+  background: var(--primary-color);
+  color: var(--text-on-accent);
   text-decoration: none;
   font-size: 0.85rem;
   font-weight: 500;
@@ -457,32 +468,35 @@ const projects = ref([
 
 .project-link:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(45, 122, 107, 0.3);
+  box-shadow: var(--shadow-md);
 }
 
 /* Contact Section */
 .contact-section {
   padding: 80px 0;
-  background: #fff;
+  background: var(--bg-primary);
 }
 
 .contact-card {
-  background: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 50%, #8b6f47 100%);
+  background: var(--gradient-hero);
+  border: 1px solid var(--border-light);
   border-radius: 24px;
   padding: 60px 40px;
   text-align: center;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .contact-card h2 {
   font-size: 2rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
   margin: 0 0 12px;
 }
 
 .contact-card p {
   font-size: 1.1rem;
-  opacity: 0.9;
+  color: var(--text-secondary);
   margin: 0 0 32px;
 }
 

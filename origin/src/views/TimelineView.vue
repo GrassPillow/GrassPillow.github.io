@@ -206,7 +206,8 @@ const timelineEvents = ref([
 
 .stat-value {
   font-size: 2.5rem;
-  font-weight: 800;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--primary-color);
   line-height: 1;
   margin-bottom: 8px;
@@ -295,7 +296,8 @@ const timelineEvents = ref([
 
 .event-date {
   font-size: 1.5rem;
-  font-weight: 800;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
 }
 
@@ -338,7 +340,7 @@ const timelineEvents = ref([
 
 .tag:hover {
   background: var(--primary-color);
-  color: #fff;
+  color: var(--text-on-accent);
 }
 
 .event-links {

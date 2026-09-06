@@ -290,23 +290,9 @@ onMounted(async () => {
 <style scoped>
 .ai-view {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 30%, #f0f4f8 60%, #f5f7fa 100%);
+  background: var(--bg-secondary);
   padding-bottom: 3rem;
   position: relative;
-}
-
-.ai-view::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 30%, rgba(45, 122, 107, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(139, 111, 71, 0.05) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
 }
 
 .ai-view > * {
@@ -315,37 +301,12 @@ onMounted(async () => {
 }
 
 .page-header {
-  background: linear-gradient(135deg, #1a5d4e 0%, #2d7a6b 20%, #3a8a7a 40%, #4a9a8a 60%, #8b6f47 80%, #a67c52 100%);
-  color: white;
+  background: var(--gradient-hero);
+  color: var(--text-primary);
   padding: 5rem 1rem;
   margin-bottom: 3rem;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-}
-
-.page-header::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 800px;
-  height: 800px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: float 20s ease-in-out infinite;
-}
-
-.page-header::after {
-  content: '';
-  position: absolute;
-  bottom: -30%;
-  left: -10%;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: float 15s ease-in-out infinite reverse;
 }
 
 @keyframes float {
@@ -367,23 +328,18 @@ onMounted(async () => {
 
 .page-title {
   font-size: 3.8rem;
-  font-weight: 900;
+  font-weight: 700;
   margin: 0 0 1.2rem 0;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+  color: var(--page-title-color);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   animation: fadeInDown 0.8s ease-out;
-  background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.9) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .page-description {
   font-size: 1.3rem;
-  opacity: 0.98;
   margin: 0;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  color: var(--page-subtitle-color);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   animation: fadeInUp 0.8s ease-out 0.2s both;
   line-height: 1.6;
@@ -419,15 +375,12 @@ onMounted(async () => {
 
 /* 搜索和筛选栏 */
 .search-filter-bar {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%);
-  backdrop-filter: blur(10px);
+  background: var(--card-bg);
   padding: 2.5rem;
   border-radius: 24px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12),
-              0 4px 16px rgba(45, 122, 107, 0.08),
-              inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  box-shadow: var(--shadow-sm);
   margin-bottom: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--border-light);
   animation: slideInUp 0.6s ease-out 0.3s both;
 }
 
@@ -461,22 +414,20 @@ onMounted(async () => {
   width: 100%;
   max-width: 500px;
   padding: 1.3rem 1.3rem 1.3rem 3.8rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border-color);
   border-radius: 18px;
   font-size: 1.1rem;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #2d7a6b;
-  box-shadow: 0 0 0 5px rgba(45, 122, 107, 0.15),
-              0 4px 16px rgba(45, 122, 107, 0.2);
-  background: white;
-  transform: translateY(-2px);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px var(--border-light);
+  background: var(--bg-secondary);
 }
 
 .filter-tags {
@@ -487,10 +438,10 @@ onMounted(async () => {
 
 .filter-tag {
   padding: 0.85rem 1.8rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border-color);
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.9);
-  color: #666;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -508,7 +459,7 @@ onMounted(async () => {
   width: 0;
   height: 0;
   border-radius: 50%;
-  background: rgba(45, 122, 107, 0.1);
+  background: var(--glass-hover);
   transform: translate(-50%, -50%);
   transition: width 0.6s ease, height 0.6s ease;
 }
@@ -519,20 +470,18 @@ onMounted(async () => {
 }
 
 .filter-tag:hover {
-  border-color: #2d7a6b;
-  color: #2d7a6b;
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 6px 20px rgba(45, 122, 107, 0.25);
-  background: white;
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+  background: var(--card-bg);
 }
 
 .filter-tag.active {
-  background: linear-gradient(135deg, #2d7a6b 0%, #3a8a7a 50%, #8b6f47 100%);
+  background: var(--primary-color);
   border-color: transparent;
-  color: white;
-  box-shadow: 0 6px 20px rgba(45, 122, 107, 0.4),
-              0 2px 8px rgba(139, 111, 71, 0.3);
-  transform: translateY(-2px);
+  color: var(--text-on-accent);
+  box-shadow: var(--shadow-sm);
 }
 
 /* 统计栏 */
@@ -541,13 +490,10 @@ onMounted(async () => {
   gap: 2.5rem;
   margin-bottom: 2rem;
   padding: 2rem 2.5rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 249, 250, 0.98) 100%);
-  backdrop-filter: blur(10px);
+  background: var(--card-bg);
   border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1),
-              0 2px 8px rgba(45, 122, 107, 0.08),
-              inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
   animation: slideInUp 0.6s ease-out 0.4s both;
 }
 
@@ -557,16 +503,16 @@ onMounted(async () => {
   gap: 1rem;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   padding: 0.75rem 1.5rem;
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--bg-secondary);
   border-radius: 16px;
   transition: all 0.3s ease;
-  border: 1px solid rgba(45, 122, 107, 0.1);
+  border: 1px solid var(--border-light);
 }
 
 .stat-item:hover {
-  background: rgba(255, 255, 255, 0.9);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(45, 122, 107, 0.15);
+  background: var(--bg-tertiary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 .stat-icon {
@@ -576,17 +522,14 @@ onMounted(async () => {
 
 .stat-value {
   font-size: 2rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #2d7a6b 0%, #8b6f47 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: 700;
+  color: var(--primary-color);
   letter-spacing: -0.02em;
 }
 
 .stat-label {
   font-size: 1.05rem;
-  color: #666;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
@@ -598,15 +541,12 @@ onMounted(async () => {
 }
 
 .category-section {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%);
-  backdrop-filter: blur(10px);
+  background: var(--card-bg);
   padding: 2.5rem;
   border-radius: 24px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12),
-              0 4px 16px rgba(45, 122, 107, 0.08),
-              inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  box-shadow: var(--shadow-sm);
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--border-light);
   position: relative;
   overflow: hidden;
 }
@@ -618,7 +558,7 @@ onMounted(async () => {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #2d7a6b 0%, #3a8a7a 50%, #8b6f47 100%);
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-light) 50%, var(--accent-color) 100%);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.4s ease;
@@ -629,10 +569,8 @@ onMounted(async () => {
 }
 
 .category-section:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18),
-              0 6px 20px rgba(45, 122, 107, 0.15),
-              inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .category-header {
@@ -641,12 +579,12 @@ onMounted(async () => {
   justify-content: space-between;
   margin-bottom: 1.5rem;
   padding: 1rem 1.5rem;
-  border-bottom: 2px solid rgba(240, 240, 240, 0.8);
+  border-bottom: 1px solid var(--border-light);
   cursor: pointer;
   user-select: none;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   border-radius: 12px;
-  background: rgba(248, 249, 250, 0.5);
+  background: var(--bg-secondary);
   margin-left: -1.5rem;
   margin-right: -1.5rem;
   margin-top: -1.5rem;
@@ -654,28 +592,25 @@ onMounted(async () => {
 
 .category-header:hover {
   padding-left: 2rem;
-  background: rgba(248, 249, 250, 0.8);
-  border-bottom-color: rgba(45, 122, 107, 0.2);
+  background: var(--bg-tertiary);
+  border-bottom-color: var(--border-color);
 }
 
 .category-title {
   font-size: 1.9rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #2d5a4f 0%, #2d7a6b 50%, #8b6f47 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: 700;
+  color: var(--text-primary);
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   display: flex;
   align-items: center;
   gap: 1rem;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 .collapse-icon {
   font-size: 1.1rem;
-  color: #2d7a6b;
+  color: var(--primary-color);
   transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   display: inline-block;
   font-weight: bold;
@@ -684,7 +619,7 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(45, 122, 107, 0.1);
+  background: var(--bg-tertiary);
   border-radius: 50%;
 }
 
@@ -707,19 +642,18 @@ onMounted(async () => {
 
 .category-count {
   font-size: 1rem;
-  font-weight: 700;
-  color: white;
-  background: linear-gradient(135deg, #2d7a6b 0%, #3a8a7a 50%, #8b6f47 100%);
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
   padding: 0.5rem 1.2rem;
   border-radius: 24px;
-  box-shadow: 0 4px 12px rgba(45, 122, 107, 0.3),
-              0 2px 6px rgba(139, 111, 71, 0.2);
   transition: all 0.3s ease;
 }
 
 .category-header:hover .category-count {
-  transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(45, 122, 107, 0.4);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .websites-grid {
@@ -729,11 +663,10 @@ onMounted(async () => {
 }
 
 .website-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.95) 100%);
-  backdrop-filter: blur(10px);
+  background: var(--bg-secondary);
   padding: 2rem;
   border-radius: 20px;
-  border: 2px solid rgba(224, 224, 224, 0.6);
+  border: 1px solid var(--border-light);
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   position: relative;
   overflow: hidden;
@@ -746,7 +679,7 @@ onMounted(async () => {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #2d7a6b 0%, #8b6f47 100%);
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.4s ease;
@@ -757,12 +690,10 @@ onMounted(async () => {
 }
 
 .website-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 16px 40px rgba(45, 122, 107, 0.3),
-              0 8px 20px rgba(139, 111, 71, 0.2),
-              inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  border-color: #2d7a6b;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.98) 100%);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-color);
+  background: var(--card-bg);
 }
 
 .website-header {
@@ -774,11 +705,8 @@ onMounted(async () => {
 
 .website-name {
   font-size: 1.4rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #2d5a4f 0%, #2d7a6b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: 700;
+  color: var(--text-primary);
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   letter-spacing: -0.01em;
@@ -794,7 +722,7 @@ onMounted(async () => {
   height: 28px;
   border-radius: 50%;
   border: none;
-  background: #fee;
+  background: rgba(204, 51, 51, 0.08);
   color: #c33;
   font-size: 1rem;
   cursor: pointer;
@@ -808,13 +736,13 @@ onMounted(async () => {
 
 .delete-btn:hover {
   opacity: 1;
-  background: #fcc;
+  background: rgba(204, 51, 51, 0.16);
   transform: scale(1.15) rotate(90deg);
 }
 
 .website-desc {
   font-size: 0.95rem;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0.75rem 0 1.25rem 0;
   line-height: 1.6;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -826,21 +754,21 @@ onMounted(async () => {
   align-items: center;
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border-light);
 }
 
 .website-link {
   display: inline-block;
   padding: 0.7rem 1.4rem;
-  background: linear-gradient(135deg, #2d7a6b 0%, #3a8a7a 50%, #8b6f47 100%);
-  color: white;
+  background: var(--primary-color);
+  color: var(--text-on-accent);
   text-decoration: none;
   border-radius: 12px;
   font-size: 0.95rem;
   font-weight: 700;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  box-shadow: 0 4px 12px rgba(45, 122, 107, 0.3);
+  box-shadow: var(--shadow-sm);
   position: relative;
   overflow: hidden;
 }
@@ -864,25 +792,24 @@ onMounted(async () => {
 }
 
 .website-link:hover {
-  transform: translateX(6px) scale(1.05);
-  box-shadow: 0 8px 24px rgba(45, 122, 107, 0.5),
-              0 4px 12px rgba(139, 111, 71, 0.3);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
 }
 
 .website-category-badge {
   font-size: 0.75rem;
   padding: 0.4rem 1rem;
-  background: linear-gradient(135deg, rgba(45, 122, 107, 0.15) 0%, rgba(139, 111, 71, 0.15) 100%);
-  color: #2d7a6b;
+  background: var(--bg-tertiary);
+  color: var(--primary-color);
   border-radius: 14px;
-  font-weight: 700;
+  font-weight: 600;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  border: 1px solid rgba(45, 122, 107, 0.2);
+  border: 1px solid var(--border-light);
   transition: all 0.3s ease;
 }
 
 .website-card:hover .website-category-badge {
-  background: linear-gradient(135deg, rgba(45, 122, 107, 0.25) 0%, rgba(139, 111, 71, 0.25) 100%);
+  background: var(--bg-secondary);
   transform: scale(1.05);
 }
 
@@ -890,12 +817,10 @@ onMounted(async () => {
 .empty-state {
   text-align: center;
   padding: 6rem 2rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 249, 250, 0.98) 100%);
-  backdrop-filter: blur(10px);
+  background: var(--card-bg);
   border-radius: 24px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1),
-              0 4px 16px rgba(45, 122, 107, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
   animation: fadeIn 0.6s ease-out;
 }
 
@@ -920,18 +845,15 @@ onMounted(async () => {
 
 .empty-title {
   font-size: 2rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #2d5a4f 0%, #2d7a6b 50%, #8b6f47 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: 700;
+  color: var(--text-primary);
   margin: 0 0 1rem 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .empty-desc {
   font-size: 1.2rem;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }

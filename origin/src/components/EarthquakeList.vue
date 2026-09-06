@@ -225,8 +225,8 @@ const getLatestTimestamp = () => lastUpdated.value.toLocaleString('zh-CN')
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  background: #fff1f0;
-  border: 1px solid #ffccc7;
+  background: rgba(207, 19, 34, 0.06);
+  border: 1px solid rgba(207, 19, 34, 0.3);
   border-radius: 12px;
   padding: 0.9rem 1.2rem;
   margin-bottom: 1.5rem;
@@ -240,7 +240,7 @@ const getLatestTimestamp = () => lastUpdated.value.toLocaleString('zh-CN')
 .error-retry {
   padding: 0.4rem 1rem;
   background: #cf1322;
-  color: white;
+  color: var(--text-on-accent);
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -265,7 +265,7 @@ const getLatestTimestamp = () => lastUpdated.value.toLocaleString('zh-CN')
 
 .stats-card {
   background: var(--gradient-primary);
-  color: #fff;
+  color: var(--text-on-accent);
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: var(--shadow-md);
@@ -292,7 +292,7 @@ const getLatestTimestamp = () => lastUpdated.value.toLocaleString('zh-CN')
   background: rgba(255, 255, 255, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 6px;
-  color: white;
+  color: var(--text-on-accent);
   cursor: pointer;
   font-size: 0.9rem;
   transition: all 0.3s ease;

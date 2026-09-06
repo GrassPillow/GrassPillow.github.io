@@ -22,10 +22,24 @@ module.exports = defineConfig({
       return definitions
     })
     
-    // 禁用 TypeScript 类型检查（解决 @types/node 兼容性问题）
-    if (process.env.NODE_ENV === 'production') {
-      config.plugins.delete('fork-ts-checker')
-    }
+    // 配置 fork-ts-checker 为异步模式，不阻塞构建但保留类型检查警告
+    config.plugin('fork-ts-checker').tap((args) => {
+      args[0] = {
+        ...args[0],
+        typescript: {
+          ...(args[0]?.typescript || {}),
+          configFile: 'tsconfig.json',
+          extensions: {
+            vue: {
+              ...(args[0]?.typescript?.extensions?.vue || {}),
+              enabled: true
+            }
+          }
+        },
+        logger: { log: () => {}, error: console.error }
+      }
+      return args
+    })
   },
   // 配置webpack-dev-server，忽略ResizeObserver错误
   devServer: {

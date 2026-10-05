@@ -8,520 +8,657 @@
         <div class="floating-orb orb-3"></div>
       </div>
       <div class="hero-content">
-        <div class="hero-avatar">
-          <img src="https://picsum.photos/seed/grasspillow/200/200.jpg" alt="GrassPillow" loading="lazy" />
-        </div>
-        <h1 class="hero-name">GrassPillow</h1>
-        <p class="hero-title">全栈开发者 · 技术博主 · 开源爱好者</p>
+        <div class="hero-badge">📦 持续收录 · 全部免费正版渠道</div>
+        <h1 class="hero-name">资源站</h1>
+        <p class="hero-title">发现好用的网络资源</p>
         <p class="hero-description">
-          热爱技术，享受创造。专注于构建优雅、高效的Web应用，
-          致力于用代码解决实际问题，让技术服务于生活。
+          精选网站工具、软件应用、学习资料与影视音乐电子书，<br />
+          帮你省下到处找资源的时间。
         </p>
-        <div class="hero-actions">
-          <router-link to="/about" class="btn btn-primary">
-            <span>👋</span> 了解更多
-          </router-link>
-          <router-link to="/projects" class="btn btn-secondary">
-            <span>💼</span> 查看作品
-          </router-link>
+        <div class="hero-search">
+          <span class="search-icon">🔍</span>
+          <input
+            v-model="searchQuery"
+            type="text"
+            class="search-input"
+            placeholder="搜索资源，例如：PDF、AI、笔记..."
+            @keyup.enter="handleSearch"
+          />
+          <button class="search-btn" @click="handleSearch">搜索</button>
         </div>
-        <div class="hero-social">
-          <a href="https://github.com/GrassPillow" target="_blank" rel="noopener noreferrer" class="social-link" title="GitHub" aria-label="GitHub">
-            <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          </a>
-          <a href="mailto:contact@grasspillow.com" class="social-link" title="Email" aria-label="Email">
-            <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section class="skills-section">
-      <div class="container">
-        <h2 class="section-title">技术栈</h2>
-        <div class="skills-grid">
-          <div class="skill-card" v-for="skill in skills" :key="skill.name">
-            <div class="skill-icon">{{ skill.icon }}</div>
-            <h3 class="skill-name">{{ skill.name }}</h3>
-            <p class="skill-desc">{{ skill.description }}</p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-value">{{ totalCount }}</span>
+            <span class="stat-label">个资源</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">{{ categoryCount }}</span>
+            <span class="stat-label">个分类</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">{{ typeCount }}</span>
+            <span class="stat-label">大类别</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Projects Section -->
-    <section class="projects-section">
-      <div class="container">
-        <h2 class="section-title">精选项目</h2>
-        <div class="projects-grid">
-          <div class="project-card" v-for="project in projects" :key="project.name">
-            <div class="project-image">
-              <img :src="project.image" :alt="project.name" loading="lazy" />
-            </div>
-            <div class="project-content">
-              <h3 class="project-name">{{ project.name }}</h3>
-              <p class="project-desc">{{ project.description }}</p>
-              <div class="project-tags">
-                <span class="tag" v-for="tag in project.tags" :key="tag">{{ tag }}</span>
+    <!-- 分类入口 -->
+    <main class="main-content">
+      <section class="categories-section">
+        <div class="container">
+          <h2 class="section-title">资源分类</h2>
+          <div class="categories-grid">
+            <router-link
+              v-for="cat in categories"
+              :key="cat.type"
+              :to="`/resources/${cat.type}`"
+              class="category-card"
+            >
+              <div class="category-icon">{{ cat.icon }}</div>
+              <h3 class="category-name">{{ cat.name }}</h3>
+              <p class="category-desc">{{ cat.desc }}</p>
+              <div class="category-footer">
+                <span class="category-count">{{ countByType[cat.type] || 0 }} 个资源</span>
+                <span class="category-arrow">→</span>
               </div>
-              <div class="project-links">
-                <a :href="project.demo" target="_blank" rel="noopener noreferrer" class="project-link" v-if="project.demo">在线演示</a>
-                <a :href="project.github" target="_blank" rel="noopener noreferrer" class="project-link" v-if="project.github">GitHub</a>
-              </div>
-            </div>
+            </router-link>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Contact CTA Section -->
-    <section class="contact-section">
-      <div class="container">
-        <div class="contact-card">
-          <h2>一起创造</h2>
-          <p>有项目想法或合作机会？欢迎联系我！</p>
-          <a href="mailto:contact@grasspillow.com" class="btn btn-primary btn-large">
-            <span>✉️</span> 发送邮件
-          </a>
+      <!-- 精选推荐 -->
+      <section class="featured-section" v-if="featured.length > 0">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">精选推荐</h2>
+            <router-link to="/resources/all" class="view-all">查看全部 →</router-link>
+          </div>
+          <div class="featured-grid">
+            <a
+              v-for="item in featured"
+              :key="`${item.type}-${item.url}`"
+              :href="item.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="featured-card"
+            >
+              <div class="featured-top">
+                <span class="featured-logo">{{ getInitial(item.name) }}</span>
+                <span class="featured-type">{{ getTypeName(item.type) }}</span>
+              </div>
+              <h3 class="featured-name">{{ item.name }}</h3>
+              <p class="featured-desc">{{ item.description }}</p>
+              <span class="featured-category">{{ item.category }}</span>
+            </a>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <!-- 资源维护说明 -->
+      <section class="about-section">
+        <div class="container">
+          <h2 class="section-title">关于本站</h2>
+          <p class="about-text">
+            本站收录的全部资源均来自公开、正版或免费授权渠道，不做任何盗版内容索引。
+            链接如遇失效，欢迎反馈更新。资源持续扩充中，敬请期待。
+          </p>
+        </div>
+      </section>
+    </main>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
+import axios from 'axios'
+import { parseCSV } from '../utils/csv.js'
 
-const skills = ref([
-  { icon: '🎨', name: '前端开发', description: 'Vue.js, React, TypeScript, CSS3' },
-  { icon: '⚙️', name: '后端开发', description: 'Node.js, Express, Python, RESTful API' },
-  { icon: '🗄️', name: '数据库', description: 'MySQL, MongoDB, PostgreSQL, Redis' },
-  { icon: '🛠️', name: '开发工具', description: 'Git, Docker, VS Code, Linux' }
-])
+const router = useRouter()
+const searchQuery = ref('')
+const resources = ref([])
+let _isUnmounted = false
 
-const projects = ref([
-  {
-    name: '个人博客',
-    description: '基于Vue 3构建的个人博客系统，支持文章发布、分类管理、标签筛选等功能。',
-    image: 'https://picsum.photos/seed/blog/400/250.jpg',
-    tags: ['Vue 3', 'TypeScript', 'Vue Router'],
-    demo: '/blog',
-    github: 'https://github.com/GrassPillow'
-  },
-  {
-    name: 'AI工具集合',
-    description: '集成多种AI工具的在线平台，包括文本处理、代码格式化、密码生成等实用功能。',
-    image: 'https://picsum.photos/seed/ai/400/250.jpg',
-    tags: ['Vue.js', 'Ant Design', 'Axios'],
-    demo: '/tools/ai',
-    github: null
-  },
-  {
-    name: '地震监测系统',
-    description: '实时展示全球地震数据，支持地图可视化和历史数据查询分析。',
-    image: 'https://picsum.photos/seed/earthquake/400/250.jpg',
-    tags: ['Mapbox', '数据可视化', 'API'],
-    demo: '/tools/earthquake',
-    github: null
-  },
-])
+const TYPE_NAMES = {
+  website: '网站工具',
+  software: '软件应用',
+  learning: '学习资料',
+  media: '影视音乐'
+}
+
+const categories = [
+  { type: 'website', icon: '🌐', name: '网站工具', desc: 'AI 助手、在线工具、设计素材与开发者网站' },
+  { type: 'software', icon: '💻', name: '软件应用', desc: '免费开源软件，覆盖系统、办公、开发与创作' },
+  { type: 'learning', icon: '📚', name: '学习资料', desc: '公开课、编程学习与权威文档手册' },
+  { type: 'media', icon: '🎬', name: '影视音乐电子书', desc: '正版免费影视、音乐与公版电子书' }
+]
+
+const totalCount = computed(() => resources.value.length)
+const categoryCount = computed(() => {
+  const set = new Set()
+  resources.value.forEach(r => set.add(`${r.type}-${r.category}`))
+  return set.size
+})
+const typeCount = computed(() => {
+  const set = new Set()
+  resources.value.forEach(r => set.add(r.type))
+  return set.size
+})
+
+const countByType = computed(() => {
+  const map = {}
+  resources.value.forEach(r => {
+    map[r.type] = (map[r.type] || 0) + 1
+  })
+  return map
+})
+
+const featured = computed(() => {
+  const perType = {}
+  const result = []
+  resources.value.forEach(r => {
+    if (!perType[r.type]) perType[r.type] = []
+    if (perType[r.type].length < 4) {
+      perType[r.type].push(r)
+      result.push(r)
+    }
+  })
+  return result
+})
+
+function getInitial(name) {
+  return (name || '?').charAt(0).toUpperCase()
+}
+
+function getTypeName(type) {
+  return TYPE_NAMES[type] || type
+}
+
+function handleSearch() {
+  const q = searchQuery.value.trim()
+  router.push({ path: '/resources/all', query: q ? { q } : {} })
+}
+
+async function loadData() {
+  try {
+    const response = await axios.get('/resources.csv')
+    if (_isUnmounted) return
+    resources.value = parseCSV(response.data)
+  } catch (error) {
+    if (_isUnmounted) return
+    console.error('加载资源数据失败:', error)
+  }
+}
+
+onMounted(() => {
+  loadData()
+})
+
+onBeforeUnmount(() => {
+  _isUnmounted = true
+})
 </script>
 
 <style scoped>
 .home-view {
-  width: 100%;
   min-height: 100vh;
-  background: #f8f9fa;
+  background: var(--c-bg-page);
 }
 
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-/* Hero Section */
+/* Hero */
 .hero-section {
   position: relative;
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: var(--c-primary-dark);
+  color: #fff;
+  padding: 7rem 1.5rem 6rem;
+  text-align: center;
   overflow: hidden;
-  padding: 60px 24px;
 }
 
 .hero-bg {
   position: absolute;
   inset: 0;
-  overflow: hidden;
+  pointer-events: none;
 }
 
 .floating-orb {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  animation: float 20s infinite ease-in-out;
+  background: rgba(255, 255, 255, 0.08);
+  animation: float 18s ease-in-out infinite;
 }
 
 .orb-1 {
-  width: 400px;
-  height: 400px;
-  top: -150px;
+  width: 500px;
+  height: 500px;
+  top: -200px;
   right: -100px;
-  animation-delay: 0s;
 }
 
 .orb-2 {
-  width: 300px;
-  height: 300px;
-  bottom: -100px;
+  width: 360px;
+  height: 360px;
+  bottom: -140px;
   left: -80px;
-  animation-delay: -7s;
+  animation-delay: -6s;
 }
 
 .orb-3 {
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   top: 40%;
-  left: 60%;
-  animation-delay: -14s;
+  left: 12%;
+  animation-delay: -12s;
 }
 
 @keyframes float {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -40px) scale(1.1); }
-  66% { transform: translate(-20px, 30px) scale(0.9); }
+  50% { transform: translate(30px, -30px) scale(1.08); }
 }
 
 .hero-content {
   position: relative;
-  z-index: var(--z-base);
-  text-align: center;
-  max-width: 700px;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.hero-avatar {
-  width: 140px;
-  height: 140px;
-  margin: 0 auto 24px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 4px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-.hero-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.hero-badge {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  animation: fadeInDown 0.6s ease-out;
 }
 
 .hero-name {
-  font-size: 3rem;
-  font-weight: 800;
-  color: #fff;
-  margin: 0 0 12px;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  font-size: 4rem;
+  font-weight: 900;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.03em;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  animation: fadeInDown 0.7s ease-out 0.1s both;
 }
 
 .hero-title {
-  font-size: 1.3rem;
-  color: rgba(255, 255, 255, 0.9);
-  margin: 0 0 20px;
-  font-weight: 500;
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+  opacity: 0.92;
+  animation: fadeInDown 0.7s ease-out 0.2s both;
 }
 
 .hero-description {
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.15rem;
   line-height: 1.7;
-  margin: 0 0 32px;
+  opacity: 0.85;
+  margin: 0 0 2.2rem;
+  animation: fadeInDown 0.7s ease-out 0.3s both;
 }
 
-.hero-actions {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-bottom: 32px;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 28px;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.15s ease;
-}
-
-.btn-primary {
-  background: #fff;
-  color: #1e5a4a;
-}
-
-.btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-}
-
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateY(-3px);
-}
-
-.btn-large {
-  padding: 16px 36px;
-  font-size: 1.1rem;
-}
-
-.hero-social {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-}
-
-.social-link {
-  width: 48px;
-  height: 48px;
+.hero-search {
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 50%;
-  color: #fff;
-  transition: all 0.15s ease;
-}
-
-.social-link:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateY(-3px);
-}
-
-/* Section Styles */
-.section-title {
-  font-size: 2rem;
-  font-weight: 700;
-  text-align: center;
-  margin: 0 0 48px;
-  color: #1e5a4a;
-}
-
-/* Skills Section */
-.skills-section {
-  padding: 80px 0;
+  max-width: 640px;
+  margin: 0 auto 2.5rem;
   background: #fff;
+  border-radius: 999px;
+  padding: 0.4rem;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+  animation: fadeInUp 0.7s ease-out 0.4s both;
+  position: relative;
 }
 
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-}
-
-.skill-card {
-  background: var(--c-bg-card);
-  border-radius: 16px;
-  padding: 32px 24px;
-  text-align: center;
-  border: 1px solid rgba(45, 122, 107, 0.1);
-  transition: all 0.15s ease;
-}
-
-.skill-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 32px rgba(45, 122, 107, 0.12);
-  border-color: rgba(45, 122, 107, 0.2);
-}
-
-.skill-icon {
-  font-size: 2.5rem;
-  margin-bottom: 16px;
-}
-
-.skill-name {
+.search-icon {
+  position: absolute;
+  left: 1.6rem;
   font-size: 1.2rem;
-  color: #1e5a4a;
-  margin: 0 0 8px;
-  font-weight: 600;
+  pointer-events: none;
 }
 
-.skill-desc {
-  font-size: 0.9rem;
-  color: #5a6a5f;
-  margin: 0;
-  line-height: 1.5;
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1.05rem;
+  padding: 0.9rem 1rem 0.9rem 3.4rem;
+  background: transparent;
+  color: var(--c-text);
+  font-family: inherit;
 }
 
-/* Projects Section */
-.projects-section {
-  padding: 80px 0;
-  background: var(--c-bg-page);
-}
-
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-}
-
-.project-card {
-  background: #fff;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid rgba(45, 122, 107, 0.1);
-  transition: all 0.15s ease;
-}
-
-.project-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(45, 122, 107, 0.15);
-}
-
-.project-image {
-  height: 200px;
-  overflow: hidden;
-}
-
-.project-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.15s ease;
-}
-
-.project-card:hover .project-image img {
-  transform: scale(1.05);
-}
-
-.project-content {
-  padding: 24px;
-}
-
-.project-name {
-  font-size: 1.3rem;
-  color: #1e5a4a;
-  margin: 0 0 12px;
-  font-weight: 600;
-}
-
-.project-desc {
-  font-size: 0.95rem;
-  color: #5a6a5f;
-  line-height: 1.6;
-  margin: 0 0 16px;
-}
-
-.project-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.tag {
-  padding: 4px 12px;
-  background: rgba(45, 122, 107, 0.1);
-  color: #2d7a6b;
-  font-size: 0.8rem;
-  font-weight: 500;
-  border-radius: 6px;
-}
-
-.project-links {
-  display: flex;
-  gap: 12px;
-}
-
-.project-link {
-  padding: 8px 16px;
+.search-btn {
+  border: none;
   background: var(--c-primary);
   color: #fff;
-  text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 500;
-  border-radius: 8px;
-  transition: all 0.15s ease;
-}
-
-.project-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(45, 122, 107, 0.3);
-}
-
-/* Contact Section */
-.contact-section {
-  padding: 80px 0;
-  background: #fff;
-}
-
-.contact-card {
-  background: var(--c-primary-dark);
-  border-radius: 24px;
-  padding: 60px 40px;
-  text-align: center;
-  color: #fff;
-}
-
-.contact-card h2 {
-  font-size: 2rem;
+  font-size: 1rem;
   font-weight: 700;
-  margin: 0 0 12px;
+  padding: 0.9rem 2.2rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
 }
 
-.contact-card p {
+.search-btn:hover {
+  background: var(--c-primary-dark);
+  transform: translateY(-1px);
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  animation: fadeInUp 0.7s ease-out 0.5s both;
+}
+
+.stat-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.stat-value {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.stat-label {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Main */
+.main-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 2rem;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--c-text);
+  margin: 0 0 1.8rem;
+  letter-spacing: -0.02em;
+}
+
+.categories-section {
+  margin-bottom: 3.5rem;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.category-card {
+  background: var(--c-bg-card);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  text-decoration: none;
+  color: var(--c-text);
+  transition: all 0.25s ease;
+  box-shadow: var(--shadow-sm);
+  display: block;
+}
+
+.category-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--c-primary);
+}
+
+.category-icon {
+  font-size: 2.6rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.category-name {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin: 0 0 0.6rem;
+  color: var(--c-text);
+}
+
+.category-desc {
+  font-size: 0.95rem;
+  color: var(--c-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 1.4rem;
+  min-height: 3em;
+}
+
+.category-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1rem;
+  border-top: 1px solid var(--c-border);
+}
+
+.category-count {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--c-primary);
+}
+
+.category-arrow {
   font-size: 1.1rem;
-  opacity: 0.9;
-  margin: 0 0 32px;
+  color: var(--c-text-muted);
+  transition: transform 0.2s ease;
+}
+
+.category-card:hover .category-arrow {
+  transform: translateX(4px);
+  color: var(--c-primary);
+}
+
+/* Featured */
+.featured-section {
+  margin-bottom: 3.5rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.8rem;
+}
+
+.section-header .section-title {
+  margin-bottom: 0;
+}
+
+.view-all {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--c-primary);
+  text-decoration: none;
+}
+
+.view-all:hover {
+  text-decoration: underline;
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.featured-card {
+  background: var(--c-bg-card);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-decoration: none;
+  color: var(--c-text);
+  transition: all 0.25s ease;
+  box-shadow: var(--shadow-sm);
+  display: block;
+}
+
+.featured-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--c-primary);
+}
+
+.featured-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.featured-logo {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--c-primary-light);
+  color: var(--c-primary);
+  font-weight: 800;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featured-type {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--c-text-muted);
+  background: var(--c-bg-warm);
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+}
+
+.featured-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  color: var(--c-text);
+}
+
+.featured-desc {
+  font-size: 0.9rem;
+  color: var(--c-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.featured-category {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--c-primary);
+}
+
+/* About */
+.about-section {
+  background: var(--c-bg-card);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.about-text {
+  font-size: 1rem;
+  color: var(--c-text-secondary);
+  line-height: 1.8;
+  margin: 0;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .skills-grid {
+  .categories-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .hero-section {
-    min-height: auto;
-    padding: 60px 24px;
+    padding: 5rem 1rem 4rem;
   }
-  
+
   .hero-name {
-    font-size: 2.2rem;
+    font-size: 2.8rem;
   }
-  
+
   .hero-title {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
   }
-  
-  .hero-actions {
-    flex-direction: column;
-    align-items: center;
+
+  .hero-description {
+    font-size: 1rem;
   }
-  
-  .skills-grid {
-    grid-template-columns: 1fr;
+
+  .hero-stats {
+    gap: 2rem;
   }
-  
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .section-title {
+
+  .stat-value {
     font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-search {
+    flex-direction: column;
+    border-radius: 24px;
+    padding: 0.8rem;
+  }
+
+  .search-icon {
+    display: none;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    text-align: center;
+  }
+
+  .search-btn {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .hero-stats {
+    gap: 1.5rem;
   }
 }
 </style>

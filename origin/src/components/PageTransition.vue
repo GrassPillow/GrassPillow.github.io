@@ -3,18 +3,15 @@
     :name="name"
     :mode="mode"
     :appear="appear"
-    @before-enter="onBeforeEnter"
-    @enter="onEnter"
-    @after-enter="onAfterEnter"
-    @before-leave="onBeforeLeave"
-    @leave="onLeave"
-    @after-leave="onAfterLeave"
+    :duration="duration"
   >
     <slot />
   </transition>
 </template>
 
 <script setup>
+// 显式过渡时长：Vue 会以 setTimeout 兜底完成切换，
+// 避免 transitionend 事件未触发（系统开启"减弱动态效果"或特殊渲染环境）导致 out-in 切换卡死
 defineProps({
   name: {
     type: String,
@@ -28,24 +25,19 @@ defineProps({
   appear: {
     type: Boolean,
     default: false
+  },
+  duration: {
+    type: [Number, Object],
+    default: () => ({ enter: 300, leave: 300 })
   }
 })
-
-const emit = defineEmits(['beforeEnter', 'enter', 'afterEnter', 'beforeLeave', 'leave', 'afterLeave'])
-
-const onBeforeEnter = (el) => emit('beforeEnter', el)
-const onEnter = (el, done) => emit('enter', el, done)
-const onAfterEnter = (el) => emit('afterEnter', el)
-const onBeforeLeave = (el) => emit('beforeLeave', el)
-const onLeave = (el, done) => emit('leave', el, done)
-const onAfterLeave = (el) => emit('afterLeave', el)
 </script>
 
 <style>
 /* Page Transitions */
 .page-enter-active,
 .page-leave-active {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .page-enter-from {

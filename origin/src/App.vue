@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-view v-slot="{ Component, route }">
-      <PageTransition mode="out-in">
+      <PageTransition mode="out-in" :duration="{ enter: 300, leave: 300 }">
         <component :is="Component" :key="route.path" />
       </PageTransition>
     </router-view>
@@ -26,37 +26,25 @@
           <span class="nav-icon">🏠</span>
           <span class="nav-label">首页</span>
         </router-link>
-        <router-link to="/about" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">👋</span>
-          <span class="nav-label">关于</span>
+        <router-link to="/resources/website" class="nav-item" @click="handleNavClick">
+          <span class="nav-icon">🌐</span>
+          <span class="nav-label">网站工具</span>
         </router-link>
-        <router-link to="/projects" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">💼</span>
-          <span class="nav-label">作品</span>
+        <router-link to="/resources/software" class="nav-item" @click="handleNavClick">
+          <span class="nav-icon">💻</span>
+          <span class="nav-label">软件应用</span>
         </router-link>
-        <router-link to="/blog" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">📝</span>
-          <span class="nav-label">博客</span>
+        <router-link to="/resources/learning" class="nav-item" @click="handleNavClick">
+          <span class="nav-icon">📚</span>
+          <span class="nav-label">学习资料</span>
         </router-link>
-        <router-link to="/gallery" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">🖼️</span>
-          <span class="nav-label">相册</span>
+        <router-link to="/resources/media" class="nav-item" @click="handleNavClick">
+          <span class="nav-icon">🎬</span>
+          <span class="nav-label">影视音乐</span>
         </router-link>
-        <router-link to="/timeline" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">📅</span>
-          <span class="nav-label">时间线</span>
-        </router-link>
-        <router-link to="/todo" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">✅</span>
-          <span class="nav-label">待办</span>
-        </router-link>
-        <router-link to="/music" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">🎵</span>
-          <span class="nav-label">音乐</span>
-        </router-link>
-        <router-link to="/tools" class="nav-item" @click="handleNavClick">
-          <span class="nav-icon">🛠️</span>
-          <span class="nav-label">工具</span>
+        <router-link to="/resources/all" class="nav-item" @click="handleNavClick">
+          <span class="nav-icon">🗂️</span>
+          <span class="nav-label">全部资源</span>
         </router-link>
       </div>
     </div>

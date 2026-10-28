@@ -16,15 +16,16 @@
           帮你省下到处找资源的时间。
         </p>
         <div class="hero-search">
-          <span class="search-icon">🔍</span>
+          <span class="search-icon" aria-hidden="true">🔍</span>
           <input
             v-model="searchQuery"
-            type="text"
+            type="search"
+            aria-label="搜索资源"
             class="search-input"
             placeholder="搜索资源，例如：PDF、AI、笔记..."
             @keyup.enter="handleSearch"
           />
-          <button class="search-btn" @click="handleSearch">搜索</button>
+          <button type="button" class="search-btn" @click="handleSearch">搜索</button>
         </div>
         <div class="hero-stats">
           <div class="stat-item">
@@ -112,8 +113,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
-import { parseCSV } from '../utils/csv.js'
+import { loadResources } from '../utils/resources.js'
 
 const router = useRouter()
 const searchQuery = ref('')
@@ -182,9 +182,9 @@ function handleSearch() {
 
 async function loadData() {
   try {
-    const response = await axios.get('/resources.csv')
+    const items = await loadResources()
     if (_isUnmounted) return
-    resources.value = parseCSV(response.data)
+    resources.value = items
   } catch (error) {
     if (_isUnmounted) return
     console.error('加载资源数据失败:', error)
@@ -210,7 +210,7 @@ onBeforeUnmount(() => {
 .hero-section {
   position: relative;
   background: var(--c-primary-dark);
-  color: #fff;
+  color: var(--c-text-inverse);
   padding: 7rem 1.5rem 6rem;
   text-align: center;
   overflow: hidden;
@@ -225,7 +225,7 @@ onBeforeUnmount(() => {
 .floating-orb {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--c-primary-rgb), 0.12);
   animation: float 18s ease-in-out infinite;
 }
 
@@ -267,8 +267,8 @@ onBeforeUnmount(() => {
 .hero-badge {
   display: inline-block;
   padding: 0.5rem 1.2rem;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(var(--c-primary-rgb), 0.2);
+  border: 1px solid rgba(var(--c-primary-rgb), 0.35);
   border-radius: 999px;
   font-size: 0.9rem;
   font-weight: 600;
@@ -281,7 +281,7 @@ onBeforeUnmount(() => {
   font-weight: 900;
   margin: 0 0 0.5rem;
   letter-spacing: -0.03em;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 4px 24px rgba(var(--c-shadow-rgb), 0.3);
   animation: fadeInDown 0.7s ease-out 0.1s both;
 }
 
@@ -306,10 +306,10 @@ onBeforeUnmount(() => {
   align-items: center;
   max-width: 640px;
   margin: 0 auto 2.5rem;
-  background: #fff;
+  background: var(--c-bg-card);
   border-radius: 999px;
   padding: 0.4rem;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-lg);
   animation: fadeInUp 0.7s ease-out 0.4s both;
   position: relative;
 }
@@ -335,7 +335,7 @@ onBeforeUnmount(() => {
 .search-btn {
   border: none;
   background: var(--c-primary);
-  color: #fff;
+  color: var(--c-text-inverse);
   font-size: 1rem;
   font-weight: 700;
   padding: 0.9rem 2.2rem;

@@ -1,5 +1,14 @@
 <template>
   <div class="resource-view">
+    <!-- 加载失败提示（区别于"无匹配结果"） -->
+    <div v-if="loadError" class="load-error">
+      <div class="load-error-icon">⚠️</div>
+      <h3 class="load-error-title">资源数据加载失败</h3>
+      <p class="load-error-desc">{{ loadError }}</p>
+      <button class="load-error-btn" @click="loadData">重试</button>
+    </div>
+
+    <template v-else>
     <header class="page-header">
       <div class="header-content">
         <h1 class="page-title">{{ headerIcon }} {{ headerTitle }}</h1>
@@ -14,7 +23,8 @@
           <span class="search-icon">🔍</span>
           <input
             v-model="searchQuery"
-            type="text"
+            type="search"
+            aria-label="搜索资源"
             :placeholder="`搜索${headerTitle}...`"
             class="search-input"
           />
@@ -23,7 +33,9 @@
           <button
             v-for="cat in categories"
             :key="cat.value"
+            type="button"
             class="filter-tag"
+            :aria-pressed="selectedCategory === cat.value || (!selectedCategory && cat.value === 'all')"
             :class="{ active: selectedCategory === cat.value || (!selectedCategory && cat.value === 'all') }"
             @click="selectedCategory = cat.value === 'all' ? '' : cat.value"
           >
@@ -54,9 +66,17 @@
           class="category-section"
           :class="{ collapsed: collapsedCategories[category] }"
         >
-          <div class="category-header" @click="toggleCategory(category)">
+          <div
+            class="category-header"
+            role="button"
+            tabindex="0"
+            :aria-expanded="!collapsedCategories[category]"
+            @click="toggleCategory(category)"
+            @keyup.enter="toggleCategory(category)"
+            @keyup.space.prevent="toggleCategory(category)"
+          >
             <h3 class="category-title">
-              <span class="collapse-icon">{{ collapsedCategories[category] ? '▶' : '▼' }}</span>
+              <span class="collapse-icon" aria-hidden="true">{{ collapsedCategories[category] ? '▶' : '▼' }}</span>
               {{ category }}
             </h3>
             <span class="category-count">{{ items.length }}</span>
@@ -71,20 +91,27 @@
         </div>
       </div>
 
-      <!-- 空状态 -->
+      <!-- 空状态：区分"加载中"与"无匹配结果" -->
       <div v-else class="empty-state">
-        <div class="empty-icon">🔍</div>
-        <h3 class="empty-title">未找到匹配的资源</h3>
-        <p class="empty-desc">尝试调整搜索条件</p>
+        <template v-if="isLoading">
+          <div class="empty-icon loading-icon">⏳</div>
+          <h3 class="empty-title">正在加载资源…</h3>
+          <p class="empty-desc">数据加载完成后自动显示</p>
+        </template>
+        <template v-else>
+          <div class="empty-icon">🔍</div>
+          <h3 class="empty-title">未找到匹配的资源</h3>
+          <p class="empty-desc">尝试调整搜索条件，或切换到其他分类</p>
+        </template>
       </div>
     </main>
+    </template>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 import ResourceCard from '@/components/ResourceCard.vue'
-import { parseCSV } from '../utils/csv.js'
+import { loadResources } from '../utils/resources.js'
 
 const TYPE_META = {
   website: { name: '网站工具', desc: 'AI 助手、在线工具、设计素材与开发者实用网站', icon: '🌐' },
@@ -108,7 +135,11 @@ export default {
       allResources: [],
       searchQuery: '',
       selectedCategory: '',
-      collapsedCategories: {}
+      collapsedCategories: {},
+      isLoading: true,
+      loadError: '',
+      // 是否经历过加载失败，决定「重试」时是否绕过缓存
+      hasFailed: false
     }
   },
   computed: {
@@ -184,21 +215,37 @@ export default {
   methods: {
     toggleCategory(category) {
       this.collapsedCategories[category] = !this.collapsedCategories[category]
+    },
+    async loadData() {
+      this.isLoading = true
+      this.loadError = ''
+      try {
+        // 重试时跳过缓存，确保拿到最新数据文件
+        const items = await loadResources({ force: this.hasFailed })
+        if (this._isUnmounted) return
+        this.allResources = items
+        this.hasFailed = false
+      } catch (error) {
+        if (this._isUnmounted) return
+        console.error('加载资源数据失败:', error)
+        this.allResources = []
+        this.hasFailed = true
+        this.loadError = error?.message || '无法获取资源数据，请检查网络后重试。'
+      } finally {
+        if (!this._isUnmounted) {
+          this.isLoading = false
+        }
+      }
     }
   },
-  async mounted() {
+  created() {
     this._isUnmounted = false
     if (this.$route.query && this.$route.query.q) {
       this.searchQuery = this.$route.query.q
     }
-    try {
-      const response = await axios.get('/resources.csv')
-      if (this._isUnmounted) return
-      this.allResources = parseCSV(response.data)
-    } catch (error) {
-      if (this._isUnmounted) return
-      console.error('加载资源数据失败:', error)
-    }
+  },
+  mounted() {
+    this.loadData()
   },
   beforeUnmount() {
     this._isUnmounted = true
@@ -215,12 +262,12 @@ export default {
 
 .page-header {
   background: var(--c-primary-dark);
-  color: white;
+  color: var(--c-text-inverse);
   padding: 5rem 1rem;
   margin-bottom: 3rem;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
 }
 
 .page-header::before {
@@ -230,7 +277,7 @@ export default {
   right: -20%;
   width: 800px;
   height: 800px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--c-primary-rgb), 0.12);
   border-radius: 50%;
   animation: float 20s ease-in-out infinite;
 }
@@ -242,7 +289,7 @@ export default {
   left: -10%;
   width: 600px;
   height: 600px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(var(--c-primary-rgb), 0.08);
   border-radius: 50%;
   animation: float 15s ease-in-out infinite reverse;
 }
@@ -264,17 +311,17 @@ export default {
   font-size: 3.4rem;
   font-weight: 900;
   margin: 0 0 1rem;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 4px 24px rgba(var(--c-shadow-rgb), 0.4);
   letter-spacing: -0.03em;
   animation: fadeInDown 0.8s ease-out;
-  color: #ffffff;
+  color: var(--c-text-inverse);
 }
 
 .page-description {
   font-size: 1.2rem;
   opacity: 0.95;
   margin: 0;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 12px rgba(var(--c-shadow-rgb), 0.3);
   animation: fadeInUp 0.8s ease-out 0.2s both;
   line-height: 1.6;
 }
@@ -376,7 +423,7 @@ export default {
 .filter-tag.active {
   background: var(--c-primary);
   border-color: transparent;
-  color: #fff;
+  color: var(--c-text-inverse);
   box-shadow: var(--shadow-md);
 }
 
@@ -450,6 +497,12 @@ export default {
   user-select: none;
 }
 
+.category-header:focus-visible {
+  outline: 3px solid var(--c-primary);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
 .category-title {
   font-size: 1.5rem;
   font-weight: 800;
@@ -480,7 +533,7 @@ export default {
 .category-count {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--c-text-inverse);
   background: var(--c-primary);
   padding: 0.4rem 1.1rem;
   border-radius: 24px;
@@ -490,6 +543,65 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.25rem;
+}
+
+/* 加载失败 */
+.load-error {
+  max-width: 640px;
+  margin: 6rem auto;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  background: var(--c-bg-card);
+  border: 1px solid var(--c-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.load-error-icon {
+  font-size: 4rem;
+  margin-bottom: 1.2rem;
+}
+
+.load-error-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--c-text);
+  margin: 0 0 0.8rem;
+}
+
+.load-error-desc {
+  font-size: 1rem;
+  color: var(--c-text-secondary);
+  margin: 0 0 1.8rem;
+  line-height: 1.6;
+}
+
+.load-error-btn {
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 26px;
+  background: var(--c-primary);
+  color: var(--c-text-inverse);
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.load-error-btn:hover {
+  background: var(--c-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.loading-icon {
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.1); }
 }
 
 /* 空状态 */

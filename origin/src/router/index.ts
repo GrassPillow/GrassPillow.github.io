@@ -45,6 +45,16 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  // 切换分类页时回到顶部；浏览器前进/后退时恢复原滚动位置
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+    if (to.path !== from.path) {
+      return { top: 0 }
+    }
+    return false
+  },
 })
 
 // Navigation guard for page titles

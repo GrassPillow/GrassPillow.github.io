@@ -57,8 +57,8 @@ onUnmounted(() => {
   border-radius: 50%;
   background: var(--c-primary);
   border: none;
-  box-shadow: 0 4px 12px rgba(45, 122, 107, 0.3),
-              0 2px 6px rgba(139, 111, 71, 0.2);
+  box-shadow: 0 4px 12px rgba(var(--c-primary-rgb), 0.3),
+              0 2px 6px rgba(var(--c-primary-rgb), 0.2);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -71,8 +71,8 @@ onUnmounted(() => {
 
 .back-to-top:hover {
   transform: translateY(-4px) scale(1.1);
-  box-shadow: 0 6px 20px rgba(45, 122, 107, 0.4),
-              0 4px 12px rgba(139, 111, 71, 0.3);
+  box-shadow: 0 6px 20px rgba(var(--c-primary-rgb), 0.4),
+              0 4px 12px rgba(var(--c-primary-rgb), 0.3);
 }
 
 .back-to-top:active {

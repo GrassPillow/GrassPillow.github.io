@@ -7,75 +7,49 @@ import { useTheme } from './composables/useTheme.js'
 const { initTheme } = useTheme()
 initTheme()
 
-// 全局ResizeObserver错误处理
-const originalErrorHandler = window.onerror;
-window.onerror = function(message, source, lineno, colno, error) {
-  // 检查是否是ResizeObserver循环错误
-  const messageStr = typeof message === 'string' ? message : String(message || '');
-  const errorMessage = error?.message || '';
-  const errorStack = error?.stack || '';
-  
-  const isResizeObserverError = 
-    messageStr.includes('ResizeObserver loop') || 
-    messageStr.includes('ResizeObserver loop completed with undelivered notifications') ||
-    messageStr.includes('ResizeObserver loop limit exceeded') ||
-    errorMessage.includes('ResizeObserver loop') ||
-    errorMessage.includes('ResizeObserver loop completed with undelivered notifications') ||
-    errorStack.includes('ResizeObserver');
-  
-  if (isResizeObserverError) {
-    // 这是一个已知的浏览器错误，我们可以安全地忽略它
-    // 完全阻止错误显示
-    return true;
-  }
-  
-  // 对于其他错误，调用原始处理器
-  if (originalErrorHandler) {
-    return originalErrorHandler.call(this, message, source, lineno, colno, error);
-  }
-  return false;
-};
+/**
+ * ResizeObserver 循环错误抑制
+ *
+ * 浏览器在 ResizeObserver 回调里同步修改被观察元素的尺寸时会抛出
+ * "ResizeObserver loop completed with undelivered notifications"。
+ * 这是浏览器的已知行为而非本站缺陷，Vue 过渡动画会稳定触发，
+ * 因此只放行这一类错误，其余错误照常上抛。
+ */
+const RO_LOOP_PATTERNS = [
+  'ResizeObserver loop',
+  'ResizeObserver loop completed with undelivered notifications',
+  'ResizeObserver loop limit exceeded'
+]
 
-// 同时处理未捕获的Promise错误
-window.addEventListener('unhandledrejection', (e) => {
-  const message = e.reason?.message || String(e.reason || '');
-  const stack = e.reason?.stack || '';
-  
-  if (message.includes('ResizeObserver loop') || 
-      message.includes('ResizeObserver loop completed with undelivered notifications') ||
-      message.includes('ResizeObserver loop limit exceeded') ||
-      stack.includes('ResizeObserver')) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    return true;
-  }
-  return false;
-}, true);
+function isResizeObserverError(err: unknown): boolean {
+  const message = err instanceof Error ? err.message : String(err ?? '')
+  return RO_LOOP_PATTERNS.some(pattern => message.includes(pattern))
+}
 
-// 处理错误事件（使用捕获阶段）
-window.addEventListener('error', (e) => {
-  const message = e.message || '';
-  const stack = e.error?.stack || '';
-  
-  const isResizeObserverError = 
-    message.includes('ResizeObserver loop') || 
-    message.includes('ResizeObserver loop completed with undelivered notifications') ||
-    message.includes('ResizeObserver loop limit exceeded') ||
-    stack.includes('ResizeObserver');
-  
-  if (isResizeObserverError) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    return true;
-  }
-  return false;
-}, true);
+// 捕获阶段的 error 事件覆盖资源加载错误与跨域脚本错误，
+// 因此不额外挂 window.onerror（两者对同一批错误重复生效）
+window.addEventListener(
+  'error',
+  e => {
+    if (isResizeObserverError(e.error || e.message)) {
+      e.preventDefault()
+      e.stopImmediatePropagation()
+    }
+  },
+  true
+)
 
-// 创建Vue应用实例
+window.addEventListener(
+  'unhandledrejection',
+  e => {
+    if (isResizeObserverError(e.reason)) {
+      e.preventDefault()
+      e.stopImmediatePropagation()
+    }
+  },
+  true
+)
+
 const app = createApp(App)
-
-// 使用路由
 app.use(router)
-
-// 挂载应用
 app.mount('#app')

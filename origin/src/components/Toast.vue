@@ -106,8 +106,8 @@ onUnmounted(() => {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15),
-              0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(var(--c-shadow-rgb), 0.15),
+              0 2px 8px rgba(var(--c-shadow-rgb), 0.1);
   font-size: 0.9375rem;
   font-weight: 500;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -119,28 +119,28 @@ onUnmounted(() => {
 
 .toast:hover {
   transform: translateX(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2),
-              0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 12px 32px rgba(var(--c-shadow-rgb), 0.2),
+              0 4px 12px rgba(var(--c-shadow-rgb), 0.15);
 }
 
 .toast.success {
-  border-left-color: #2d7a6b;
-  color: #2d5a4f;
+  border-left-color: var(--c-success-base);
+  color: var(--c-success-text);
 }
 
 .toast.error {
-  border-left-color: #dc3545;
-  color: #dc3545;
+  border-left-color: var(--c-error-base);
+  color: var(--c-error-text);
 }
 
 .toast.warning {
-  border-left-color: #ffc107;
-  color: #856404;
+  border-left-color: var(--c-warning-base);
+  color: var(--c-warning-text);
 }
 
 .toast.info {
-  border-left-color: #17a2b8;
-  color: #0c5460;
+  border-left-color: var(--c-info-base);
+  color: var(--c-info-text);
 }
 
 .toast-icon {
@@ -150,19 +150,19 @@ onUnmounted(() => {
 }
 
 .toast.success .toast-icon {
-  color: #2d7a6b;
+  color: var(--c-success-base);
 }
 
 .toast.error .toast-icon {
-  color: #dc3545;
+  color: var(--c-error-base);
 }
 
 .toast.warning .toast-icon {
-  color: #ffc107;
+  color: var(--c-warning-base);
 }
 
 .toast.info .toast-icon {
-  color: #17a2b8;
+  color: var(--c-info-base);
 }
 
 .toast-message {
@@ -174,7 +174,7 @@ onUnmounted(() => {
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #999;
+  color: var(--c-text-muted);
   cursor: pointer;
   padding: 0;
   width: 24px;
@@ -189,8 +189,8 @@ onUnmounted(() => {
 }
 
 .toast-close:hover {
-  background: rgba(0, 0, 0, 0.05);
-  color: #666;
+  background: var(--c-bg-warm);
+  color: var(--c-text-secondary);
 }
 
 /* 过渡动画 */

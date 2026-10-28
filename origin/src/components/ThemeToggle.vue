@@ -23,8 +23,8 @@ const { isDark, toggleTheme } = useTheme()
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 2px solid var(--border-color);
-  background: var(--card-bg);
+  border: 2px solid var(--c-border);
+  background: var(--c-bg-card);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -35,7 +35,7 @@ const { isDark, toggleTheme } = useTheme()
 
 .theme-toggle:hover {
   transform: scale(1.1);
-  border-color: var(--primary-color);
+  border-color: var(--c-primary);
   box-shadow: var(--shadow-md);
 }
 

@@ -2,12 +2,17 @@
 # 任何一步失败立即退出，避免"构建失败仍继续复制/误删"的脏部署
 set -e
 
-# 开始时间
-start_time=$(date "+%Y-%m-%d %H:%M:%S")
+# 始终以脚本所在目录（仓库根）为目标，避免在其他目录执行时删错文件
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$ROOT_DIR"
 
-echo "deploying start " $(date "+%Y-%m-%d %H:%M:%S")
+# 开始时间（用秒级时间戳做差，字符串相减得不到耗时）
+start_time=$(date +%s)
 
-echo "开始删除 " $(date "+%Y-%m-%d %H:%M:%S")
+echo "deploying start $(date "+%Y-%m-%d %H:%M:%S")"
+echo "仓库根目录: $ROOT_DIR"
+
+echo "开始删除 $(date "+%Y-%m-%d %H:%M:%S")"
 # 保留的文件和文件夹列表
 KEEP_ITEMS=(".idea" "origin" ".gitignore" "deploy.sh" "README.md" ".git" "CLAUDE.md" ".claude" "openspec")
 
@@ -58,9 +63,11 @@ done
 echo "复制完成 " $(date "+%Y-%m-%d %H:%M:%S")
 
 # 结束时间
-end_time=$(date "+%Y-%m-%d %H:%M:%S")
+end_time=$(date +%s)
 
-# 计算执行时间
-exec_time=$(echo $end_time $start_time | awk '{print $1 - $2}')
+# 计算执行时间（秒）
+exec_time=$((end_time - start_time))
 
-echo "整个部署过程执行时间：$exec_time 毫秒"
+echo "整个部署过程执行时间：${exec_time} 秒"
+echo "构建产物已复制到仓库根目录，部署完成后请执行："
+echo "  git add index.html 404.html css js favicon.ico resources.csv"

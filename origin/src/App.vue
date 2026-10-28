@@ -16,12 +16,19 @@
     <!-- 悬浮球导航 -->
     <div class="floating-nav-ball" :class="{ 'nav-hidden': isNavHidden, 'nav-expanded': isExpanded }">
       <!-- 主悬浮球按钮 -->
-      <button class="ball-button" @click="toggleNav" :class="{ 'active': isExpanded }">
-        <span class="ball-icon">{{ isExpanded ? '✕' : '☰' }}</span>
+      <button
+        type="button"
+        class="ball-button"
+        aria-label="打开导航菜单"
+        :aria-expanded="isExpanded"
+        @click="toggleNav"
+        :class="{ 'active': isExpanded }"
+      >
+        <span class="ball-icon" aria-hidden="true">{{ isExpanded ? '✕' : '☰' }}</span>
       </button>
-      
+
       <!-- 展开的导航菜单 -->
-      <div class="nav-menu" v-show="isExpanded">
+      <div class="nav-menu" v-show="isExpanded" @keyup.esc="isExpanded = false">
         <router-link to="/" class="nav-item" @click="handleNavClick">
           <span class="nav-icon">🏠</span>
           <span class="nav-label">首页</span>
@@ -90,7 +97,8 @@ const handleNavClick = () => {
 }
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
+  // passive: 滚动监听不阻止默认行为，避免影响滚动性能
+  window.addEventListener('scroll', handleScroll, { passive: true })
 })
 
 onUnmounted(() => {
@@ -103,80 +111,99 @@ onUnmounted(() => {
 
 <style>
 :root {
-  /* Colors */
+  /* 品牌与基础色 */
   --c-primary: #2d7a6b;
   --c-primary-light: #e8f5f1;
   --c-primary-dark: #1e5a4a;
+
+  /* 背景层级 */
   --c-bg-page: #faf9f7;
   --c-bg-card: #ffffff;
   --c-bg-warm: #f5f3ef;
   --c-border: #e8e4df;
+
+  /* 文字层级 */
   --c-text: #2c3e2d;
-  --c-text-secondary: #6b7a6d;
-  --c-text-muted: #9ba89c;
+  --c-text-secondary: #637266;
+  --c-text-muted: #68766a;
+  /* 深色背景（页头、悬浮球、激活按钮）上的文字 */
+  --c-text-inverse: #ffffff;
 
-  /* Font sizes */
-  --fs-hero: 3rem;
-  --fs-h1: 2.2rem;
-  --fs-h2: 1.6rem;
-  --fs-h3: 1.2rem;
-  --fs-body: 1rem;
-  --fs-sm: 0.875rem;
-  --fs-xs: 0.75rem;
+  /* 浮层背景：悬浮导航菜单等。深浅主题下均为深色系，
+     因此配 --c-overlay-text（浮层上的文字），两套主题取值一致 */
+  --c-overlay: #1e5a4a;
+  --c-overlay-text: #ffffff;
+  /* 透明通道用 RGB 分量形式，便于 rgba(var(--c-x-rgb), 0.5) 组合
+     --c-overlay-text-rgb：浮层/悬浮球表面的半透明白色高光与激活底色 */
+  --c-overlay-text-rgb: 255, 255, 255;
+  /* --c-shadow-rgb：阴影用的纯黑分量，阴影在两套主题下均为黑色 */
+  --c-shadow-rgb: 0, 0, 0;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08);
+  /* 语义色：base 用于左边框与图标，text 用于文字
+     取值经 WCAG 对比度校验：text 类 >= 4.5:1 on --c-bg-card，
+     base 类 >= 3:1（非文本 UI，WCAG 1.4.11） */
+  --c-success-base: #2d7a6b;
+  --c-success-text: #2d5a4f;
+  --c-error-base: #dc3545;
+  --c-error-text: #c62f3f;
+  --c-warning-base: #b88700;
+  --c-warning-text: #856404;
+  --c-info-base: #17a2b8;
+  --c-info-text: #0c5460;
 
-  /* Radii */
-  --radius-sm: 8px;
+  /* 阴影 */
+  --shadow-sm: 0 1px 3px rgba(var(--c-shadow-rgb), 0.04);
+  --shadow-md: 0 4px 16px rgba(var(--c-shadow-rgb), 0.06);
+  --shadow-lg: 0 8px 32px rgba(var(--c-shadow-rgb), 0.08);
+  /* 彩色投影用的主色，主题切换时随之变化 */
+  --c-primary-rgb: 45, 122, 107;
+
+  /* 圆角 */
   --radius-md: 12px;
   --radius-lg: 20px;
 
   /* Z-index scale */
   --z-base: 0;
-  --z-dropdown: 100;
-  --z-sticky: 200;
-  --z-overlay: 300;
-  --z-modal: 400;
   --z-toast: 500;
-
-  /* 兼容旧变量名：历史视图引用的非 --c-* 变量，统一映射到 --c-* 体系 */
-  --primary-color: var(--c-primary);
-  --primary-light: var(--c-primary-light);
-  --primary-dark: var(--c-primary-dark);
-  --text-primary: var(--c-text);
-  --text-secondary: var(--c-text-secondary);
-  --text-muted: var(--c-text-muted);
-  --bg-primary: var(--c-bg-card);
-  --bg-secondary: var(--c-bg-warm);
-  --bg-tertiary: var(--c-bg-warm);
-  --card-bg: var(--c-bg-card);
-  --border-light: var(--c-border);
-  --border-color: var(--c-border);
-  --accent-color: #8b6f47;
-  /* 无渐变约定：渐变型变量退化为纯色 */
-  --gradient-hero: var(--c-primary-dark);
-  --gradient-primary: var(--c-primary);
 }
 
-/* 深色模式调色板（绿 + 暖灰体系反色） */
+/* 深色模式调色板（绿 + 暖灰体系反色）
+   每个 :root 中定义的 token 都必须在此给出深色取值 */
 [data-theme="dark"] {
   --c-primary: #55b3a0;
   --c-primary-light: #1c3530;
   --c-primary-dark: #8fd4c6;
+
   --c-bg-page: #101513;
   --c-bg-card: #1b2421;
   --c-bg-warm: #222c29;
   --c-border: #33423c;
+
   --c-text: #e2e8e6;
   --c-text-secondary: #a3b3ad;
-  --c-text-muted: #6f8079;
+  --c-text-muted: #85958e;
+  /* 深色主题下页头背景转为浅色系，文字相应转为深色 */
+  --c-text-inverse: #101513;
 
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --c-overlay: #1c3530;
+  --c-overlay-text: #ffffff;
+  --c-overlay-text-rgb: 255, 255, 255;
+  --c-shadow-rgb: 0, 0, 0;
+
+  /* 语义色仅提亮明度，保持原色相家族（红/黄/蓝/绿） */
+  --c-success-base: #55b3a0;
+  --c-success-text: #7fd4c1;
+  --c-error-base: #ff7b7b;
+  --c-error-text: #ff9a9a;
+  --c-warning-base: #ffc107;
+  --c-warning-text: #ffd166;
+  --c-info-base: #4dd0e1;
+  --c-info-text: #7ddcea;
+
+  --shadow-sm: 0 1px 3px rgba(var(--c-shadow-rgb), 0.35);
+  --shadow-md: 0 4px 16px rgba(var(--c-shadow-rgb), 0.4);
+  --shadow-lg: 0 8px 32px rgba(var(--c-shadow-rgb), 0.45);
+  --c-primary-rgb: 85, 179, 160;
 }
 
 /* Theme toggle container */
@@ -191,14 +218,15 @@ onUnmounted(() => {
 .page-title {
   font-size: 2.5rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--c-text-inverse);
   margin: 0 0 12px;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 4px 20px rgba(var(--c-shadow-rgb), 0.3);
 }
 
 .page-subtitle {
   font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--c-text-inverse);
+  opacity: 0.85;
   margin: 0;
 }
 
@@ -214,6 +242,35 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   min-height: 100vh;
   transition: background-color 0.3s ease;
+}
+
+/* 主题切换过渡
+   仅对颜色属性生效：卡片、列表容器、筛选标签、Toast、导航项、按钮等
+   元素在 data-theme 变化时平滑渐变，而不是瞬时跳变。
+   刻意不含 transform，避免与各元素自身的 hover 位移动效叠加。
+   App.vue 末尾的 prefers-reduced-motion 规则会把这些过渡压缩到接近 0。 */
+.resource-card,
+.category-section,
+.search-filter-bar,
+.stats-bar,
+.stat-item,
+.empty-state,
+.load-error,
+.filter-tag,
+.category-count,
+.category-header,
+.load-error-btn,
+.hero-search,
+.search-input,
+.featured-card,
+.category-card,
+.toast,
+.nav-item,
+.theme-toggle,
+.back-to-top {
+  transition-property: color, background-color, border-color, box-shadow, opacity;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
 }
 #app {
   min-height: 100vh;
@@ -259,7 +316,7 @@ p {
     min-height: 44px;
   border-radius: 50%;
   background: var(--c-primary);
-  border: 3px solid rgba(255, 255, 255, 0.4);
+  border: 3px solid rgba(var(--c-overlay-text-rgb), 0.4);
   box-shadow: var(--shadow-lg);
   cursor: pointer;
   display: flex;
@@ -275,16 +332,16 @@ p {
 
 @keyframes pulse {
   0%, 100% {
-    box-shadow: 0 12px 32px rgba(45, 122, 107, 0.5),
-                0 6px 16px rgba(139, 111, 71, 0.4),
-                inset 0 2px 4px rgba(255, 255, 255, 0.3),
-                inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 12px 32px rgba(var(--c-primary-rgb), 0.5),
+                0 6px 16px rgba(var(--c-primary-rgb), 0.4),
+                inset 0 2px 4px rgba(var(--c-overlay-text-rgb), 0.3),
+                inset 0 -2px 4px rgba(var(--c-shadow-rgb), 0.2);
   }
   50% {
-    box-shadow: 0 16px 40px rgba(45, 122, 107, 0.6),
-                0 8px 20px rgba(139, 111, 71, 0.5),
-                inset 0 2px 4px rgba(255, 255, 255, 0.4),
-                inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 16px 40px rgba(var(--c-primary-rgb), 0.6),
+                0 8px 20px rgba(var(--c-primary-rgb), 0.5),
+                inset 0 2px 4px rgba(var(--c-overlay-text-rgb), 0.4),
+                inset 0 -2px 4px rgba(var(--c-shadow-rgb), 0.2);
   }
 }
 
@@ -296,7 +353,7 @@ p {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(var(--c-overlay-text-rgb), 0.3);
   transform: translate(-50%, -50%) scale(0);
   transition: transform 0.2s ease;
 }
@@ -307,11 +364,11 @@ p {
 
 .ball-button:hover {
   transform: scale(1.15);
-  box-shadow: 0 16px 40px rgba(45, 122, 107, 0.6),
-              0 8px 20px rgba(139, 111, 71, 0.5),
-              inset 0 2px 4px rgba(255, 255, 255, 0.4),
-              inset 0 -2px 4px rgba(0, 0, 0, 0.2);
-  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 16px 40px rgba(var(--c-primary-rgb), 0.6),
+              0 8px 20px rgba(var(--c-primary-rgb), 0.5),
+              inset 0 2px 4px rgba(var(--c-overlay-text-rgb), 0.4),
+              inset 0 -2px 4px rgba(var(--c-shadow-rgb), 0.2);
+  border-color: rgba(var(--c-overlay-text-rgb), 0.6);
 }
 
 .ball-button.active {
@@ -321,7 +378,7 @@ p {
 }
 
 .ball-icon {
-  color: white;
+  color: var(--c-overlay-text);
   font-size: 1.5rem;
   font-weight: 300;
   line-height: 1;
@@ -337,15 +394,16 @@ p {
   flex-direction: column;
   gap: 10px;
   padding: 20px;
-  background: rgba(30, 90, 74, 0.97);
+  /* 浮层始终为深色系：mix(--c-overlay) 与 97% 不透明度，主题切换时取深浅两套浮层色 */
+  background: color-mix(in srgb, var(--c-overlay) 97%, transparent);
   backdrop-filter: blur(24px) saturate(200%);
   -webkit-backdrop-filter: blur(24px) saturate(200%);
   border-radius: 28px;
-  box-shadow: 0 20px 60px rgba(45, 122, 107, 0.5),
-              0 10px 30px rgba(139, 111, 71, 0.4),
-              inset 0 2px 4px rgba(255, 255, 255, 0.3),
-              inset 0 -2px 4px rgba(0, 0, 0, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 20px 60px rgba(var(--c-primary-rgb), 0.5),
+              0 10px 30px rgba(var(--c-primary-rgb), 0.4),
+              inset 0 2px 4px rgba(var(--c-overlay-text-rgb), 0.3),
+              inset 0 -2px 4px rgba(var(--c-shadow-rgb), 0.2);
+  border: 2px solid rgba(var(--c-overlay-text-rgb), 0.25);
   min-width: 150px;
   animation: slideUp 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   transform-origin: bottom right;
@@ -362,13 +420,13 @@ p {
   }
 }
 
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 18px;
-    min-height: 44px;
-  color: white;
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  min-height: 44px;
+  color: var(--c-overlay-text);
   text-decoration: none;
   border-radius: 18px;
   transition: all 0.15s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -386,7 +444,7 @@ p {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(var(--c-overlay-text-rgb), 0.15);
   opacity: 0;
   transition: opacity 0.3s ease;
   border-radius: 16px;
@@ -398,17 +456,17 @@ p {
 
 .nav-item:hover {
   transform: translateX(-4px);
-  color: white;
+  color: var(--c-overlay-text);
 }
 
 .nav-item.router-link-active {
-  background: rgba(255, 255, 255, 0.3);
-  color: white;
+  background: rgba(var(--c-overlay-text-rgb), 0.3);
+  color: var(--c-overlay-text);
   font-weight: 700;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25),
-              inset 0 2px 4px rgba(255, 255, 255, 0.4),
-              inset 0 -1px 2px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 6px 16px rgba(var(--c-shadow-rgb), 0.25),
+              inset 0 2px 4px rgba(var(--c-overlay-text-rgb), 0.4),
+              inset 0 -1px 2px rgba(var(--c-shadow-rgb), 0.1);
+  border: 1px solid rgba(var(--c-overlay-text-rgb), 0.2);
 }
 
 .nav-icon {
@@ -443,24 +501,6 @@ p {
   pointer-events: none;
 }
 
-
-/* 内容区域 */
-.router-view {
-  flex: 1;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  margin: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-/* 主页、图书列表页和AI页特殊样式 - 全屏显示 */
-.router-view .home-view,
-.router-view .book-list-view,
-.router-view .ai-view {
-  margin: -20px;
-  padding: 0;
-}
 
 /* 响应式设计 */
 @media (max-width: 768px) {

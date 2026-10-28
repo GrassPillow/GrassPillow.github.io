@@ -1,1 +1,15 @@
-<!doctype html><html lang=""><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="/favicon.ico"><title>origin</title><script defer="defer" src="/js/chunk-vendors.f2a3edf0.js"></script><script defer="defer" src="/js/app.5455d138.js"></script><link href="/css/app.4d5d3bef.css" rel="stylesheet"></head><body><noscript><strong>We're sorry but origin doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="app"></div></body></html>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="/favicon.ico"><script>// 防闪烁：在 Vue 挂载前确定主题，避免深色模式用户先看到浅色背景再跳变。
+      // 判定顺序与 composables/useTheme.js 的 initTheme() 保持一致：
+      //   1. localStorage 有显式选择 → 采用之
+      //   2. 无显式选择 → 跟随 prefers-color-scheme
+      // 整段包 try/catch：localStorage 在隐私模式下可能抛异常，
+      // 失败时静默跳过，交由 initTheme() 兜底，不阻塞首屏渲染。
+      try {
+        var saved = localStorage.getItem('grasspillow-theme')
+        var dark = saved
+          ? saved === 'dark'
+          : window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (dark) {
+          document.documentElement.setAttribute('data-theme', 'dark')
+        }
+      } catch (e) {}</script><title>资源站 - 发现好用的网络资源</title><meta name="description" content="收录网站工具、软件应用、学习资料、影视音乐电子书 4 大类免费正版网络资源，覆盖 AI 助手、在线工具、开源软件、公开课与公版电子书。"><meta name="theme-color" content="#2d7a6b"><meta property="og:type" content="website"><meta property="og:site_name" content="资源站"><meta property="og:title" content="资源站 - 发现好用的网络资源"><meta property="og:description" content="收录网站工具、软件应用、学习资料、影视音乐电子书 4 大类免费正版网络资源。"><meta property="og:locale" content="zh_CN"><meta name="twitter:card" content="summary"><script defer="defer" src="/js/chunk-vendors.f2a3edf0.js"></script><script defer="defer" src="/js/app.e7164de9.js"></script><link href="/css/app.a1b18c27.css" rel="stylesheet"></head><body><noscript><strong>本站为单页应用，需要启用 JavaScript 才能浏览资源列表。请开启后重试。</strong></noscript><div id="app"></div></body></html>

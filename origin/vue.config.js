@@ -59,10 +59,10 @@ module.exports = defineConfig({
             return false; // 不显示这些错误
           }
           
-          // 检查错误堆栈
+          // 检查错误堆栈（仅命中循环通知错误，不做宽泛的 ResizeObserver 匹配）
           if (error?.stack) {
             const stack = error.stack.toString();
-            if (stack.includes('ResizeObserver')) {
+            if (stack.includes('ResizeObserver loop')) {
               return false;
             }
           }

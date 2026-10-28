@@ -1,7 +1,6 @@
 type,category,name,url,description
 website,ai,ChatGPT,https://chat.openai.com,OpenAI 开发的对话式 AI 助手，支持写作、问答与代码生成
 website,ai,Claude,https://claude.ai,Anthropic 开发的 AI 助手，擅长长文本理解与高质量内容输出
-website,ai,Gemini,https://gemini.google.com,Google 的多模态 AI 助手，结合搜索与实时数据
 website,ai,Perplexity,https://www.perplexity.ai,AI 搜索引擎，答案附带来源引用
 website,ai,豆包,https://www.doubao.com,字节跳动推出的全能 AI 助手
 website,ai,Kimi,https://kimi.moonshot.cn,月之暗面开发的 AI 助手，擅长长文本阅读分析
@@ -106,6 +105,12 @@ media,影视,学习强国,https://www.xuexi.cn,正版影视剧集免费看，零
 media,影视,西瓜视频,https://www.ixigua.com,字节跳动免费视频平台
 media,影视,芒果TV,https://www.mgtv.com,湖南卫视旗下视频平台，含免费专区
 media,影视,爱奇艺,https://www.iqiyi.com,在线视频平台，含免费专区
+media,影视,腾讯视频,https://v.qq.com,腾讯旗下在线视频平台，海量正版含免费专区
+media,影视,优酷,https://www.youku.com,阿里巴巴旗下视频平台，大量剧集限免免费看
+media,影视,哔哩哔哩,https://www.bilibili.com,正版影视、纪录片与番剧，部分免费
+media,影视,搜狐视频,https://tv.sohu.com,正版剧集平台，大量老剧免费看
+media,影视,咪咕视频,https://www.miguvideo.com,中国移动旗下视频平台，免费内容多
+media,影视,央视网,https://tv.cctv.com,中央广播电视总台官方视频平台
 media,音乐,网易云音乐,https://music.163.com,国内主流音乐平台，免费用户可听
 media,音乐,QQ音乐,https://y.qq.com,腾讯旗下音乐平台
 media,音乐,酷狗音乐,https://www.kugou.com,老牌音乐平台

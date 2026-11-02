@@ -8,7 +8,9 @@
 import axios from 'axios'
 import { parseCSV } from './csv.js'
 
-const RESOURCE_URL = '/resources.csv'
+// GitHub Pages 对无查询参数的静态文件可能命中 CDN 缓存，导致线上展示旧数据。
+// 每次页面全新加载时追加时间戳参数绕过缓存；SPA 内由模块级缓存保证只请求一次。
+const RESOURCE_URL = `/resources.csv?v=${Date.now()}`
 
 let cachedResources = null
 let inflight = null

@@ -86,6 +86,7 @@
               v-for="item in items"
               :key="`${category}-${item.url}`"
               :resource="item"
+              :highlight="searchQuery"
             />
           </div>
         </div>
@@ -112,6 +113,7 @@
 <script>
 import ResourceCard from '@/components/ResourceCard.vue'
 import { loadResources } from '../utils/resources.js'
+import { useFavorites } from '../composables/useFavorites.js'
 
 const TYPE_META = {
   website: { name: '网站工具', desc: 'AI 助手、在线工具、设计素材与开发者实用网站', icon: '🌐' },
@@ -136,6 +138,7 @@ export default {
       searchQuery: '',
       selectedCategory: '',
       collapsedCategories: {},
+      favoriteUrls: new Set(),
       isLoading: true,
       loadError: '',
       // 是否经历过加载失败，决定「重试」时是否绕过缓存
@@ -161,6 +164,10 @@ export default {
         if (r.category) set.add(r.category)
       })
       const list = [{ value: 'all', label: '全部' }]
+      // 收藏筛选：仅当存在收藏条目时展示
+      if (this.favoriteUrls.size > 0) {
+        list.push({ value: 'favorites', label: `★ 收藏 (${this.favoriteUrls.size})` })
+      }
       Array.from(set).forEach(c => list.push({ value: c, label: c }))
       return list
     },
@@ -172,7 +179,9 @@ export default {
     filteredResources() {
       let filtered = this.filteredByType
 
-      if (this.selectedCategory) {
+      if (this.selectedCategory === 'favorites') {
+        filtered = filtered.filter(r => this.favoriteUrls.has(r.url))
+      } else if (this.selectedCategory) {
         filtered = filtered.filter(r => r.category === this.selectedCategory)
       }
 
@@ -213,6 +222,9 @@ export default {
     }
   },
   methods: {
+    syncFavorites() {
+      this.favoriteUrls = this.$favorites.getFavorites()
+    },
     toggleCategory(category) {
       this.collapsedCategories[category] = !this.collapsedCategories[category]
     },
@@ -240,15 +252,21 @@ export default {
   },
   created() {
     this._isUnmounted = false
+    this.$favorites = useFavorites()
+    this.favoriteUrls = this.$favorites.getFavorites()
     if (this.$route.query && this.$route.query.q) {
       this.searchQuery = this.$route.query.q
     }
   },
   mounted() {
+    this._stopFavWatch = this.$favorites.onFavoritesChange(() => {
+      if (!this._isUnmounted) this.syncFavorites()
+    })
     this.loadData()
   },
   beforeUnmount() {
     this._isUnmounted = true
+    if (this._stopFavWatch) this._stopFavWatch()
   }
 }
 </script>

@@ -59,11 +59,14 @@ software,办公效率,Flameshot,https://flameshot.org,开源跨平台截图标�
 software,办公效率,Snipaste,https://www.snipaste.com,截图加贴图的效率神器
 software,办公效率,WPS Office,https://www.wps.cn,国产免费办公套件
 software,开发工具,VS Code,https://code.visualstudio.com,微软开源跨平台代码编辑器
+software,开发工具,Zed,https://zed.dev,Rust 编写的高性能代码编辑器，内置 AI 与实时协作
 software,开发工具,Git,https://git-scm.com,分布式版本控制系统
+software,开发工具,Lazygit,https://github.com/jesseduffield/lazygit,终端里的 Git 可视化 TUI，键盘完成提交、分支与冲突处理
 software,开发工具,Docker,https://www.docker.com,容器化应用开发部署平台
 software,开发工具,DBeaver,https://dbeaver.io,免费开源多数据库管理工具
 software,开发工具,DBX,https://dbxio.com,开源轻量数据库工作台，约 25MB 支持 100+ 种数据库，内置 AI 助手与 MCP
 software,开发工具,Postman,https://www.postman.com,API 调试与测试工具
+software,开发工具,Apifox,https://apifox.com,API 文档、调试、Mock 与自动化测试一体化协作平台
 software,开发工具,Notepad++,https://notepad-plus-plus.org,Windows 轻量文本编辑器
 software,媒体创作,VLC,https://www.videolan.org,开源万能媒体播放器
 software,媒体创作,OBS Studio,https://obsproject.com,开源录屏与直播推流工具

@@ -62,6 +62,7 @@ software,开发工具,VS Code,https://code.visualstudio.com,微软开源跨平�
 software,开发工具,Git,https://git-scm.com,分布式版本控制系统
 software,开发工具,Docker,https://www.docker.com,容器化应用开发部署平台
 software,开发工具,DBeaver,https://dbeaver.io,免费开源多数据库管理工具
+software,开发工具,DBX,https://dbxio.com,开源轻量数据库工作台，约 25MB 支持 100+ 种数据库，内置 AI 助手与 MCP
 software,开发工具,Postman,https://www.postman.com,API 调试与测试工具
 software,开发工具,Notepad++,https://notepad-plus-plus.org,Windows 轻量文本编辑器
 software,媒体创作,VLC,https://www.videolan.org,开源万能媒体播放器

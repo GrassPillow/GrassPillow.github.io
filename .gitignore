@@ -5,3 +5,9 @@ origin/.env.local
 origin/.env.*.local
 *.js.map
 *.css.map
+
+# AI 工具本地配置/记忆目录（不随仓库分发）
+.agents/
+.playwright-mcp/
+.superpowers/
+.workbuddy/

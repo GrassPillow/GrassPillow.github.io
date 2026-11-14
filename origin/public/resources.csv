@@ -60,14 +60,31 @@ software,办公效率,Snipaste,https://www.snipaste.com,截图加贴图的效率
 software,办公效率,WPS Office,https://www.wps.cn,国产免费办公套件
 software,开发工具,VS Code,https://code.visualstudio.com,微软开源跨平台代码编辑器
 software,开发工具,Zed,https://zed.dev,Rust 编写的高性能代码编辑器，内置 AI 与实时协作
+software,开发工具,Neovim,https://neovim.io,高度可扩展的 Vim 衍生终端编辑器
+software,开发工具,Notepad++,https://notepad-plus-plus.org,Windows 轻量文本编辑器
 software,开发工具,Git,https://git-scm.com,分布式版本控制系统
 software,开发工具,Lazygit,https://github.com/jesseduffield/lazygit,终端里的 Git 可视化 TUI，键盘完成提交、分支与冲突处理
+software,开发工具,GitHub Desktop,https://desktop.github.com,GitHub 官方图形化 Git 客户端
 software,开发工具,Docker,https://www.docker.com,容器化应用开发部署平台
+software,开发工具,Lens,https://k8slens.dev,Kubernetes 集群可视化管理 IDE
+software,开发工具,k9s,https://k9scli.io,终端里的 Kubernetes 集群管理 TUI
 software,开发工具,DBeaver,https://dbeaver.io,免费开源多数据库管理工具
 software,开发工具,DBX,https://dbxio.com,开源轻量数据库工作台，约 25MB 支持 100+ 种数据库，内置 AI 助手与 MCP
+software,开发工具,Beekeeper Studio,https://www.beekeeperstudio.io,开源跨平台 SQL 编辑器与数据库管理工具
+software,开发工具,RedisInsight,https://redis.io/insight/,Redis 官方可视化监控与管理工具
 software,开发工具,Postman,https://www.postman.com,API 调试与测试工具
 software,开发工具,Apifox,https://apifox.com,API 文档、调试、Mock 与自动化测试一体化协作平台
-software,开发工具,Notepad++,https://notepad-plus-plus.org,Windows 轻量文本编辑器
+software,开发工具,Bruno,https://www.usebruno.com,离线优先的开源 API 调试客户端
+software,开发工具,Hoppscotch,https://hoppscotch.io,开源轻量的在线 API 调试工具
+software,开发工具,Windows Terminal,https://github.com/microsoft/terminal,微软官方现代终端，支持多标签与分屏
+software,开发工具,Warp,https://www.warp.dev,AI 辅助的开源现代终端，跨平台支持
+software,开发工具,Termius,https://termius.com,跨平台 SSH 客户端，支持同步与团队协作
+software,开发工具,DevToys,https://devtoys.app,开发者瑞士军刀，内置 30+ 种离线转换工具
+software,开发工具,CyberChef,https://gchq.github.io/CyberChef,浏览器里的数据处理与编解码瑞士军刀
+software,开发工具,jq,https://jqlang.github.io/jq,命令行 JSON 解析与处理工具
+software,开发工具,fzf,https://github.com/junegunn/fzf,命令行模糊查找器，可联动文件与历史
+software,开发工具,ripgrep,https://github.com/BurntSushi/ripgrep,极速递归文本搜索，自动遵循 gitignore
+software,开发工具,ngrok,https://ngrok.com,内网穿透与本地端口公网映射
 software,媒体创作,VLC,https://www.videolan.org,开源万能媒体播放器
 software,媒体创作,OBS Studio,https://obsproject.com,开源录屏与直播推流工具
 software,媒体创作,Audacity,https://www.audacityteam.org,开源音频剪辑软件

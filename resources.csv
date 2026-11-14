@@ -59,32 +59,79 @@ software,办公效率,Flameshot,https://flameshot.org,开源跨平台截图标�
 software,办公效率,Snipaste,https://www.snipaste.com,截图加贴图的效率神器,客户端|办公|效率
 software,办公效率,WPS Office,https://www.wps.cn,国产免费办公套件,免费|中文|客户端|办公
 software,开发工具,VS Code,https://code.visualstudio.com,微软开源跨平台代码编辑器,开源|跨平台|客户端|编程
+software,开发工具,VSCodium,https://vscodium.com,VS Code 的去遥测开源构建，隐私友好,开源|跨平台|客户端|编程
 software,开发工具,Zed,https://zed.dev,Rust 编写的高性能代码编辑器，内置 AI 与实时协作,AI|客户端|编程|效率
+software,开发工具,Sublime Text,https://www.sublimetext.com,轻量快速的商业代码编辑器，启动与响应极快,客户端|编程|效率
 software,开发工具,Neovim,https://neovim.io,高度可扩展的 Vim 衍生终端编辑器,终端|客户端|编程
+software,开发工具,Vim,https://www.vim.org,经典模态文本编辑器，几乎存在于所有 Unix 系统,开源|终端|客户端|编程
+software,开发工具,Helix,https://helix-editor.com,开箱即用的后现代模态编辑器，内置 LSP 与语法树,开源|终端|客户端|编程
+software,开发工具,Emacs,https://www.gnu.org/software/emacs,可无限扩展的 GNU 编辑器与工作环境,开源|跨平台|客户端|编程
 software,开发工具,Notepad++,https://notepad-plus-plus.org,Windows 轻量文本编辑器,客户端|编程
+software,开发工具,JetBrains Toolbox,https://www.jetbrains.com/toolbox-app,JetBrains IDE 的统一安装与版本管理工具,客户端|编程|效率
 software,开发工具,Git,https://git-scm.com,分布式版本控制系统,版本控制|客户端|编程
 software,开发工具,Lazygit,https://github.com/jesseduffield/lazygit,终端里的 Git 可视化 TUI，键盘完成提交、分支与冲突处理,版本控制|终端|客户端|编程
 software,开发工具,GitHub Desktop,https://desktop.github.com,GitHub 官方图形化 Git 客户端,版本控制|客户端|编程
+software,开发工具,Sourcetree,https://www.sourcetreeapp.com,Atlassian 免费 Git 图形客户端，可视化分支与提交,免费|客户端|版本控制|编程
+software,开发工具,GitKraken,https://www.gitkraken.com,跨平台 Git GUI，支持提交图谱与冲突处理,跨平台|客户端|版本控制|编程
+software,开发工具,GitHub CLI,https://cli.github.com,在终端里管理仓库、Issue 与 PR 的官方命令行工具,开源|终端|版本控制|编程
+software,开发工具,git-delta,https://github.com/dandavison/delta,为 git diff 提供语法高亮与并排对比的分页器,开源|终端|版本控制|编程
 software,开发工具,Docker,https://www.docker.com,容器化应用开发部署平台,容器|客户端|编程
+software,开发工具,Podman Desktop,https://podman-desktop.io,无守护进程的容器与 Kubernetes 图形管理工具,开源|免费|跨平台|容器|客户端
+software,开发工具,Rancher Desktop,https://rancherdesktop.io,本地一键运行 Kubernetes 与容器运行时,开源|免费|跨平台|容器|客户端
+software,开发工具,OrbStack,https://orbstack.dev,macOS 上轻量快速的 Docker 与 Linux 虚拟机替代,客户端|容器|效率
 software,开发工具,Lens,https://k8slens.dev,Kubernetes 集群可视化管理 IDE,容器|客户端|编程
 software,开发工具,k9s,https://k9scli.io,终端里的 Kubernetes 集群管理 TUI,容器|终端|客户端|编程
+software,开发工具,Helm,https://helm.sh,Kubernetes 应用包管理与发布工具,开源|终端|容器|编程
 software,开发工具,DBeaver,https://dbeaver.io,免费开源多数据库管理工具,开源|免费|数据库|客户端
 software,开发工具,DBX,https://dbxio.com,开源轻量数据库工作台，约 25MB 支持 100+ 种数据库，内置 AI 助手与 MCP,开源|AI|数据库|客户端
 software,开发工具,Beekeeper Studio,https://www.beekeeperstudio.io,开源跨平台 SQL 编辑器与数据库管理工具,开源|跨平台|数据库|客户端
+software,开发工具,TablePlus,https://tableplus.com,界面现代的跨平台多数据库管理工具,跨平台|客户端|数据库
+software,开发工具,HeidiSQL,https://www.heidisql.com,Windows 免费开源数据库客户端，支持多种数据库,开源|免费|客户端|数据库
+software,开发工具,pgAdmin,https://www.pgadmin.org,PostgreSQL 官方图形化管理工具,开源|免费|客户端|数据库
+software,开发工具,MongoDB Compass,https://www.mongodb.com/products/compass,MongoDB 官方可视化查询与管理工具,免费|客户端|数据库
 software,开发工具,RedisInsight,https://redis.io/insight/,Redis 官方可视化监控与管理工具,数据库|客户端|编程
 software,开发工具,Postman,https://www.postman.com,API 调试与测试工具,API|客户端|编程
 software,开发工具,Apifox,https://apifox.com,API 文档、调试、Mock 与自动化测试一体化协作平台,API|文档|客户端|编程
 software,开发工具,Bruno,https://www.usebruno.com,离线优先的开源 API 调试客户端,开源|API|客户端|编程
 software,开发工具,Hoppscotch,https://hoppscotch.io,开源轻量的在线 API 调试工具,开源|API|客户端|编程
+software,开发工具,Insomnia,https://insomnia.rest,开源 API 设计与调试客户端，支持 GraphQL 与 gRPC,开源|跨平台|API|客户端
+software,开发工具,Yaak,https://yaak.app,本地优先的开源 API 客户端，请求数据用 Git 版本管理,开源|跨平台|API|客户端
+software,开发工具,HTTPie,https://httpie.io,人性化的 HTTP 客户端，提供 CLI 与桌面版,开源|API|终端|客户端
+software,开发工具,mitmproxy,https://mitmproxy.org,交互式 HTTPS 抓包与改写代理,开源|终端|安全|编程
+software,开发工具,Wireshark,https://www.wireshark.org,全球最流行的网络协议分析器,开源|免费|跨平台|安全|客户端
+software,开发工具,HTTP Toolkit,https://httptoolkit.com,一键拦截、查看与修改 HTTP(S) 流量,开源|跨平台|API|安全|客户端
+software,开发工具,ngrok,https://ngrok.com,内网穿透与本地端口公网映射,客户端|编程
 software,开发工具,Windows Terminal,https://github.com/microsoft/terminal,微软官方现代终端，支持多标签与分屏,终端|客户端|编程
+software,开发工具,iTerm2,https://iterm2.com,macOS 上功能强大的终端替代品,免费|客户端|终端|效率
 software,开发工具,Warp,https://www.warp.dev,AI 辅助的开源现代终端，跨平台支持,开源|跨平台|AI|终端
+software,开发工具,Alacritty,https://alacritty.org,GPU 加速的跨平台终端模拟器,开源|跨平台|客户端|终端
+software,开发工具,WezTerm,https://wezfurlong.org/wezterm,GPU 加速的跨平台终端与多路复用器,开源|跨平台|客户端|终端
+software,开发工具,Tabby,https://tabby.sh,高度可定制的跨平台终端，内置 SSH 与分屏,开源|跨平台|客户端|终端
 software,开发工具,Termius,https://termius.com,跨平台 SSH 客户端，支持同步与团队协作,跨平台|客户端|编程|效率
+software,开发工具,Zellij,https://zellij.dev,终端工作区与多路复用器，内置布局与插件,开源|终端|效率
 software,开发工具,DevToys,https://devtoys.app,开发者瑞士军刀，内置 30+ 种离线转换工具,开源|客户端|编程
 software,开发工具,CyberChef,https://gchq.github.io/CyberChef,浏览器里的数据处理与编解码瑞士军刀,开源|客户端|编程
 software,开发工具,jq,https://jqlang.github.io/jq,命令行 JSON 解析与处理工具,终端|开源|客户端|编程
 software,开发工具,fzf,https://github.com/junegunn/fzf,命令行模糊查找器，可联动文件与历史,终端|开源|客户端|编程
 software,开发工具,ripgrep,https://github.com/BurntSushi/ripgrep,极速递归文本搜索，自动遵循 gitignore,开源|客户端|编程
-software,开发工具,ngrok,https://ngrok.com,内网穿透与本地端口公网映射,客户端|编程
+software,开发工具,bat,https://github.com/sharkdp/bat,带语法高亮与 Git 标记的 cat 替代品,开源|终端|编程
+software,开发工具,fd,https://github.com/sharkdp/fd,简单快速的 find 替代品，默认遵循 gitignore,开源|终端|编程
+software,开发工具,eza,https://eza.rocks,现代化 ls 替代品，支持图标、Git 状态与树形视图,开源|终端|编程
+software,开发工具,zoxide,https://github.com/ajeetdsouza/zoxide,智能目录跳转工具，记住你常去的位置,开源|终端|效率
+software,开发工具,Starship,https://starship.rs,跨 shell 的极简命令提示符，开箱即用,开源|跨平台|终端|效率
+software,开发工具,tldr,https://tldr.sh,社区维护的命令行示例速查手册,开源|终端|文档|效率
+software,开发工具,direnv,https://direnv.net,按目录自动加载与卸载环境变量,开源|终端|效率
+software,开发工具,mise,https://mise.jdx.dev,一个 CLI 管理开发工具版本、环境变量与任务,开源|终端|效率|编程
+software,开发工具,lazydocker,https://github.com/jesseduffield/lazydocker,Docker 与 Compose 的终端可视化 TUI,开源|终端|容器|效率
+software,开发工具,pnpm,https://pnpm.io,节省磁盘、速度更快的 Node 包管理器,开源|免费|终端|编程
+software,开发工具,Bun,https://bun.sh,集运行时、打包器与包管理于一体的 JavaScript 工具链,开源|免费|终端|编程
+software,开发工具,Deno,https://deno.com,默认安全的现代 JavaScript 与 TypeScript 运行时,开源|免费|终端|编程
+software,开发工具,Vite,https://vite.dev,极速的前端构建工具与开发服务器,开源|免费|终端|编程
+software,开发工具,Homebrew,https://brew.sh,macOS 与 Linux 上最流行的命令行包管理器,开源|免费|终端|系统
+software,开发工具,Scoop,https://scoop.sh,Windows 命令行包管理器，无需管理员权限,开源|免费|终端|系统
+software,开发工具,Chocolatey,https://chocolatey.org,Windows 软件自动化安装与配置管理,免费|终端|系统
+software,开发工具,Zeal,https://zealdocs.org,Windows 与 Linux 的离线 API 文档浏览器,开源|免费|客户端|文档
+software,开发工具,Dash,https://kapeli.com/dash,macOS 离线 API 文档与代码片段管理,客户端|文档|效率
 software,媒体创作,VLC,https://www.videolan.org,开源万能媒体播放器,开源|客户端
 software,媒体创作,OBS Studio,https://obsproject.com,开源录屏与直播推流工具,开源|视频|客户端
 software,媒体创作,Audacity,https://www.audacityteam.org,开源音频剪辑软件,开源|音乐|客户端

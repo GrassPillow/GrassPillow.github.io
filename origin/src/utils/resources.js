@@ -44,8 +44,16 @@ export async function loadResources(options = {}) {
         // 解析不出数据通常是表头被改坏或文件内容异常
         throw new Error('resources.csv 解析结果为空，请检查数据文件格式。')
       }
-      cachedResources = items
-      return items
+      // tags 列以 | 分隔，统一转成数组，模板与筛选逻辑都基于数组
+      const normalized = items.map(item => ({
+        ...item,
+        tags: (item.tags || '')
+          .split('|')
+          .map(t => t.trim())
+          .filter(Boolean)
+      }))
+      cachedResources = normalized
+      return normalized
     })
     .finally(() => {
       // 无论成功失败都释放飞行中的 Promise，失败时允许重试

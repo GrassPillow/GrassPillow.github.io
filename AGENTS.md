@@ -66,7 +66,7 @@ origin/
 │   │   ├── HomeView.vue        # 首页：hero、分类入口、精选资源
 │   │   └── ResourceView.vue    # 分类列表页（按 props.type 复用：all/website/software/learning/media）
 │   ├── components/
-│   │   ├── ResourceCard.vue    # 资源卡片（收藏、复制链接）
+│   │   ├── ResourceCard.vue    # 资源卡片（收藏、复制链接、标签 chip，emit tag-click）
 │   │   ├── PageTransition.vue  # 页面过渡（显式 duration，避免 transitionend 缺失卡死）
 │   │   ├── BackToTop.vue
 │   │   ├── ThemeToggle.vue
@@ -89,7 +89,11 @@ origin/
 
 **路由：** `/`（首页）、`/resources/all`、`/resources/website`、`/resources/software`、`/resources/learning`、`/resources/media`（均复用 `ResourceView`，通过 `props.type` 区分）、`/:pathMatch(.*)*`（重定向回首页）。全部懒加载，每条路由带 `meta.title`。
 
-**数据流：** `public/resources.csv` 是唯一数据源 → `utils/resources.js` 的 `loadResources()` 请求 `/resources.csv?v=<timestamp>`（绕过 GitHub Pages CDN 缓存）→ `utils/csv.js` 解析 → 视图按分类过滤展示。同一页面生命周期内复用模块级缓存，避免分类切换重复请求。
+**数据流：** `public/resources.csv` 是唯一数据源 → `utils/resources.js` 的 `loadResources()` 请求 `/resources.csv?v=<timestamp>`（绕过 GitHub Pages CDN 缓存）→ `utils/csv.js` 解析 → `loadResources()` 把 `tags` 列按 `|` 拆成数组 → 视图按分类/标签过滤展示。同一页面生命周期内复用模块级缓存，避免分类切换重复请求。
+
+**CSV 字段：** `type,category,name,url,description,tags`。`tags` 用 `|` 分隔（如 `开源|跨平台|客户端|编程`），**每行都必须有该列**——`parseCSV` 会跳过列数不一致的行。
+
+**标签系统：** 卡片展示标签 chip，点击即筛选；列表页支持多选标签，采用 **AND** 语义（同时命中所有已选标签），并与搜索联动（搜索会匹配标签）。筛选状态写入 URL `?tags=开源,数据库`，可直接分享或前进后退；首页另有「热门标签」区块。新增资源时按现有 27 个标签的词汇表取值，避免同义标签碎片化。
 
 **收藏：** `useFavorites.js` 以资源 URL 为键存入 `localStorage('gp:favorites')`，变更时派发 `favorites-changed` 事件，列表页据此实时刷新「仅看收藏」。localStorage 异常时降级为内存态。
 

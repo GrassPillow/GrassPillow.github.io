@@ -12,6 +12,16 @@
       </div>
       <h3 class="card-name" v-html="highlightedName"></h3>
       <p class="card-desc" v-html="highlightedDesc"></p>
+      <div v-if="tags.length" class="card-tags">
+        <button
+          v-for="tag in tags"
+          :key="tag"
+          type="button"
+          class="card-tag"
+          :title="`筛选标签：${tag}`"
+          @click.prevent.stop="handleTagClick(tag)"
+        >{{ tag }}</button>
+      </div>
       <div class="card-footer">
         <span class="card-category">{{ resource.category }}</span>
         <span class="card-domain">{{ domain }}</span>
@@ -59,7 +69,16 @@ const props = defineProps({
 
 const { isFavorite, toggleFavorite, onFavoritesChange } = useFavorites()
 
+const emit = defineEmits(['tag-click'])
+
 const isFav = ref(false)
+
+const tags = computed(() => (Array.isArray(props.resource.tags) ? props.resource.tags.slice(0, 4) : []))
+
+function handleTagClick(tag) {
+  // 卡片整体是 <a>，标签点击不能触发跳转
+  emit('tag-click', tag)
+}
 
 const initial = computed(() => {
   const name = props.resource.name || '?'
@@ -219,6 +238,33 @@ onUnmounted(() => {
   -webkit-box-orient: vertical;
   overflow: hidden;
   min-height: 2.9em;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: -0.4rem 0 1rem;
+}
+
+.card-tag {
+  padding: 0.2rem 0.65rem;
+  border: 1px solid var(--c-border);
+  border-radius: 999px;
+  background: var(--c-bg-card);
+  color: var(--c-text-secondary);
+  font-size: 0.72rem;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.6;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.card-tag:hover {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+  background: var(--c-primary-light);
 }
 
 .card-footer {

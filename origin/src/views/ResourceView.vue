@@ -42,6 +42,32 @@
             {{ cat.label }}
           </button>
         </div>
+
+        <!-- 标签筛选：多选，按「同时满足」过滤 -->
+        <div v-if="availableTags.length" class="tag-filter">
+          <div class="tag-filter-head">
+            <span class="tag-filter-label">🏷️ 标签筛选</span>
+            <span v-if="selectedTags.length" class="tag-filter-hint">
+              已选 {{ selectedTags.length }} 个，同时满足
+            </span>
+            <button v-if="selectedTags.length" type="button" class="tag-clear" @click="clearTags">
+              清除
+            </button>
+          </div>
+          <div class="filter-tags tag-cloud">
+            <button
+              v-for="tag in availableTags"
+              :key="tag.name"
+              type="button"
+              class="filter-tag tag-chip"
+              :class="{ active: selectedTags.includes(tag.name) }"
+              :aria-pressed="selectedTags.includes(tag.name)"
+              @click="toggleTag(tag.name)"
+            >
+              {{ tag.name }}<span class="tag-count">{{ tag.count }}</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- 统计 -->
@@ -55,6 +81,11 @@
           <span class="stat-icon">📁</span>
           <span class="stat-value">{{ filteredCategoriesCount }}</span>
           <span class="stat-label">个分类</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-icon">🏷️</span>
+          <span class="stat-value">{{ availableTags.length }}</span>
+          <span class="stat-label">个标签</span>
         </div>
       </div>
 
@@ -87,6 +118,7 @@
               :key="`${category}-${item.url}`"
               :resource="item"
               :highlight="searchQuery"
+              @tag-click="toggleTag"
             />
           </div>
         </div>
@@ -137,6 +169,7 @@ export default {
       allResources: [],
       searchQuery: '',
       selectedCategory: '',
+      selectedTags: [],
       collapsedCategories: {},
       favoriteUrls: new Set(),
       isLoading: true,
@@ -176,6 +209,18 @@ export default {
       if (this.type === 'all') return this.allResources
       return this.allResources.filter(r => r.type === this.type)
     },
+    // 当前大类下出现过的标签，按资源数降序
+    availableTags() {
+      const counts = {}
+      this.filteredByType.forEach(r => {
+        (r.tags || []).forEach(tag => {
+          counts[tag] = (counts[tag] || 0) + 1
+        })
+      })
+      return Object.keys(counts)
+        .map(name => ({ name, count: counts[name] }))
+        .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'zh-CN'))
+    },
     filteredResources() {
       let filtered = this.filteredByType
 
@@ -185,12 +230,20 @@ export default {
         filtered = filtered.filter(r => r.category === this.selectedCategory)
       }
 
+      // 多选标签：需同时命中所有已选标签
+      if (this.selectedTags.length) {
+        filtered = filtered.filter(r =>
+          this.selectedTags.every(tag => (r.tags || []).includes(tag))
+        )
+      }
+
       if (this.searchQuery && this.searchQuery.trim()) {
         const query = this.searchQuery.toLowerCase().trim()
         filtered = filtered.filter(r =>
           (r.name && r.name.toLowerCase().includes(query)) ||
           (r.description && r.description.toLowerCase().includes(query)) ||
-          (r.url && r.url.toLowerCase().includes(query))
+          (r.url && r.url.toLowerCase().includes(query)) ||
+          (r.tags || []).some(tag => tag.toLowerCase().includes(query))
         )
       }
 
@@ -216,9 +269,15 @@ export default {
     '$route.query.q'(q) {
       this.searchQuery = q || ''
     },
+    // 支持浏览器前进/后退与直接分享带标签的链接
+    '$route.query.tags'() {
+      this.readTagsFromQuery()
+    },
     type() {
       this.selectedCategory = ''
       this.collapsedCategories = {}
+      this.selectedTags = []
+      this.syncTagsToQuery()
     }
   },
   methods: {
@@ -227,6 +286,50 @@ export default {
     },
     toggleCategory(category) {
       this.collapsedCategories[category] = !this.collapsedCategories[category]
+    },
+    // 从 ?tags=a,b 读取，过滤掉不属于当前大类的标签
+    readTagsFromQuery() {
+      const raw = this.$route.query.tags
+      const text = Array.isArray(raw) ? raw.join(',') : (raw || '')
+      const list = text.split(',').map(t => t.trim()).filter(Boolean)
+      const allowed = new Set(this.availableTags.map(t => t.name))
+      // 数据尚未加载时先全量接收，加载完再裁剪
+      this.selectedTags = allowed.size ? list.filter(t => allowed.has(t)) : list
+    },
+    toggleTag(tag) {
+      const index = this.selectedTags.indexOf(tag)
+      if (index >= 0) {
+        this.selectedTags.splice(index, 1)
+      } else {
+        this.selectedTags.push(tag)
+      }
+      this.syncTagsToQuery()
+    },
+    clearTags() {
+      this.selectedTags = []
+      this.syncTagsToQuery()
+    },
+    // 把标签写回 URL，保证可分享、可前进后退
+    syncTagsToQuery() {
+      const next = this.selectedTags.join(',')
+      const current = this.$route.query.tags || ''
+      if (String(current) === next) return
+      const query = { ...this.$route.query }
+      if (next) {
+        query.tags = next
+      } else {
+        delete query.tags
+      }
+      this.$router.replace({ path: this.$route.path, query }).catch(() => {})
+    },
+    // 数据加载后剔除当前大类不存在的标签
+    pruneSelectedTags() {
+      const allowed = new Set(this.availableTags.map(t => t.name))
+      const pruned = this.selectedTags.filter(t => allowed.has(t))
+      if (pruned.length !== this.selectedTags.length) {
+        this.selectedTags = pruned
+        this.syncTagsToQuery()
+      }
     },
     async loadData() {
       this.isLoading = true
@@ -237,6 +340,7 @@ export default {
         if (this._isUnmounted) return
         this.allResources = items
         this.hasFailed = false
+        this.pruneSelectedTags()
       } catch (error) {
         if (this._isUnmounted) return
         console.error('加载资源数据失败:', error)
@@ -257,6 +361,7 @@ export default {
     if (this.$route.query && this.$route.query.q) {
       this.searchQuery = this.$route.query.q
     }
+    this.readTagsFromQuery()
   },
   mounted() {
     this._stopFavWatch = this.$favorites.onFavoritesChange(() => {
@@ -443,6 +548,69 @@ export default {
   border-color: transparent;
   color: var(--c-text-inverse);
   box-shadow: var(--shadow-md);
+}
+
+/* 标签筛选 */
+.tag-filter {
+  margin-top: 1.6rem;
+  padding-top: 1.4rem;
+  border-top: 1px dashed var(--c-border);
+}
+
+.tag-filter-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.tag-filter-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--c-text-secondary);
+}
+
+.tag-filter-hint {
+  font-size: 0.8rem;
+  color: var(--c-text-muted);
+}
+
+.tag-clear {
+  margin-left: auto;
+  padding: 0.3rem 0.9rem;
+  border: 1px solid var(--c-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--c-text-secondary);
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tag-clear:hover {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+
+.tag-chip {
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.tag-count {
+  font-size: 0.72rem;
+  opacity: 0.65;
+  font-variant-numeric: tabular-nums;
+}
+
+.tag-chip.active .tag-count {
+  opacity: 0.85;
 }
 
 /* 统计栏 */

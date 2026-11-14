@@ -1,162 +1,162 @@
-type,category,name,url,description
-website,ai,ChatGPT,https://chat.openai.com,OpenAI 开发的对话式 AI 助手，支持写作、问答与代码生成
-website,ai,Claude,https://claude.ai,Anthropic 开发的 AI 助手，擅长长文本理解与高质量内容输出
-website,ai,Perplexity,https://www.perplexity.ai,AI 搜索引擎，答案附带来源引用
-website,ai,豆包,https://www.doubao.com,字节跳动推出的全能 AI 助手
-website,ai,Kimi,https://kimi.moonshot.cn,月之暗面开发的 AI 助手，擅长长文本阅读分析
-website,ai,DeepSeek,https://www.deepseek.com,深度求索推出的免费开源 AI 助手
-website,ai,秘塔 AI 搜索,https://metaso.cn,无广告 AI 搜索引擎，支持深度研究模式
-website,ai,文心一言,https://yiyan.baidu.com,百度推出的对话式 AI 助手
-website,ai,通义千问,https://tongyi.aliyun.com,阿里云推出的多模态 AI 助手
-website,ai,Cursor,https://www.cursor.com,AI 驱动的代码编辑器，支持 Agent 模式
-website,ai,GitHub Copilot,https://github.com/features/copilot,GitHub 推出的 AI 编程助手
-website,ai,Trae,https://www.trae.ai,字节跳动推出的 AI IDE，中文界面友好
-website,ai,Midjourney,https://www.midjourney.com,AI 图像生成工具
-website,ai,Runway,https://runwayml.com,AI 视频生成与编辑平台
-website,ai,即梦 AI,https://jimeng.jianying.com,字节跳动的 AI 创作工具，支持图生视频
-website,效率,TinyWow,https://tinywow.com,集合 200+ 免费在线工具的宝藏网站
-website,效率,iLovePDF,https://www.ilovepdf.com,在线 PDF 处理全家桶，合并压缩转换
-website,效率,PDF派,https://www.pdfpai.com,免费 PDF 在线转换工具集合
-website,效率,docsmall,https://docsmall.com,图片与 PDF 在线压缩、编辑与格式转换
-website,效率,remove.bg,https://www.remove.bg,一键 AI 去除图片背景
-website,效率,Online-Convert,https://www.online-convert.com,支持 200+ 格式的在线文件转换器
-website,效率,Excalidraw,https://excalidraw.com,开源在线手绘风格白板与流程图工具
-website,效率,ProcessOn,https://www.processon.com,在线思维导图与流程图工具
-website,效率,Notion,https://www.notion.so,一站式笔记知识库与项目管理空间
-website,效率,语雀,https://www.yuque.com,蚂蚁集团推出的云端知识库
-website,效率,石墨文档,https://shimo.im,在线协作文档与表格
-website,效率,飞书,https://www.feishu.cn,一站式办公协作平台，文档会议多维表格
-website,设计,Canva,https://www.canva.com,易上手的平面设计平台，海量模板
-website,设计,Figma,https://www.figma.com,协作式 UI/UX 设计工具
-website,设计,Photopea,https://www.photopea.com,免费的在线 PS 替代品
-website,设计,Unsplash,https://unsplash.com,高质量免费可商用摄影图片库
-website,设计,Pexels,https://www.pexels.com,免费图片与视频素材库
-website,设计,iconfont,https://www.iconfont.cn,阿里巴巴矢量图标库
-website,设计,Google Fonts,https://fonts.google.com,免费开源字体库
-website,设计,Coolors,https://coolors.co,一键生成配色方案的调色板工具
-website,设计,Flaticon,https://www.flaticon.com,海量矢量图标素材库
-website,设计,Freepik,https://www.freepik.com,免费矢量图插画与模板资源
-website,开发,GitHub,https://github.com,全球最大的代码托管与开源协作平台
-website,开发,Gitee,https://gitee.com,国内代码托管平台，GitHub 平替
-website,开发,Stack Overflow,https://stackoverflow.com,全球最大程序员问答社区
-website,开发,MDN Web Docs,https://developer.mozilla.org,Mozilla 维护的权威 Web 开发文档
-website,开发,LeetCode,https://leetcode.cn,程序员算法刷题与面试准备平台
-website,开发,牛客,https://www.nowcoder.com,校招求职与刷题社区
-website,开发,Codeforces,https://codeforces.com,全球著名算法竞赛平台
-website,开发,regex101,https://regex101.com,在线正则表达式测试工具
-website,开发,CodePen,https://codepen.io,前端代码在线实验场
-website,开发,JSON.cn,https://www.json.cn,JSON 格式化与校验工具
-software,系统工具,7-Zip,https://www.7-zip.org,开源免费压缩软件，支持多种格式
-software,系统工具,Keka,https://www.keka.io,macOS 免费开源压缩解压工具
-software,系统工具,Everything,https://www.voidtools.com,Windows 极速文件搜索神器
-software,系统工具,PowerToys,https://github.com/microsoft/PowerToys,微软官方 Windows 效率工具集
-software,系统工具,Rectangle,https://rectangleapp.com,macOS 窗口分屏管理工具
-software,办公效率,LibreOffice,https://www.libreoffice.org,免费开源的 Office 办公套件
-software,办公效率,Obsidian,https://obsidian.md,本地优先的双链笔记知识库
-software,办公效率,Logseq,https://logseq.com,开源大纲式双链笔记工具
-software,办公效率,思源笔记,https://github.com/siyuan-note/siyuan,开源本地优先的块级笔记软件
-software,办公效率,Flameshot,https://flameshot.org,开源跨平台截图标注工具
-software,办公效率,Snipaste,https://www.snipaste.com,截图加贴图的效率神器
-software,办公效率,WPS Office,https://www.wps.cn,国产免费办公套件
-software,开发工具,VS Code,https://code.visualstudio.com,微软开源跨平台代码编辑器
-software,开发工具,Zed,https://zed.dev,Rust 编写的高性能代码编辑器，内置 AI 与实时协作
-software,开发工具,Neovim,https://neovim.io,高度可扩展的 Vim 衍生终端编辑器
-software,开发工具,Notepad++,https://notepad-plus-plus.org,Windows 轻量文本编辑器
-software,开发工具,Git,https://git-scm.com,分布式版本控制系统
-software,开发工具,Lazygit,https://github.com/jesseduffield/lazygit,终端里的 Git 可视化 TUI，键盘完成提交、分支与冲突处理
-software,开发工具,GitHub Desktop,https://desktop.github.com,GitHub 官方图形化 Git 客户端
-software,开发工具,Docker,https://www.docker.com,容器化应用开发部署平台
-software,开发工具,Lens,https://k8slens.dev,Kubernetes 集群可视化管理 IDE
-software,开发工具,k9s,https://k9scli.io,终端里的 Kubernetes 集群管理 TUI
-software,开发工具,DBeaver,https://dbeaver.io,免费开源多数据库管理工具
-software,开发工具,DBX,https://dbxio.com,开源轻量数据库工作台，约 25MB 支持 100+ 种数据库，内置 AI 助手与 MCP
-software,开发工具,Beekeeper Studio,https://www.beekeeperstudio.io,开源跨平台 SQL 编辑器与数据库管理工具
-software,开发工具,RedisInsight,https://redis.io/insight/,Redis 官方可视化监控与管理工具
-software,开发工具,Postman,https://www.postman.com,API 调试与测试工具
-software,开发工具,Apifox,https://apifox.com,API 文档、调试、Mock 与自动化测试一体化协作平台
-software,开发工具,Bruno,https://www.usebruno.com,离线优先的开源 API 调试客户端
-software,开发工具,Hoppscotch,https://hoppscotch.io,开源轻量的在线 API 调试工具
-software,开发工具,Windows Terminal,https://github.com/microsoft/terminal,微软官方现代终端，支持多标签与分屏
-software,开发工具,Warp,https://www.warp.dev,AI 辅助的开源现代终端，跨平台支持
-software,开发工具,Termius,https://termius.com,跨平台 SSH 客户端，支持同步与团队协作
-software,开发工具,DevToys,https://devtoys.app,开发者瑞士军刀，内置 30+ 种离线转换工具
-software,开发工具,CyberChef,https://gchq.github.io/CyberChef,浏览器里的数据处理与编解码瑞士军刀
-software,开发工具,jq,https://jqlang.github.io/jq,命令行 JSON 解析与处理工具
-software,开发工具,fzf,https://github.com/junegunn/fzf,命令行模糊查找器，可联动文件与历史
-software,开发工具,ripgrep,https://github.com/BurntSushi/ripgrep,极速递归文本搜索，自动遵循 gitignore
-software,开发工具,ngrok,https://ngrok.com,内网穿透与本地端口公网映射
-software,媒体创作,VLC,https://www.videolan.org,开源万能媒体播放器
-software,媒体创作,OBS Studio,https://obsproject.com,开源录屏与直播推流工具
-software,媒体创作,Audacity,https://www.audacityteam.org,开源音频剪辑软件
-software,媒体创作,GIMP,https://www.gimp.org,开源图像编辑软件，PS 平替
-software,媒体创作,Krita,https://krita.org,开源数字绘画软件
-software,媒体创作,Inkscape,https://inkscape.org,开源矢量绘图软件
-software,媒体创作,DaVinci Resolve,https://www.blackmagicdesign.com/products/davinciresolve,专业免费视频剪辑调色软件
-software,媒体创作,Blender,https://www.blender.org,开源 3D 建模动画软件
-software,安全隐私,Bitwarden,https://bitwarden.com,开源跨平台密码管理器
-software,安全隐私,KeePassXC,https://keepassxc.org,开源本地密码管理工具
-software,安全隐私,VeraCrypt,https://www.veracrypt.fr,开源磁盘加密软件
-software,安全隐私,uBlock Origin,https://github.com/gorhill/uBlock,高效开源广告拦截浏览器插件
-software,下载工具,qBittorrent,https://www.qbittorrent.org,开源 BT 下载客户端，无广告
-software,下载工具,Free Download Manager,https://www.freedownloadmanager.org,免费多线程下载工具
-learning,公开课,中国大学MOOC,https://www.icourse163.org,国内名校免费公开课平台
-learning,公开课,学堂在线,https://www.xuetangx.com,清华大学发起的慕课平台
-learning,公开课,网易公开课,https://open.163.com,TED 与国内外名校公开课合集
-learning,公开课,Coursera,https://www.coursera.org,国际知名在线课程平台，部分免费
-learning,公开课,edX,https://www.edx.org,麻省理工与哈佛联合的慕课平台
-learning,公开课,可汗学院,https://www.khanacademy.org,免费在线课程公益组织
-learning,公开课,MIT OpenCourseWare,https://ocw.mit.edu,麻省理工开放课程
-learning,公开课,国家智慧教育平台,https://www.smartedu.cn,国家官方在线课程与教育平台
-learning,编程学习,freeCodeCamp,https://www.freecodecamp.org,免费全栈编程学习社区
-learning,编程学习,The Odin Project,https://www.theodinproject.com,开源全栈开发学习路径
-learning,编程学习,菜鸟教程,https://www.runoob.com,中文编程入门教程网站
-learning,编程学习,Codecademy,https://www.codecademy.com,互动式编程学习平台
-learning,编程学习,慕课网,https://www.imooc.com,国内 IT 技能学习平台
-learning,编程学习,哔哩哔哩,https://www.bilibili.com,海量免费编程与知识学习视频
-learning,编程学习,CSDN,https://www.csdn.net,中文技术社区与博客平台
-learning,文档手册,devdocs.io,https://devdocs.io,聚合多语言 API 离线文档
-learning,文档手册,Microsoft Learn,https://learn.microsoft.com,微软官方技术学习文档
-learning,文档手册,GitBook,https://www.gitbook.com,开源文档写作与发布平台
-learning,文档手册,OpenStax,https://openstax.org,免费开源大学教材
-learning,文档手册,国家哲学社会科学文献中心,https://www.ncpssd.org,正版学术期刊与文献免费阅读
-learning,文档手册,国家数字图书馆,https://www.nlc.cn,海量正版电子书与古籍在线阅览
-media,影视,1905电影网,https://www.1905.com,CCTV6 官方平台，万部正版经典电影免费看
-media,影视,央视频,https://www.yangshipin.cn,中央广播电视总台官方客户端
-media,影视,学习强国,https://www.xuexi.cn,正版影视剧集免费看，零广告
-media,影视,西瓜视频,https://www.ixigua.com,字节跳动免费视频平台
-media,影视,芒果TV,https://www.mgtv.com,湖南卫视旗下视频平台，含免费专区
-media,影视,爱奇艺,https://www.iqiyi.com,在线视频平台，含免费专区
-media,影视,腾讯视频,https://v.qq.com,腾讯旗下在线视频平台，海量正版含免费专区
-media,影视,优酷,https://www.youku.com,阿里巴巴旗下视频平台，大量剧集限免免费看
-media,影视,哔哩哔哩,https://www.bilibili.com,正版影视、纪录片与番剧，部分免费
-media,影视,搜狐视频,https://tv.sohu.com,正版剧集平台，大量老剧免费看
-media,影视,咪咕视频,https://www.miguvideo.com,中国移动旗下视频平台，免费内容多
-media,影视,央视网,https://tv.cctv.com,中央广播电视总台官方视频平台
-media,音乐,网易云音乐,https://music.163.com,国内主流音乐平台，免费用户可听
-media,音乐,QQ音乐,https://y.qq.com,腾讯旗下音乐平台
-media,音乐,酷狗音乐,https://www.kugou.com,老牌音乐平台
-media,音乐,Jamendo,https://www.jamendo.com,CC 授权免费音乐库，可商用
-media,音乐,Free Music Archive,https://freemusicarchive.org,独立音乐免费下载库
-media,音乐,Musopen,https://musopen.org,无版权古典音乐库
-media,音乐,Incompetech,https://incompetech.com,Kevin MacLeod 的 CC 音乐库
-media,音乐,Pixabay,https://pixabay.com,免费图片音乐视频素材库
-media,音乐,耳聆网,https://www.ear0.com,国内 CC 授权声音分享平台
-media,音乐,爱给网,https://www.aigei.com,音效配乐与素材大全
-media,音乐,酷我音乐,https://www.kuwo.cn,正版音乐平台，海量歌曲免费在线听
-media,音乐,咪咕音乐,https://music.migu.cn,中国移动正版音乐，无损音质免费畅听
-media,音乐,Bensound,https://www.bensound.com,CC 授权音乐库，免费使用
-media,音乐,FreePD,https://freepd.com,公有领域音乐免费下载
-media,音乐,ccMixter,https://ccmixter.org,CC 授权混音与翻唱社区
-media,音乐,SoundCloud,https://soundcloud.com,独立音乐人分享平台，含 CC 授权内容
-media,电子书,Project Gutenberg,https://www.gutenberg.org,全球最大公版电子书库，7.5 万+免费书
-media,电子书,ManyBooks,https://manybooks.net,英文原版免费电子书平台
-media,电子书,Standard Ebooks,https://standardebooks.org,精心排版的公版电子书
-media,电子书,LibriVox,https://librivox.org,免费公版有声书朗读平台
-media,电子书,微信读书,https://weread.qq.com,腾讯阅读平台，含大量免费书籍
-media,电子书,豆瓣阅读,https://read.douban.com,豆瓣旗下阅读平台，含免费作品
-media,电子书,Open Library,https://openlibrary.org,互联网档案馆运营的正版电子书借阅库
-media,电子书,Wikisource,https://zh.wikisource.org,公版文献自由文库，支持全文检索
-media,电子书,Internet Archive,https://archive.org,公版书籍与有声书数字档案馆
-media,电子书,书格,https://shuge.org,公版古籍善本数字化图书馆，免费开放
-media,电子书,HathiTrust,https://www.hathitrust.org,大学图书馆联合公版典藏库
-media,电子书,中国哲学书电子化计划,https://ctext.org,公版古籍全文电子化，学术常用
+type,category,name,url,description,tags
+website,ai,ChatGPT,https://chat.openai.com,OpenAI 开发的对话式 AI 助手，支持写作、问答与代码生成,AI|在线|编程
+website,ai,Claude,https://claude.ai,Anthropic 开发的 AI 助手，擅长长文本理解与高质量内容输出,AI|在线|编程
+website,ai,Perplexity,https://www.perplexity.ai,AI 搜索引擎，答案附带来源引用,AI|在线
+website,ai,豆包,https://www.doubao.com,字节跳动推出的全能 AI 助手,AI|在线
+website,ai,Kimi,https://kimi.moonshot.cn,月之暗面开发的 AI 助手，擅长长文本阅读分析,AI|在线|编程
+website,ai,DeepSeek,https://www.deepseek.com,深度求索推出的免费开源 AI 助手,AI|开源|免费|在线
+website,ai,秘塔 AI 搜索,https://metaso.cn,无广告 AI 搜索引擎，支持深度研究模式,AI|免费|在线
+website,ai,文心一言,https://yiyan.baidu.com,百度推出的对话式 AI 助手,AI|在线
+website,ai,通义千问,https://tongyi.aliyun.com,阿里云推出的多模态 AI 助手,AI|在线
+website,ai,Cursor,https://www.cursor.com,AI 驱动的代码编辑器，支持 Agent 模式,AI|在线|编程
+website,ai,GitHub Copilot,https://github.com/features/copilot,GitHub 推出的 AI 编程助手,AI|在线|编程
+website,ai,Trae,https://www.trae.ai,字节跳动推出的 AI IDE，中文界面友好,AI|中文|在线
+website,ai,Midjourney,https://www.midjourney.com,AI 图像生成工具,AI|图像|在线
+website,ai,Runway,https://runwayml.com,AI 视频生成与编辑平台,AI|视频|在线
+website,ai,即梦 AI,https://jimeng.jianying.com,字节跳动的 AI 创作工具，支持图生视频,AI|视频|在线
+website,效率,TinyWow,https://tinywow.com,集合 200+ 免费在线工具的宝藏网站,免费|在线|效率
+website,效率,iLovePDF,https://www.ilovepdf.com,在线 PDF 处理全家桶，合并压缩转换,在线|效率
+website,效率,PDF派,https://www.pdfpai.com,免费 PDF 在线转换工具集合,免费|在线|效率
+website,效率,docsmall,https://docsmall.com,图片与 PDF 在线压缩、编辑与格式转换,图像|在线|效率
+website,效率,remove.bg,https://www.remove.bg,一键 AI 去除图片背景,AI|图像|在线|效率
+website,效率,Online-Convert,https://www.online-convert.com,支持 200+ 格式的在线文件转换器,在线|效率
+website,效率,Excalidraw,https://excalidraw.com,开源在线手绘风格白板与流程图工具,开源|在线|效率
+website,效率,ProcessOn,https://www.processon.com,在线思维导图与流程图工具,在线|效率
+website,效率,Notion,https://www.notion.so,一站式笔记知识库与项目管理空间,在线|效率
+website,效率,语雀,https://www.yuque.com,蚂蚁集团推出的云端知识库,在线|效率
+website,效率,石墨文档,https://shimo.im,在线协作文档与表格,文档|在线|效率
+website,效率,飞书,https://www.feishu.cn,一站式办公协作平台，文档会议多维表格,文档|在线|效率
+website,设计,Canva,https://www.canva.com,易上手的平面设计平台，海量模板,在线|设计|素材
+website,设计,Figma,https://www.figma.com,协作式 UI/UX 设计工具,在线|设计|素材|效率
+website,设计,Photopea,https://www.photopea.com,免费的在线 PS 替代品,免费|图像|在线|设计
+website,设计,Unsplash,https://unsplash.com,高质量免费可商用摄影图片库,免费|图像|在线|设计
+website,设计,Pexels,https://www.pexels.com,免费图片与视频素材库,免费|视频|图像|在线
+website,设计,iconfont,https://www.iconfont.cn,阿里巴巴矢量图标库,在线|设计|素材
+website,设计,Google Fonts,https://fonts.google.com,免费开源字体库,开源|免费|在线|设计
+website,设计,Coolors,https://coolors.co,一键生成配色方案的调色板工具,在线|设计|素材
+website,设计,Flaticon,https://www.flaticon.com,海量矢量图标素材库,在线|设计|素材
+website,设计,Freepik,https://www.freepik.com,免费矢量图插画与模板资源,免费|在线|设计|素材
+website,开发,GitHub,https://github.com,全球最大的代码托管与开源协作平台,开源|在线|编程|效率
+website,开发,Gitee,https://gitee.com,国内代码托管平台，GitHub 平替,中文|在线|编程
+website,开发,Stack Overflow,https://stackoverflow.com,全球最大程序员问答社区,在线|编程
+website,开发,MDN Web Docs,https://developer.mozilla.org,Mozilla 维护的权威 Web 开发文档,文档|在线|编程
+website,开发,LeetCode,https://leetcode.cn,程序员算法刷题与面试准备平台,在线|编程
+website,开发,牛客,https://www.nowcoder.com,校招求职与刷题社区,在线|编程
+website,开发,Codeforces,https://codeforces.com,全球著名算法竞赛平台,在线|编程
+website,开发,regex101,https://regex101.com,在线正则表达式测试工具,在线|编程
+website,开发,CodePen,https://codepen.io,前端代码在线实验场,在线|编程
+website,开发,JSON.cn,https://www.json.cn,JSON 格式化与校验工具,在线|编程
+software,系统工具,7-Zip,https://www.7-zip.org,开源免费压缩软件，支持多种格式,开源|免费|客户端|系统
+software,系统工具,Keka,https://www.keka.io,macOS 免费开源压缩解压工具,开源|免费|客户端|系统
+software,系统工具,Everything,https://www.voidtools.com,Windows 极速文件搜索神器,客户端|系统
+software,系统工具,PowerToys,https://github.com/microsoft/PowerToys,微软官方 Windows 效率工具集,客户端|系统|效率
+software,系统工具,Rectangle,https://rectangleapp.com,macOS 窗口分屏管理工具,客户端|系统
+software,办公效率,LibreOffice,https://www.libreoffice.org,免费开源的 Office 办公套件,开源|免费|客户端|办公
+software,办公效率,Obsidian,https://obsidian.md,本地优先的双链笔记知识库,客户端|办公|效率
+software,办公效率,Logseq,https://logseq.com,开源大纲式双链笔记工具,开源|客户端|办公|效率
+software,办公效率,思源笔记,https://github.com/siyuan-note/siyuan,开源本地优先的块级笔记软件,开源|客户端|办公|效率
+software,办公效率,Flameshot,https://flameshot.org,开源跨平台截图标注工具,开源|跨平台|客户端|办公
+software,办公效率,Snipaste,https://www.snipaste.com,截图加贴图的效率神器,客户端|办公|效率
+software,办公效率,WPS Office,https://www.wps.cn,国产免费办公套件,免费|中文|客户端|办公
+software,开发工具,VS Code,https://code.visualstudio.com,微软开源跨平台代码编辑器,开源|跨平台|客户端|编程
+software,开发工具,Zed,https://zed.dev,Rust 编写的高性能代码编辑器，内置 AI 与实时协作,AI|客户端|编程|效率
+software,开发工具,Neovim,https://neovim.io,高度可扩展的 Vim 衍生终端编辑器,终端|客户端|编程
+software,开发工具,Notepad++,https://notepad-plus-plus.org,Windows 轻量文本编辑器,客户端|编程
+software,开发工具,Git,https://git-scm.com,分布式版本控制系统,版本控制|客户端|编程
+software,开发工具,Lazygit,https://github.com/jesseduffield/lazygit,终端里的 Git 可视化 TUI，键盘完成提交、分支与冲突处理,版本控制|终端|客户端|编程
+software,开发工具,GitHub Desktop,https://desktop.github.com,GitHub 官方图形化 Git 客户端,版本控制|客户端|编程
+software,开发工具,Docker,https://www.docker.com,容器化应用开发部署平台,容器|客户端|编程
+software,开发工具,Lens,https://k8slens.dev,Kubernetes 集群可视化管理 IDE,容器|客户端|编程
+software,开发工具,k9s,https://k9scli.io,终端里的 Kubernetes 集群管理 TUI,容器|终端|客户端|编程
+software,开发工具,DBeaver,https://dbeaver.io,免费开源多数据库管理工具,开源|免费|数据库|客户端
+software,开发工具,DBX,https://dbxio.com,开源轻量数据库工作台，约 25MB 支持 100+ 种数据库，内置 AI 助手与 MCP,开源|AI|数据库|客户端
+software,开发工具,Beekeeper Studio,https://www.beekeeperstudio.io,开源跨平台 SQL 编辑器与数据库管理工具,开源|跨平台|数据库|客户端
+software,开发工具,RedisInsight,https://redis.io/insight/,Redis 官方可视化监控与管理工具,数据库|客户端|编程
+software,开发工具,Postman,https://www.postman.com,API 调试与测试工具,API|客户端|编程
+software,开发工具,Apifox,https://apifox.com,API 文档、调试、Mock 与自动化测试一体化协作平台,API|文档|客户端|编程
+software,开发工具,Bruno,https://www.usebruno.com,离线优先的开源 API 调试客户端,开源|API|客户端|编程
+software,开发工具,Hoppscotch,https://hoppscotch.io,开源轻量的在线 API 调试工具,开源|API|客户端|编程
+software,开发工具,Windows Terminal,https://github.com/microsoft/terminal,微软官方现代终端，支持多标签与分屏,终端|客户端|编程
+software,开发工具,Warp,https://www.warp.dev,AI 辅助的开源现代终端，跨平台支持,开源|跨平台|AI|终端
+software,开发工具,Termius,https://termius.com,跨平台 SSH 客户端，支持同步与团队协作,跨平台|客户端|编程|效率
+software,开发工具,DevToys,https://devtoys.app,开发者瑞士军刀，内置 30+ 种离线转换工具,开源|客户端|编程
+software,开发工具,CyberChef,https://gchq.github.io/CyberChef,浏览器里的数据处理与编解码瑞士军刀,开源|客户端|编程
+software,开发工具,jq,https://jqlang.github.io/jq,命令行 JSON 解析与处理工具,终端|开源|客户端|编程
+software,开发工具,fzf,https://github.com/junegunn/fzf,命令行模糊查找器，可联动文件与历史,终端|开源|客户端|编程
+software,开发工具,ripgrep,https://github.com/BurntSushi/ripgrep,极速递归文本搜索，自动遵循 gitignore,开源|客户端|编程
+software,开发工具,ngrok,https://ngrok.com,内网穿透与本地端口公网映射,客户端|编程
+software,媒体创作,VLC,https://www.videolan.org,开源万能媒体播放器,开源|客户端
+software,媒体创作,OBS Studio,https://obsproject.com,开源录屏与直播推流工具,开源|视频|客户端
+software,媒体创作,Audacity,https://www.audacityteam.org,开源音频剪辑软件,开源|音乐|客户端
+software,媒体创作,GIMP,https://www.gimp.org,开源图像编辑软件，PS 平替,开源|图像|客户端
+software,媒体创作,Krita,https://krita.org,开源数字绘画软件,开源|图像|客户端
+software,媒体创作,Inkscape,https://inkscape.org,开源矢量绘图软件,开源|客户端|设计
+software,媒体创作,DaVinci Resolve,https://www.blackmagicdesign.com/products/davinciresolve,专业免费视频剪辑调色软件,免费|视频|客户端
+software,媒体创作,Blender,https://www.blender.org,开源 3D 建模动画软件,开源|3D|客户端
+software,安全隐私,Bitwarden,https://bitwarden.com,开源跨平台密码管理器,开源|跨平台|客户端|安全
+software,安全隐私,KeePassXC,https://keepassxc.org,开源本地密码管理工具,开源|客户端|安全
+software,安全隐私,VeraCrypt,https://www.veracrypt.fr,开源磁盘加密软件,开源|客户端|安全
+software,安全隐私,uBlock Origin,https://github.com/gorhill/uBlock,高效开源广告拦截浏览器插件,开源|客户端|安全
+software,下载工具,qBittorrent,https://www.qbittorrent.org,开源 BT 下载客户端，无广告,开源|免费|客户端|效率
+software,下载工具,Free Download Manager,https://www.freedownloadmanager.org,免费多线程下载工具,免费|客户端|效率
+learning,公开课,中国大学MOOC,https://www.icourse163.org,国内名校免费公开课平台,课程|免费|中文|学习
+learning,公开课,学堂在线,https://www.xuetangx.com,清华大学发起的慕课平台,课程|学习|在线
+learning,公开课,网易公开课,https://open.163.com,TED 与国内外名校公开课合集,课程|中文|学习
+learning,公开课,Coursera,https://www.coursera.org,国际知名在线课程平台，部分免费,课程|免费|学习|在线
+learning,公开课,edX,https://www.edx.org,麻省理工与哈佛联合的慕课平台,课程|学习
+learning,公开课,可汗学院,https://www.khanacademy.org,免费在线课程公益组织,课程|免费|学习|在线
+learning,公开课,MIT OpenCourseWare,https://ocw.mit.edu,麻省理工开放课程,课程|开源|学习
+learning,公开课,国家智慧教育平台,https://www.smartedu.cn,国家官方在线课程与教育平台,课程|学习|在线
+learning,编程学习,freeCodeCamp,https://www.freecodecamp.org,免费全栈编程学习社区,免费|编程|学习
+learning,编程学习,The Odin Project,https://www.theodinproject.com,开源全栈开发学习路径,开源|编程|学习
+learning,编程学习,菜鸟教程,https://www.runoob.com,中文编程入门教程网站,中文|文档|编程|学习
+learning,编程学习,Codecademy,https://www.codecademy.com,互动式编程学习平台,编程|学习
+learning,编程学习,慕课网,https://www.imooc.com,国内 IT 技能学习平台,中文|课程|编程|学习
+learning,编程学习,哔哩哔哩,https://www.bilibili.com,海量免费编程与知识学习视频,免费|视频|编程|学习
+learning,编程学习,CSDN,https://www.csdn.net,中文技术社区与博客平台,中文|文档|编程|学习
+learning,文档手册,devdocs.io,https://devdocs.io,聚合多语言 API 离线文档,文档|API|学习
+learning,文档手册,Microsoft Learn,https://learn.microsoft.com,微软官方技术学习文档,文档|免费|学习
+learning,文档手册,GitBook,https://www.gitbook.com,开源文档写作与发布平台,文档|开源|学习
+learning,文档手册,OpenStax,https://openstax.org,免费开源大学教材,文档|开源|免费|学习
+learning,文档手册,国家哲学社会科学文献中心,https://www.ncpssd.org,正版学术期刊与文献免费阅读,文档|免费|电子书|学习
+learning,文档手册,国家数字图书馆,https://www.nlc.cn,海量正版电子书与古籍在线阅览,文档|电子书|中文|学习
+media,影视,1905电影网,https://www.1905.com,CCTV6 官方平台，万部正版经典电影免费看,视频|免费
+media,影视,央视频,https://www.yangshipin.cn,中央广播电视总台官方客户端,视频|免费|客户端
+media,影视,学习强国,https://www.xuexi.cn,正版影视剧集免费看，零广告,视频|免费
+media,影视,西瓜视频,https://www.ixigua.com,字节跳动免费视频平台,视频|免费
+media,影视,芒果TV,https://www.mgtv.com,湖南卫视旗下视频平台，含免费专区,视频|免费
+media,影视,爱奇艺,https://www.iqiyi.com,在线视频平台，含免费专区,视频|免费|在线
+media,影视,腾讯视频,https://v.qq.com,腾讯旗下在线视频平台，海量正版含免费专区,视频|免费|在线
+media,影视,优酷,https://www.youku.com,阿里巴巴旗下视频平台，大量剧集限免免费看,视频|免费
+media,影视,哔哩哔哩,https://www.bilibili.com,正版影视、纪录片与番剧，部分免费,视频|免费
+media,影视,搜狐视频,https://tv.sohu.com,正版剧集平台，大量老剧免费看,视频|免费
+media,影视,咪咕视频,https://www.miguvideo.com,中国移动旗下视频平台，免费内容多,视频|免费
+media,影视,央视网,https://tv.cctv.com,中央广播电视总台官方视频平台,视频|免费
+media,音乐,网易云音乐,https://music.163.com,国内主流音乐平台，免费用户可听,音乐|免费|中文
+media,音乐,QQ音乐,https://y.qq.com,腾讯旗下音乐平台,音乐|免费
+media,音乐,酷狗音乐,https://www.kugou.com,老牌音乐平台,音乐|免费
+media,音乐,Jamendo,https://www.jamendo.com,CC 授权免费音乐库，可商用,音乐|免费
+media,音乐,Free Music Archive,https://freemusicarchive.org,独立音乐免费下载库,音乐|免费
+media,音乐,Musopen,https://musopen.org,无版权古典音乐库,音乐|免费
+media,音乐,Incompetech,https://incompetech.com,Kevin MacLeod 的 CC 音乐库,音乐|免费
+media,音乐,Pixabay,https://pixabay.com,免费图片音乐视频素材库,音乐|免费|视频|图像
+media,音乐,耳聆网,https://www.ear0.com,国内 CC 授权声音分享平台,音乐|免费|中文
+media,音乐,爱给网,https://www.aigei.com,音效配乐与素材大全,音乐|免费|素材
+media,音乐,酷我音乐,https://www.kuwo.cn,正版音乐平台，海量歌曲免费在线听,音乐|免费|在线
+media,音乐,咪咕音乐,https://music.migu.cn,中国移动正版音乐，无损音质免费畅听,音乐|免费
+media,音乐,Bensound,https://www.bensound.com,CC 授权音乐库，免费使用,音乐|免费
+media,音乐,FreePD,https://freepd.com,公有领域音乐免费下载,音乐|免费
+media,音乐,ccMixter,https://ccmixter.org,CC 授权混音与翻唱社区,音乐|免费
+media,音乐,SoundCloud,https://soundcloud.com,独立音乐人分享平台，含 CC 授权内容,音乐|免费
+media,电子书,Project Gutenberg,https://www.gutenberg.org,全球最大公版电子书库，7.5 万+免费书,电子书|免费
+media,电子书,ManyBooks,https://manybooks.net,英文原版免费电子书平台,电子书|免费
+media,电子书,Standard Ebooks,https://standardebooks.org,精心排版的公版电子书,电子书|免费
+media,电子书,LibriVox,https://librivox.org,免费公版有声书朗读平台,电子书|免费
+media,电子书,微信读书,https://weread.qq.com,腾讯阅读平台，含大量免费书籍,电子书|免费|中文
+media,电子书,豆瓣阅读,https://read.douban.com,豆瓣旗下阅读平台，含免费作品,电子书|免费|中文
+media,电子书,Open Library,https://openlibrary.org,互联网档案馆运营的正版电子书借阅库,电子书|免费
+media,电子书,Wikisource,https://zh.wikisource.org,公版文献自由文库，支持全文检索,电子书|免费
+media,电子书,Internet Archive,https://archive.org,公版书籍与有声书数字档案馆,电子书|免费
+media,电子书,书格,https://shuge.org,公版古籍善本数字化图书馆，免费开放,电子书|免费
+media,电子书,HathiTrust,https://www.hathitrust.org,大学图书馆联合公版典藏库,电子书|免费
+media,电子书,中国哲学书电子化计划,https://ctext.org,公版古籍全文电子化，学术常用,电子书|免费

@@ -68,6 +68,26 @@
         </div>
       </section>
 
+      <!-- 热门标签 -->
+      <section class="tags-section" v-if="hotTags.length > 0">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">热门标签</h2>
+            <router-link to="/resources/all" class="view-all">查看全部 →</router-link>
+          </div>
+          <div class="hot-tags">
+            <router-link
+              v-for="tag in hotTags"
+              :key="tag.name"
+              :to="{ path: '/resources/all', query: { tags: tag.name } }"
+              class="hot-tag"
+            >
+              {{ tag.name }}<span class="hot-tag-count">{{ tag.count }}</span>
+            </router-link>
+          </div>
+        </div>
+      </section>
+
       <!-- 精选推荐 -->
       <section class="featured-section" v-if="featured.length > 0">
         <div class="container">
@@ -154,8 +174,21 @@ const countByType = computed(() => {
   return map
 })
 
-const featured = computed(() => {
-  const perType = {}
+// 全站高频标签，作为首页的快速入口
+const hotTags = computed(() => {
+  const counts = {}
+  resources.value.forEach(r => {
+    (r.tags || []).forEach(tag => {
+      counts[tag] = (counts[tag] || 0) + 1
+    })
+  })
+  return Object.keys(counts)
+    .map(name => ({ name, count: counts[name] }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'zh-CN'))
+    .slice(0, 12)
+})
+
+const featured = computed(() => {  const perType = {}
   const result = []
   resources.value.forEach(r => {
     if (!perType[r.type]) perType[r.type] = []
@@ -406,6 +439,45 @@ onBeforeUnmount(() => {
 
 .categories-section {
   margin-bottom: 3.5rem;
+}
+
+/* 热门标签 */
+.tags-section {
+  margin-bottom: 3.5rem;
+}
+
+.hot-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.hot-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid var(--c-border);
+  border-radius: 999px;
+  background: var(--c-bg-card);
+  color: var(--c-text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.hot-tag:hover {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+  background: var(--c-primary-light);
+  transform: translateY(-2px);
+}
+
+.hot-tag-count {
+  font-size: 0.75rem;
+  color: var(--c-text-muted);
+  font-variant-numeric: tabular-nums;
 }
 
 .categories-grid {

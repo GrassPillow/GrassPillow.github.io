@@ -51,6 +51,9 @@ software,系统工具,Keka,https://www.keka.io,macOS 免费开源压缩解压工
 software,系统工具,Everything,https://www.voidtools.com,Windows 极速文件搜索神器,客户端|系统
 software,系统工具,PowerToys,https://github.com/microsoft/PowerToys,微软官方 Windows 效率工具集,客户端|系统|效率
 software,系统工具,Rectangle,https://rectangleapp.com,macOS 窗口分屏管理工具,客户端|系统
+software,系统工具,LocalSend,https://github.com/localsend/localsend,局域网跨设备文件互传，无需联网,开源|免费|跨平台|客户端|效率
+software,系统工具,Syncthing,https://github.com/syncthing/syncthing,点对点文件持续同步工具,开源|免费|跨平台|客户端|效率
+software,系统工具,RustDesk,https://github.com/rustdesk/rustdesk,可自托管的开源远程桌面软件,开源|免费|跨平台|客户端|安全|效率
 software,办公效率,LibreOffice,https://www.libreoffice.org,免费开源的 Office 办公套件,开源|免费|客户端|办公
 software,办公效率,Obsidian,https://obsidian.md,本地优先的双链笔记知识库,客户端|办公|效率
 software,办公效率,Logseq,https://logseq.com,开源大纲式双链笔记工具,开源|客户端|办公|效率
@@ -58,6 +61,8 @@ software,办公效率,思源笔记,https://github.com/siyuan-note/siyuan,开源�
 software,办公效率,Flameshot,https://flameshot.org,开源跨平台截图标注工具,开源|跨平台|客户端|办公
 software,办公效率,Snipaste,https://www.snipaste.com,截图加贴图的效率神器,客户端|办公|效率
 software,办公效率,WPS Office,https://www.wps.cn,国产免费办公套件,免费|中文|客户端|办公
+software,办公效率,Joplin,https://github.com/laurent22/joplin,注重隐私的开源笔记应用，支持端到端加密同步,开源|免费|跨平台|客户端|办公|效率
+software,办公效率,SumatraPDF,https://github.com/sumatrapdfreader/sumatrapdf,Windows 上轻量极速的 PDF 阅读器,开源|免费|客户端|文档
 software,开发工具,VS Code,https://code.visualstudio.com,微软开源跨平台代码编辑器,开源|跨平台|客户端|编程
 software,开发工具,VSCodium,https://vscodium.com,VS Code 的去遥测开源构建，隐私友好,开源|跨平台|客户端|编程
 software,开发工具,Zed,https://zed.dev,Rust 编写的高性能代码编辑器，内置 AI 与实时协作,AI|客户端|编程|效率
@@ -132,6 +137,8 @@ software,开发工具,Scoop,https://scoop.sh,Windows 命令行包管理器，无
 software,开发工具,Chocolatey,https://chocolatey.org,Windows 软件自动化安装与配置管理,免费|终端|系统
 software,开发工具,Zeal,https://zealdocs.org,Windows 与 Linux 的离线 API 文档浏览器,开源|免费|客户端|文档
 software,开发工具,Dash,https://kapeli.com/dash,macOS 离线 API 文档与代码片段管理,客户端|文档|效率
+software,开发工具,Nushell,https://github.com/nushell/nushell,结构化数据驱动的现代 Shell,开源|免费|跨平台|终端|编程
+software,开发工具,Oh My Posh,https://github.com/JanDeDobbeleer/oh-my-posh,高度可定制的跨 shell 提示符渲染器,开源|免费|跨平台|终端|效率
 software,媒体创作,VLC,https://www.videolan.org,开源万能媒体播放器,开源|客户端
 software,媒体创作,OBS Studio,https://obsproject.com,开源录屏与直播推流工具,开源|视频|客户端
 software,媒体创作,Audacity,https://www.audacityteam.org,开源音频剪辑软件,开源|音乐|客户端
@@ -140,12 +147,47 @@ software,媒体创作,Krita,https://krita.org,开源数字绘画软件,开源|�
 software,媒体创作,Inkscape,https://inkscape.org,开源矢量绘图软件,开源|客户端|设计
 software,媒体创作,DaVinci Resolve,https://www.blackmagicdesign.com/products/davinciresolve,专业免费视频剪辑调色软件,免费|视频|客户端
 software,媒体创作,Blender,https://www.blender.org,开源 3D 建模动画软件,开源|3D|客户端
+software,媒体创作,HandBrake,https://github.com/HandBrake/HandBrake,开源视频转码工具，支持批量压制与预设,开源|免费|跨平台|客户端|视频
+software,媒体创作,mpv,https://github.com/mpv-player/mpv,极简高效的命令行视频播放器,开源|免费|跨平台|客户端|视频
 software,安全隐私,Bitwarden,https://bitwarden.com,开源跨平台密码管理器,开源|跨平台|客户端|安全
 software,安全隐私,KeePassXC,https://keepassxc.org,开源本地密码管理工具,开源|客户端|安全
 software,安全隐私,VeraCrypt,https://www.veracrypt.fr,开源磁盘加密软件,开源|客户端|安全
 software,安全隐私,uBlock Origin,https://github.com/gorhill/uBlock,高效开源广告拦截浏览器插件,开源|客户端|安全
 software,下载工具,qBittorrent,https://www.qbittorrent.org,开源 BT 下载客户端，无广告,开源|免费|客户端|效率
 software,下载工具,Free Download Manager,https://www.freedownloadmanager.org,免费多线程下载工具,免费|客户端|效率
+software,下载工具,Motrix,https://github.com/agalwood/Motrix,支持 HTTP、BT 与磁力链接的全能下载器,开源|免费|跨平台|客户端|效率
+software,下载工具,Gopeed,https://github.com/GopeedLab/gopeed,支持 HTTP、BitTorrent 与 ed2k 的高速下载器,开源|免费|跨平台|客户端|效率
+software,Windows 工具,Files,https://github.com/files-community/Files,现代化 Windows 文件管理器，多标签与双栏布局,开源|免费|客户端|系统|效率
+software,Windows 工具,Flow Launcher,https://github.com/Flow-Launcher/Flow.Launcher,快速文件搜索与应用启动器，支持插件扩展,开源|免费|客户端|系统|效率
+software,Windows 工具,EverythingToolbar,https://github.com/srwi/EverythingToolbar,把 Everything 搜索集成到 Windows 任务栏,开源|免费|客户端|系统|效率
+software,Windows 工具,TrafficMonitor,https://github.com/zhongyang219/TrafficMonitor,任务栏实时显示网速、CPU 与内存占用,开源|免费|中文|客户端|系统
+software,Windows 工具,TranslucentTB,https://github.com/TranslucentTB/TranslucentTB,让 Windows 任务栏透明或半透明的轻量工具,开源|免费|客户端|系统
+software,Windows 工具,EarTrumpet,https://github.com/File-New-Project/EarTrumpet,按应用独立调节音量的 Windows 音量控制器,开源|免费|客户端|系统
+software,Windows 工具,QuickLook,https://github.com/QL-Win/QuickLook,为 Windows 带来 macOS 风格的空格键快速预览,开源|免费|客户端|系统|效率
+software,Windows 工具,Ditto,https://github.com/sabrogden/Ditto,Windows 剪贴板历史增强工具，支持搜索与同步,开源|免费|客户端|系统|效率
+software,Windows 工具,AutoHotkey,https://github.com/AutoHotkey/AutoHotkey,Windows 宏录制与自动化脚本工具,开源|免费|客户端|系统|编程
+software,Windows 工具,NanaZip,https://github.com/M2Team/NanaZip,面向现代 Windows 的 7-Zip 衍生压缩软件,开源|免费|客户端|系统
+software,Windows 工具,Rufus,https://github.com/pbatard/rufus,制作 Windows 与 Linux 启动 U 盘的可靠工具,开源|免费|客户端|系统
+software,Windows 工具,Ventoy,https://github.com/ventoy/Ventoy,一个 U 盘存放多个 ISO 的多重启动方案,开源|免费|客户端|系统
+software,Windows 工具,UniGetUI,https://github.com/Devolutions/UniGetUI,统一管理 WinGet、Scoop 与 Chocolatey 的图形界面,开源|免费|客户端|系统|效率
+software,Windows 工具,czkawka,https://github.com/qarmin/czkawka,查找重复文件、空目录与相似图片,开源|免费|客户端|系统|效率
+software,Windows 工具,BleachBit,https://github.com/bleachbit/bleachbit,开源系统清理与磁盘空间释放工具,开源|免费|客户端|系统|安全
+software,Windows 工具,LibreHardwareMonitor,https://github.com/LibreHardwareMonitor/LibreHardwareMonitor,监控温度、风扇转速与电压等硬件传感器,开源|免费|客户端|系统
+software,Windows 工具,Auto Dark Mode,https://github.com/AutoDarkMode/Windows-Auto-Night-Mode,按时间自动切换 Windows 深色与浅色主题,开源|免费|客户端|系统|效率
+software,Windows 工具,Lively Wallpaper,https://github.com/lively-community/lively,免费开源动态桌面壁纸与屏保工具,开源|免费|客户端|系统|设计
+software,Windows 工具,GlazeWM,https://github.com/glzr-io/glazewm,受 i3wm 启发的 Windows 平铺窗口管理器,开源|免费|客户端|系统|效率
+software,Windows 工具,AltSnap,https://github.com/RamonUnch/AltSnap,用 Alt 键拖拽移动和缩放任意窗口,开源|免费|客户端|系统|效率
+software,Windows 工具,ExplorerPatcher,https://github.com/valinet/ExplorerPatcher,恢复与增强 Windows 11 资源管理器的旧版体验,开源|免费|客户端|系统
+software,Windows 工具,Open-Shell,https://github.com/Open-Shell/Open-Shell-Menu,经典开始菜单的延续版本,开源|免费|客户端|系统
+software,Windows 工具,WinGet,https://github.com/microsoft/winget-cli,微软官方 Windows 命令行包管理器,开源|免费|终端|系统
+software,Windows 工具,WSL,https://github.com/microsoft/WSL,在 Windows 内运行 Linux 的官方子系统,开源|免费|客户端|系统|编程
+software,Windows 工具,ShareX,https://github.com/ShareX/ShareX,截图、录屏与文件上传一体的开源工具,开源|免费|客户端|系统|效率
+software,Windows 工具,ScreenToGif,https://github.com/NickeManarin/ScreenToGif,录制屏幕并编辑导出 GIF 与视频,开源|免费|客户端|视频
+software,Windows 工具,simplewall,https://github.com/henrypp/simplewall,基于 Windows 过滤平台的轻量防火墙,开源|免费|客户端|安全|系统
+software,Windows 工具,Sandboxie,https://github.com/sandboxie-plus/Sandboxie,沙盒隔离运行程序，防止系统被修改,开源|免费|客户端|安全
+software,Windows 工具,Windhawk,https://github.com/ramensoftware/windhawk,Windows 程序定制与增强的插件市场,开源|免费|客户端|系统
+software,Windows 工具,komorebi,https://github.com/LGUG2Z/komorebi,Windows 上的平铺窗口管理器,开源|免费|终端|系统|效率
+software,Windows 工具,Clink,https://github.com/chrisant996/clink,为 cmd.exe 带来 Bash 式命令行编辑,开源|免费|终端|系统
 learning,公开课,中国大学MOOC,https://www.icourse163.org,国内名校免费公开课平台,课程|免费|中文|学习
 learning,公开课,学堂在线,https://www.xuetangx.com,清华大学发起的慕课平台,课程|学习|在线
 learning,公开课,网易公开课,https://open.163.com,TED 与国内外名校公开课合集,课程|中文|学习

@@ -30,10 +30,10 @@ npm run lint       # ESLint 代码检查
 部署后提交产物：
 
 ```bash
-git add index.html 404.html css js favicon.ico resources.csv
+git add index.html 404.html css js favicon.ico resources.csv robots.txt sitemap.xml
 ```
 
-⚠️ 根目录的 `index.html`、`404.html`、`css/`、`js/`、`favicon.ico`、`resources.csv` 都是构建输出，**不要直接编辑**。
+⚠️ 根目录的 `index.html`、`404.html`、`css/`、`js/`、`favicon.ico`、`resources.csv`、`robots.txt`、`sitemap.xml` 都是构建输出，**不要直接编辑**。
 
 ⚠️ 修改 `deploy.sh` 白名单时务必保留 `AGENTS.md`、`.workbuddy` 等目录，否则部署会误删文档与项目记忆。
 

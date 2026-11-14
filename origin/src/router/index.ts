@@ -58,10 +58,30 @@ const router = createRouter({
 })
 
 // Navigation guard for page titles
+const SITE_ORIGIN = 'https://grasspillow.github.io'
+
+// 同步 canonical / og:url 到当前路由，避免所有页面共用首页地址
+function updateCanonical(path: string) {
+  const url = SITE_ORIGIN + (path === '/' ? '/' : path)
+  let link = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
+  if (!link) {
+    link = document.createElement('link')
+    link.rel = 'canonical'
+    document.head.appendChild(link)
+  }
+  link.href = url
+
+  const ogUrl = document.querySelector<HTMLMetaElement>('meta[property="og:url"]')
+  if (ogUrl) {
+    ogUrl.content = url
+  }
+}
+
 router.beforeEach((to, from, next) => {
   if (to.meta.title && typeof to.meta.title === 'string') {
     document.title = to.meta.title
   }
+  updateCanonical(to.path)
   next()
 })
 

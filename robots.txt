@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://grasspillow.github.io/sitemap.xml

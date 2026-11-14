@@ -115,17 +115,6 @@
           </div>
         </div>
       </section>
-
-      <!-- 资源维护说明 -->
-      <section class="about-section">
-        <div class="container">
-          <h2 class="section-title">关于本站</h2>
-          <p class="about-text">
-            本站收录的全部资源均来自公开、正版或免费授权渠道，不做任何盗版内容索引。
-            链接如遇失效，欢迎反馈更新。资源持续扩充中，敬请期待。
-          </p>
-        </div>
-      </section>
     </main>
   </div>
 </template>
@@ -652,22 +641,6 @@ onBeforeUnmount(() => {
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--c-primary);
-}
-
-/* About */
-.about-section {
-  background: var(--c-bg-card);
-  border: 1px solid var(--c-border);
-  border-radius: var(--radius-lg);
-  padding: 2.5rem;
-  box-shadow: var(--shadow-sm);
-}
-
-.about-text {
-  font-size: 1rem;
-  color: var(--c-text-secondary);
-  line-height: 1.8;
-  margin: 0;
 }
 
 /* Responsive */
